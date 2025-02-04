@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FaUser, FaCog, FaSignOutAlt, FaHome } from 'react-icons/fa';
+import { FaUser, FaCog, FaBell, FaHome } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import Popup from './Popup'; // Import the Popup component
 
@@ -11,57 +11,95 @@ const Header = () => {
     setIsPopupOpen(true); // Show the popup when logout is clicked
   };
 
+  // Styles for the buttons
+  const buttonStyle = {
+    position: 'relative',
+    background: 'inherit',
+    color: 'white', // Tailwind's blue-500
+    padding: '0.5rem 1rem',
+    borderRadius: '0.375rem', // Tailwind's rounded-md
+    boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)',
+    display: 'flex',
+    alignItems: 'center',
+    cursor: 'pointer',
+    transition: 'color 0.3s ease'
+  };
+
+  const underlineStyle = {
+    content: "''",
+    position: 'absolute',
+    left: 0,
+    bottom: '-4px', // Adjust position of underline
+    width: '100%',
+    height: '2px', // Thickness of underline
+    backgroundColor: '#3B82F6', // Underline color
+    transform: 'scaleX(0)', // Start with no width
+    transition: 'transform 0.3s ease',
+  };
+
+  // State for hover effect on each button
+  const [hoveredButton, setHoveredButton] = useState(null);
+
   return (
-    <header className="bg-gradient-to-r from-blue-500 to-teal-500 p-4 shadow-md">
+    <header className="bg-black p-4 shadow-md">
       <div className="max-w-7xl mx-auto flex justify-between items-center">
         {/* Logo */}
         <div className="text-white text-2xl font-bold flex items-center space-x-2">
-          <FaUser className="text-3xl" />
-          <span>ChatApp</span>
+          <img className="w-12 h-12" src="/chirplogo.png" alt="Chirp Logo"/>
+          <span>Chirp</span>
         </div>
 
         {/* Navigation Links */}
-        <nav className="space-x-4 hidden md:flex items-center">
+        <nav className="space-x-4 text-lg hidden md:flex items-center">
           {/* Home Button */}
           <button
             onClick={() => navigate('/')}
-            className="bg-white text-blue-500 px-4 py-2 rounded-md shadow-md hover:bg-gray-100 flex items-center space-x-1"
+            style={buttonStyle}
+            onMouseEnter={() => setHoveredButton('home')}
+            onMouseLeave={() => setHoveredButton(null)}
           >
             <FaHome />
-            <span>Home</span>
+            <span className='px-2'>Home</span>
+            <span style={{ ...underlineStyle, transform: hoveredButton === 'home' ? 'scaleX(1)' : 'scaleX(0)' }} />
           </button>
 
           {/* Profile Button */}
           <button
             onClick={() => navigate('/profile')}
-            
-            
-            className="bg-white text-blue-500 px-4 py-2 rounded-md shadow-md hover:bg-gray-100 flex items-center space-x-1"
+            style={buttonStyle}
+            onMouseEnter={() => setHoveredButton('profile')}
+            onMouseLeave={() => setHoveredButton(null)}
           >
             <FaUser />
-            <span>Profile</span>
+            <span className='px-2'>Profile</span>
+            <span style={{ ...underlineStyle, transform: hoveredButton === 'profile' ? 'scaleX(1)' : 'scaleX(0)' }} />
           </button>
 
           {/* Settings Button */}
           <button
             onClick={() => navigate('/settings')}
-            className="bg-white text-blue-500 px-4 py-2 rounded-md shadow-md hover:bg-gray-100 flex items-center space-x-1"
+            style={buttonStyle}
+            onMouseEnter={() => setHoveredButton('settings')}
+            onMouseLeave={() => setHoveredButton(null)}
           >
             <FaCog />
-            <span>Settings</span>
+            <span className='px-2'>Settings</span>
+            <span style={{ ...underlineStyle, transform: hoveredButton === 'settings' ? 'scaleX(1)' : 'scaleX(0)' }} />
+          </button>
+          <button
+            onClick={() => navigate('/notis')}
+            style={buttonStyle}
+            onMouseEnter={() => setHoveredButton('notis')}
+            onMouseLeave={() => setHoveredButton(null)}
+          >
+            <FaBell />
+            <span className='px-2'>Notis</span>
+            <span style={{ ...underlineStyle, transform: hoveredButton === 'notis' ? 'scaleX(1)' : 'scaleX(0)' }} />
           </button>
         </nav>
 
         {/* Log Out Button */}
-        <div className="flex items-center space-x-4">
-          <button
-            className="bg-white text-blue-500 px-4 py-2 rounded-md shadow-md hover:bg-gray-100 flex items-center space-x-1 focus:outline-none"
-            onClick={handleLogoutClick}
-          >
-            <FaSignOutAlt />
-            <span>Log Out</span>
-          </button>
-        </div>
+        
       </div>
 
       {/* Popup Confirmation */}
