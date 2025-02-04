@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from 'axios';
+
 import { apiEndpoints } from "../Api";
 
 const Page = () => {
@@ -47,10 +47,13 @@ const Page = () => {
   };
 
   return (
-    <div className="bg-gradient-to-r from-green-500 to-blue-600 min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8">
+    <div className="bg-black min-h-screen  flex items-center justify-center px-4 sm:px-6 lg:px-8">
+      <div className=" bg-black flex-auto flex-col items-center justify-center md:justify-start ml-14">
+        <h1 className="text-8xl font-bold bg-gradient-to-r from-blue-400 to-purple-800 bg-clip-text text-transparent leading-normal">Welcome!</h1>
+        <p className="text-2xl font-bold bg-gradient-to-r from-red-500  to-blue-800 bg-clip-text text-transparent leading-normal my-1">Connect Seamlessly.....</p>
+      </div>
       <div className="w-full max-w-md bg-white rounded-lg shadow-md p-6 sm:p-8">
         <h2 className="text-2xl sm:text-3xl font-bold text-center text-gray-800">Login</h2>
-        <p className="text-center text-gray-600 mb-6 sm:mb-8">Welcome Back!</p>
 
         <form className="space-y-4" onSubmit={handleLogin}>
           <div>
