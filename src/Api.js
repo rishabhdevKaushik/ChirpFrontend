@@ -1,5 +1,5 @@
 import axios from 'axios';
-const BASE_URL = 'https://chirpbackend-9pjh.onrender.com';
+const BASE_URL = 'https://chirpbackend-9pjh.onrender.com/api';
 
 const api = axios.create({
     baseURL: BASE_URL,
