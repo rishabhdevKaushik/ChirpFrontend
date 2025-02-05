@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { apiEndpoints } from "../Api"; // Import your API endpoints
 
-import { apiEndpoints } from "../Api";
-
-const Page = () => {
+const Login = () => {
   const [formData, setFormData] = useState({
     identifier: "",
     password: "",
   });
-
+  const [loading, setLoading] = useState(false); // State for loading
+  const [error, setError] = useState(null); // State for error messages
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -18,42 +18,41 @@ const Page = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setLoading(true); // Start loading
 
-    console.log("Login Data:", formData);
     try {
-      
+      console.log("Login Data:", formData);
       const response = await apiEndpoints.login(formData); // API call to find user
       console.log(response);
       const { accessToken } = response.data;
       console.log("Login Successful:", accessToken);
-  
+
       // Save the access token to local storage
       localStorage.setItem('accessToken', accessToken);
-  
+
       navigate("/main"); // Navigate to the main page
     } catch (error) {
-      console.log(error);
-      
-      
+      console.error(error);
+      setError("Login failed. Please check your credentials."); // Set error message
+    } finally {
+      setLoading(false); // Stop loading regardless of success or failure
     }
-
-
   };
 
-
-  const handleSignup = (e) => {
-
+  const handleSignup = () => {
     navigate("/Signup");
   };
 
   return (
-    <div className="bg-black min-h-screen  flex items-center justify-center px-4 sm:px-6 lg:px-8">
-      <div className=" bg-black flex-auto flex-col items-center justify-center md:justify-start ml-14">
+    <div className="bg-black min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8">
+      <div className="bg-black flex-auto flex-col items-center justify-center md:justify-start ml-14">
         <h1 className="text-8xl font-bold bg-gradient-to-r from-blue-400 to-purple-800 bg-clip-text text-transparent leading-normal">Welcome!</h1>
-        <p className="text-2xl font-bold bg-gradient-to-r from-red-500  to-blue-800 bg-clip-text text-transparent leading-normal my-1">Connect Seamlessly.....</p>
+        <p className="text-2xl font-bold bg-gradient-to-r from-red-500 to-blue-800 bg-clip-text text-transparent leading-normal my-1">Connect Seamlessly.....</p>
       </div>
       <div className="w-full max-w-md bg-white rounded-lg shadow-md p-6 sm:p-8">
         <h2 className="text-2xl sm:text-3xl font-bold text-center text-gray-800">Login</h2>
+
+        {error && <p className="text-red-500 text-center">{error}</p>} {/* Display error message */}
 
         <form className="space-y-4" onSubmit={handleLogin}>
           <div>
@@ -61,7 +60,7 @@ const Page = () => {
               Username or Email
             </label>
             <input
-              type="identifier"
+              type="text" // Changed type from "identifier" to "text"
               name="identifier"
               id="identifier"
               value={formData.identifier}
@@ -92,19 +91,17 @@ const Page = () => {
           {/* Login Button */}
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white py-2 px-4 rounded-md shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 sm:text-sm"
+            disabled={loading} // Disable button while loading
+            className={`w-full ${loading ? 'bg-gray-400' : 'bg-blue-600'} text-white py-2 px-4 rounded-md shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 sm:text-sm`}
           >
-            Login
+            {loading ? 'Logging in...' : 'Login'} {/* Show loading text */}
           </button>
         </form>
 
         <div className="mt-4 sm:mt-6 text-center">
           <p className="text-gray-600">
             Don't have an account?{" "}
-            <button
-              onClick={handleSignup}
-              className="text-blue-600 hover:underline font-medium"
-            >
+            <button onClick={handleSignup} className="text-blue-600 hover:underline font-medium">
               Sign Up
             </button>
           </p>
@@ -114,4 +111,4 @@ const Page = () => {
   );
 };
 
-export default Page;
+export default Login;
