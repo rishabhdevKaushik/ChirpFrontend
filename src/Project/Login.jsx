@@ -1,14 +1,14 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { apiEndpoints } from "../Api"; // Import your API endpoints
+import {useNavigate } from "react-router-dom";
+import {apiEndpoints } from "../Api"; // Import your API endpoints
 
 const Login = () => {
   const [formData, setFormData] = useState({
     identifier: "",
     password: "",
   });
-  const [loading, setLoading] = useState(false); // State for loading
-  const [error, setError] = useState(null); // State for error messages
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -18,24 +18,18 @@ const Login = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    setLoading(true); // Start loading
+    setLoading(true);
 
     try {
-      console.log("Login Data:", formData);
-      const response = await apiEndpoints.login(formData); // API call to find user
-      console.log(response);
+      const response = await apiEndpoints.login(formData);
       const { accessToken } = response.data;
-      console.log("Login Successful:", accessToken);
-
-      // Save the access token to local storage
-      localStorage.setItem('accessToken', accessToken);
-
-      navigate("/main"); // Navigate to the main page
+      localStorage.setItem("accessToken", accessToken);
+      navigate("/main");
     } catch (error) {
       console.error(error);
-      setError("Login failed. Please check your credentials."); // Set error message
+      setError("Login failed. Please check your credentials.");
     } finally {
-      setLoading(false); // Stop loading regardless of success or failure
+      setLoading(false);
     }
   };
 
@@ -44,36 +38,39 @@ const Login = () => {
   };
 
   return (
-    <div className="bg-black min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8">
-      <div className="bg-black flex-auto flex-col items-center justify-center md:justify-start ml-14">
-        <h1 className="text-8xl font-bold bg-gradient-to-r from-blue-400 to-purple-800 bg-clip-text text-transparent leading-normal">Welcome!</h1>
-        <p className="text-2xl font-bold bg-gradient-to-r from-red-500 to-blue-800 bg-clip-text text-transparent leading-normal my-1">Connect Seamlessly.....</p>
-      </div>
-      <div className="w-full max-w-md bg-white rounded-lg shadow-md p-6 sm:p-8">
-        <h2 className="text-2xl sm:text-3xl font-bold text-center text-gray-800">Login</h2>
+    <div className="relative min-h-screen flex items-center justify-center bg-cover bg-center" style={{ backgroundImage: "url('/bg1.jpeg')" }}>
+      {/* Blur Overlay */}
+      <div className="absolute inset-0 bg-black/30 backdrop-blur-xs"></div>
 
-        {error && <p className="text-red-500 text-center">{error}</p>} {/* Display error message */}
+      <div className="relative z-10 backdrop-blur-md w-full max-w-lg bg-gray-900 bg-opacity-70 rounded-lg shadow-xl p-8 sm:p-10 transform transition duration-500 hover:scale-105 hover:shadow-2xl rounded-full">
+        <div className="text-center mb-6">
+          <h1 className="text-5xl font-extrabold text-transparent bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text leading-tight animate__animated animate__fadeIn">
+            Welcome Back!
+          </h1>
+          <p className="text-xl text-gray-300">Login to your account</p>
+        </div>
 
-        <form className="space-y-4" onSubmit={handleLogin}>
+        {error && <p className="text-red-500 text-center mb-4 animate__animated animate__fadeIn">{error}</p>}
+
+        <form className="space-y-6" onSubmit={handleLogin}>
           <div>
-            <label htmlFor="identifier" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="identifier" className="block text-sm font-medium text-gray-300">
               Username or Email
             </label>
             <input
-              type="text" // Changed type from "identifier" to "text"
+              type="text"
               name="identifier"
               id="identifier"
               value={formData.identifier}
               onChange={handleChange}
               required
-              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              className="mt-1 block w-full px-4 py-3 border border-gray-600 bg-gray-800 text-white rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition duration-300 ease-in-out transform hover:scale-105"
               placeholder="Enter your username or email"
             />
           </div>
 
-          {/* Password */}
           <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="password" className="block text-sm font-medium text-gray-300">
               Password
             </label>
             <input
@@ -83,25 +80,24 @@ const Login = () => {
               value={formData.password}
               onChange={handleChange}
               required
-              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              className="mt-1 block w-full px-4 py-3 border border-gray-600 bg-gray-800 text-white rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition duration-300 ease-in-out transform hover:scale-105"
               placeholder="Enter your password"
             />
           </div>
 
-          {/* Login Button */}
           <button
             type="submit"
-            disabled={loading} // Disable button while loading
-            className={`w-full ${loading ? 'bg-gray-400' : 'bg-blue-600'} text-white py-2 px-4 rounded-md shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 sm:text-sm`}
+            disabled={loading}
+            className={`w-full ${loading ? "bg-gray-600" : "bg-gradient-to-r from-blue-500 to-purple-600"} text-white py-3 px-4 rounded-md shadow-md hover:from-blue-600 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-300 ease-in-out`}
           >
-            {loading ? 'Logging in...' : 'Login'} {/* Show loading text */}
+            {loading ? "Logging in..." : "Login"}
           </button>
         </form>
 
-        <div className="mt-4 sm:mt-6 text-center">
-          <p className="text-gray-600">
+        <div className="mt-6 text-center">
+          <p className="text-gray-400">
             Don't have an account?{" "}
-            <button onClick={handleSignup} className="text-blue-600 hover:underline font-medium">
+            <button onClick={handleSignup} className="text-blue-400 hover:underline font-medium">
               Sign Up
             </button>
           </p>

@@ -45,7 +45,7 @@ const apiEndpoints = {
     deleteUser: (data) => api.delete('/user/delete', data),
     logout: () => api.post('/user/logout'),
     findUser: (username) => api.get(`/user/${username}`),
-    refershauthenticationtoken: () => api.post('/user/refresh-token'),
+    refershauthenticationtoken: () => api.post('/user/authenticate-token'),
     
     sendFriendRequest: (username) => api.post(`/friendreq/${username}`),
     updateFriendRequest: (data, username) => api.put(`/friendreq/${username}`, data),
