@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Header from "./Header";
+import Navbar from "./Navbar";
 import Leftsection from "./Leftsection";
 import RightSection from "./Rightsection";
 
@@ -8,7 +8,6 @@ const Main = () => {
 
   return (
     <>
-      <Header />
       <div className="flex flex-col md:flex-row w-full h-screen">
         {/* Left Section (Friends List) */}
         <div className="md:w-1/4 w-full bg-gray-100 p-4 overflow-y-auto">

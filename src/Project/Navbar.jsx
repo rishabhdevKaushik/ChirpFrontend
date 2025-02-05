@@ -3,7 +3,7 @@ import { FaUser, FaCog, FaBell, FaHome } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import Popup from './Popup'; // Import the Popup component
 
-const Header = () => {
+const Navbar = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const navigate = useNavigate();
 
@@ -41,7 +41,7 @@ const Header = () => {
   const [hoveredButton, setHoveredButton] = useState(null);
 
   return (
-    <header className="bg-black p-4 shadow-md">
+    <header className="bg-gray-900 p-4 shadow-md">
       <div className="max-w-7xl mx-auto flex justify-between items-center">
         {/* Logo */}
         <div className="text-white text-2xl font-bold flex items-center space-x-2">
@@ -53,7 +53,7 @@ const Header = () => {
         <nav className="space-x-4 text-lg hidden md:flex items-center">
           {/* Home Button */}
           <button
-            onClick={() => navigate('/')}
+            onClick={() => navigate('/main')}
             style={buttonStyle}
             onMouseEnter={() => setHoveredButton('home')}
             onMouseLeave={() => setHoveredButton(null)}
@@ -112,4 +112,4 @@ const Header = () => {
   );
 };
 
-export default Header;
+export default Navbar;
