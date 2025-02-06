@@ -17,7 +17,6 @@ const Profile = () => {
     setLoading(true);
     try {
       const response = await apiEndpoints.listPendingRequests();
-      console.log(response.data.pendingRequests);
       setPendingRequests(response.data.pendingRequests);
       setLoading(false);
     } catch (error) {
@@ -83,7 +82,17 @@ const Profile = () => {
       setLoading(false);
     }finally{
        fetchPendingRequests();
-}  };
+    }  
+
+    // Make new chat with this person
+    try {
+      const data = {username};
+      
+      await apiEndpoints.accessChat(data);
+    } catch (error) {
+      console.error('Error making chat with this user:', error);
+    }
+};
 
   const handleBlockRequest = async (username) => {
     console.log(`Blocking user ${username}`);

@@ -23,15 +23,19 @@ const Page = () => {
     try {
       
       const response = await apiEndpoints.login(formData); // API call to find user
-      console.log(response);
-      const { accessToken } = response.data;
-      console.log("Login Successful:", accessToken);
+      const { accessToken, currentUser } = response.data;
   
       // Save the access token to local storage
       localStorage.setItem('accessToken', accessToken);
-  
+      localStorage.setItem('currentUsername', currentUser.username);
+      localStorage.setItem('currentUserId', currentUser.id);
+
+      console.log("Login successful");
+      
+      
       navigate("/main"); // Navigate to the main page
     } catch (error) {
+      console.log("Login unsuccessful");
       console.log(error);
       
       

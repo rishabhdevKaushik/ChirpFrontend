@@ -55,7 +55,17 @@ const apiEndpoints = {
     listPendingRequests: () => api.get('/friendreq/list/pending'),
     listFriends: () => api.get('/friendreq/list/friends'),
 
-    
+    accessChat: (data)=>api.post('/chat/chats',data),
+    fetchChat: ()=>api.get('/chat/chats'),
+    createGroupchat:(data)=>api.post('/chat/group',data),
+    updateGroupchat:(data)=>api.put('/chat/group',data),
+    removeuserfromgroup:(data,chatid)=>api.post(`/chat/group/${chatid}`,data),
+
+
+    sendmsg:(data)=>api.post('/message',data),
+    getallmsgofchat:(chatid)=>api.get(`/message/${chatid}`),
+    editmsg:(data)=>api.put('/message', data),
+    deleteMessage:(messageid)=>api.delete(`/message/${messageid}`)
 };
 
 export { api, apiEndpoints };

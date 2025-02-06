@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { apiEndpoints } from '../Api'; // Ensure this path and file export are correct
 import SendRequest from './Sendrequest'; // Import the SendRequest component
+import socket from '../socket';
 
 const LeftSection = ({ onSelectFriend }) => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -9,31 +10,47 @@ const LeftSection = ({ onSelectFriend }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [showSendRequest, setShowSendRequest] = useState(false);
-  const [friends, setFriends] = useState([
-    { name: 'John Doe', avatar: 'https://i.pravatar.cc/150?img=1' },
-    { name: 'Jane Smith', avatar: 'https://i.pravatar.cc/150?img=2' },
-    { name: 'Alex Johnson', avatar: 'https://i.pravatar.cc/150?img=3' },
-    { name: 'Sarah Lee', avatar: 'https://i.pravatar.cc/150?img=4' },
-  ]);
+  const [friends, setFriends] = useState([]);
+
   useEffect(() => {
     // Fetch friends from backend
     const fetchFriends = async () => {
       try {
-        const response = await apiEndpoints.listFriends();
-        const fetchedFriends = response.data.friends || [];
-  
+        const currentUsername = localStorage.getItem("currentUsername");
+        
+        const response = await apiEndpoints.fetchChat();
+
         // Assuming 'currentUser' data is available in the response
-        const currentUsername = response.data.currentUser?.username;
-  
-        // Filter out the current user from the friends list
-        const filteredFriends = fetchedFriends.filter(
-          (friend) => friend.username !== currentUsername
-        );
-  
+        // Initialize an array to hold the friends
+        const fetchedFriends = [];
+
+        // Iterate through each chat object in the response
+        response.data.forEach(chat => {
+          if (chat.isGroup) {
+            // If it's a group chat, add the chatName to the friends list
+            fetchedFriends.push({
+              id: chat._id, // Use the chat ID as a unique identifier
+              name: chat.chatName,
+              isGroup: true
+            });
+          } else {
+            // If it's not a group chat, filter out the current user and add the other user
+            chat.users.forEach(user => {
+              if (user.username !== currentUsername) {
+                fetchedFriends.push({
+                  id: chat._id,
+                  name: user.username,
+                  isGroup: false
+                });
+              }
+            });
+          }
+        });
+
         // Merge friends while avoiding duplicates
         setFriends((prevFriends) => {
-          const uniqueFriends = [...prevFriends, ...filteredFriends].reduce((acc, friend) => {
-            if (!acc.some(existing => existing.username === friend.username)) {
+          const uniqueFriends = [...prevFriends, ...fetchedFriends].reduce((acc, friend) => {
+            if (!acc.some(existing => existing.id === friend.id)) {
               acc.push(friend);
             }
             return acc;
@@ -44,9 +61,9 @@ const LeftSection = ({ onSelectFriend }) => {
         setError('Failed to fetch friends list.');
       }
     };
+
     fetchFriends();
   }, []);
-  
 
   const filteredFriends = isGlobalSearch
     ? []
@@ -79,6 +96,15 @@ const LeftSection = ({ onSelectFriend }) => {
     setSearchQuery('');
   };
 
+  const handleSelectChat = (chat) =>{
+    localStorage.setItem("selectedChat", chat);
+    // Join the chat room when a friend is selected
+        // const joinChat = () =>{
+          socket.emit("join chat", chat.id);
+        // }
+        onSelectFriend(chat);
+  }
+
   return (
     <div className="bg-gray-100 min-h-screen flex flex-col items-center p-4 md:p-6">
       <div className="bg-white shadow-md rounded-lg p-4 md:p-6 w-full max-w-sm sm:max-w-md lg:max-w-lg">
@@ -102,7 +128,7 @@ const LeftSection = ({ onSelectFriend }) => {
         </div>
 
         <h3 className="text-xl font-semibold text-gray-800 mb-4">
-          {isGlobalSearch ? 'Global Search Results' : 'Your Friends'}
+          {isGlobalSearch ? 'Global Search Results' : ''}
         </h3>
         <div className="space-y-5">
           {!isGlobalSearch ? (
@@ -111,7 +137,8 @@ const LeftSection = ({ onSelectFriend }) => {
                 <div
                   key={friend.name}
                   className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 bg-gray-50 rounded-lg shadow-md hover:bg-gray-200 transition-colors duration-300 cursor-pointer"
-                  onClick={() => onSelectFriend(friend)}
+                  // onClick={() => onSelectFriend(friend)}
+                  onClick={() => handleSelectChat(friend)}
                 >
                   <div className="flex items-center space-x-3">
                     <img
