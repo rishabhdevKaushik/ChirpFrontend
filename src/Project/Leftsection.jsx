@@ -96,13 +96,14 @@ const LeftSection = ({ onSelectFriend }) => {
     setSearchQuery('');
   };
 
-  const handleSelectChat = (chat) =>{
+  const handleSelectChat = (chat) =>{    
     localStorage.setItem("selectedChat", chat);
+    localStorage.setItem("selectedChatId", chat.id);
     // Join the chat room when a friend is selected
-        // const joinChat = () =>{
-          socket.emit("join chat", chat.id);
-        // }
-        onSelectFriend(chat);
+    socket.emit("join chat", chat.id);
+    
+    
+    onSelectFriend(chat);
   }
 
   return (

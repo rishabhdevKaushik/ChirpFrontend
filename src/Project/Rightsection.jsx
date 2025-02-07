@@ -9,58 +9,59 @@ const RightSection = ({ selectedFriend }) => {
   const messagesEndRef = useRef(null);
   const [typing, setTyping] = useState(false);
   const currentUsername = localStorage.getItem('currentUsername');
-  const currentUserId= localStorage.getItem('currentUserId');
+  const currentUserId = localStorage.getItem('currentUserId');
 
-  var selectedChat = localStorage.getItem('selectedChat');
-  
+  const selectedChat = localStorage.getItem('selectedChat');
+  const selectedChatId = localStorage.getItem('selectedChatId');
 
-  // Initialize socket connection
   useEffect(() => {
-
     socket.connect();
+    socket.emit('setup', currentUserId); // Send current user id
 
-    socket.emit("setup", currentUserId); // send current user id
-
-    socket.on("connected", () =>{
-      console.log("Connected to socket io server");
-      
+    socket.on('connected', () => {
+      // console.log('Connected to socket io server');
     });
 
-    // For incomming message
-    socket.on("message recieved", (msg) =>{
-      setMessage((msg) =>{
-        setMessages((prevMessages) => [...prevMessages, msg]);
-      setMessage('');
-      })
+    socket.on('typing', () => {
+      console.log('Typing...');
+      setTyping(true);
     });
 
-    // // Join the chat room when a friend is selected
-    // const joinChat = () =>{
-    //   socket.emit("join chat", selectedChat.id);
-    // }
+    socket.on('stopTyping', () => {
+      console.log('Stopped typing');
+      setTyping(false);
+    });
 
-    socket.on("typing", ()=>{
-      setTyping("true");
+    // For incoming message
+    socket.on('messageReceived', (msg) => {
+      setMessages((prevMessages) => {
+        if (prevMessages.find((message) => message._id === msg._id)) {
+          return prevMessages; // Avoid duplicate messages
+        }
+        return [...prevMessages, msg];
+      });
     });
-  
-    socket.on("stopTyping", ()=>{
-      setTyping("false");
-    });
-    
-    
+
     // Cleanup on unmount
     return () => {
       socket.disconnect();
     };
-  }, []);
+  }, [currentUserId]);
 
-  
-
-
+  let typingTimeout;
   const handleChange = (e) => {
     setMessage(e.target.value);
 
-    socket.emit("typing", selectedChat.id);
+    // Typing indicator
+    socket.emit('typing', selectedChatId);
+
+    // Clear the previous timeout if the user keeps typing
+    clearTimeout(typingTimeout);
+
+    // Set a new timeout to emit "stopTyping"
+    typingTimeout = setTimeout(() => {
+      socket.emit('stopTyping', selectedChatId);
+    }, 2000); // Emit after 2 seconds of no typing
   };
 
   const handleSend = async (e) => {
@@ -69,13 +70,14 @@ const RightSection = ({ selectedFriend }) => {
       const newMessage = {
         content: message,
         sender: { username: currentUsername },
+        // _id: Date.now().toString(), // Temporary ID for optimistic UI
       };
 
-      // Update UI optimistically
-      setMessages((prevMessages) => [...prevMessages, newMessage]);
-      setMessage('');
-
       try {
+        // Update UI
+        setMessages((prevMessages) => [...prevMessages, newMessage]);
+        setMessage('');
+
         const data = {
           content: message,
           chatId: selectedFriend.id,
@@ -83,10 +85,18 @@ const RightSection = ({ selectedFriend }) => {
 
         // Send message to the server
         const response = await apiEndpoints.sendmsg(data);
-        // For outgoing message
-        socket.emit("new message", newMessage);
+
+
+        // Update the message with the correct server ID
+        setMessages((prevMessages) =>
+          prevMessages.map((msg) =>
+            msg._id === newMessage._id ? response.data : msg
+          )
+        );
 
         // Emit the message via Socket.IO
+        socket.emit('newMessage', response.data);
+        
       } catch (error) {
         console.error('Failed to send message:', error);
       }
@@ -109,14 +119,12 @@ const RightSection = ({ selectedFriend }) => {
     }
   };
 
-  // Fetch messages when a friend is selected
   useEffect(() => {
     if (selectedFriend) {
       getMessages(selectedFriend.id);
     }
   }, [selectedFriend]);
 
-  // Scroll to the bottom of the messages container
   useEffect(() => {
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollTop = messagesEndRef.current.scrollHeight;
@@ -195,11 +203,10 @@ const RightSection = ({ selectedFriend }) => {
           <div
             key={index}
             onDoubleClick={() => handleDoubleClick(msg)}
-            className={`p-3 rounded-lg mb-2 shadow-md max-w-sm break-words ${
-              msg.sender.username === currentUsername
-                ? 'self-end bg-blue-500 text-white'
-                : 'self-start bg-gray-300 text-gray-800'
-            } cursor-pointer hover:shadow-lg transition-shadow duration-300`}
+            className={`p-3 rounded-lg mb-2 shadow-md max-w-sm break-words ${msg.sender.username === currentUsername
+              ? 'self-end bg-blue-500 text-white'
+              : 'self-start bg-gray-300 text-gray-800'
+              } cursor-pointer hover:shadow-lg transition-shadow duration-300`}
           >
             {msg.content}
           </div>
@@ -227,7 +234,9 @@ const RightSection = ({ selectedFriend }) => {
                 </button>
               </>
             ) : (
-              <p className="text-gray-500">You can only edit or delete your own messages.</p>
+              <p className="text-gray-500">
+                You can only edit or delete your own messages.
+              </p>
             )}
             <button
               onClick={handleSelect}
