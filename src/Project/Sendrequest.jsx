@@ -1,9 +1,7 @@
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { apiEndpoints } from '../Api';
+import { useState, useEffect } from "react";
+import { apiEndpoints } from "../Api";
 const SendRequest = ({ username }) => {
     const [showPopup, setShowPopup] = useState(true);
-    const navigate = useNavigate();
 
     useEffect(() => {
         setShowPopup(true); // Automatically show the popup when component mounts
@@ -12,8 +10,8 @@ const SendRequest = ({ username }) => {
     const handleFriendRequest = async () => {
         try {
             console.log("username ", username);
-            
-            const response = await apiEndpoints.sendFriendRequest(username);
+
+            await apiEndpoints.sendFriendRequest(username);
             // alert(`Friend request sent to ${username}!`);
             setShowPopup(false); // Hide the popup
         } catch (error) {
@@ -28,7 +26,9 @@ const SendRequest = ({ username }) => {
             {showPopup && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
                     <div className="bg-white p-6 rounded-2xl shadow-xl text-center space-y-4">
-                        <h2 className="text-xl font-semibold text-gray-700">Choose an Action</h2>
+                        <h2 className="text-xl font-semibold text-gray-700">
+                            Choose an Action
+                        </h2>
 
                         <div className="flex gap-4 justify-center">
                             <button
