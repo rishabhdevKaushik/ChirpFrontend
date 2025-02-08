@@ -55,10 +55,21 @@ const Profile = () => {
       await apiEndpoints.updateFriendRequest({ status: "ACCEPT" }, username);
       fetchPendingRequests();
     } catch (error) {
-      console.error("Error accepting user:", error);
+      console.error('Error accepting user:', error);
+      setLoading(false);
+    }finally{
+       fetchPendingRequests();
+    }  
+
+    // Make new chat with this person
+    try {
+      const data = {username};
+      
+      await apiEndpoints.accessChat(data);
+    } catch (error) {
+      console.error('Error making chat with this user:', error);
     }
-    setLoading(false);
-  };
+};
 
   // Reject friend request
   const handleRejectRequest = async (username) => {
