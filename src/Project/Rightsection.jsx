@@ -182,45 +182,67 @@ const RightSection = ({ selectedFriend }) => {
     };
 
     return (
-        <div className="flex flex-col p-4 bg-gray-100 rounded-lg shadow-md h-full w-full max-w-full">
+        <div className="flex flex-col p-4 bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl shadow-lg h-[calc(100vh-2rem)] w-full max-w-full">
             {selectedFriend ? (
-                <div className="flex items-center space-x-3 mb-4 p-4 bg-white shadow-md rounded-lg hover:bg-gray-50 transition duration-300 ease-in-out">
+                <div className="flex items-center space-x-4 mb-4 p-3 bg-white/90 backdrop-blur-sm shadow-md rounded-xl hover:bg-white/95 transition duration-300 ease-in-out border border-gray-100">
                     <img
-                        src={selectedFriend.avatar}
+                        src={selectedFriend.avatar || "https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y"}
                         alt={selectedFriend.name}
-                        className="w-12 h-12 rounded-full border-2 border-gray-300"
+                        className="w-14 h-14 rounded-full border-2 border-blue-400 p-0.5 hover:scale-105 transition-transform duration-300"
+                        onError={(e) => {
+                            e.target.src = "https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y";
+                        }}
                     />
-                    <h3 className="text-lg font-semibold text-gray-800 truncate hover:text-blue-600 transition-colors duration-300 ease-in-out">
-                        {selectedFriend.name}
-                    </h3>
+                    <div>
+                        <h3 className="text-xl font-semibold text-gray-800 hover:text-blue-600 transition-colors duration-300">
+                            {selectedFriend.name}
+                        </h3>
+                        {typing && (
+                            <span className="text-sm text-blue-500 animate-pulse">
+                                typing...
+                            </span>
+                        )}
+                    </div>
                 </div>
             ) : (
-                <p className="text-gray-500 text-center mb-4">
-                    Select a friend to start chatting
-                </p>
+                <div className="flex flex-col items-center justify-center h-full space-y-4 text-center">
+                    <div className="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center">
+                        <svg className="w-10 h-10 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                        </svg>
+                    </div>
+                    <p className="text-gray-500 text-lg">
+                        Select a friend to start chatting
+                    </p>
+                </div>
             )}
 
             {/* Messages Display */}
             <div
                 ref={messagesEndRef}
-                className="flex-grow mb-4 overflow-y-auto bg-white p-3 rounded-lg shadow-md flex flex-col"
-                style={{ maxHeight: "calc(100vh - 300px)" }}
+                className="flex-grow mb-4 overflow-y-auto bg-white/90 backdrop-blur-sm p-4 rounded-xl shadow-md flex flex-col space-y-3"
+                style={{ maxHeight: "calc(100vh - 250px)" }}
             >
                 {messages.map((msg) => (
                     <div
                         key={msg._id || msg.tempId}
                         onDoubleClick={() => handleDoubleClick(msg)}
-                        className={`p-3 rounded-lg mb-2 shadow-md max-w-sm break-words ${
+                        className={`group p-4 rounded-xl mb-2 shadow-sm max-w-sm break-words transition-all duration-300 hover:-translate-y-0.5 ${
                             msg.sender.username === currentUsername
-                                ? "self-end bg-blue-500 text-white"
-                                : "self-start bg-gray-300 text-gray-800"
-                        } cursor-pointer hover:shadow-lg transition-shadow duration-300 ${
+                                ? "self-end bg-gradient-to-r from-blue-500 to-blue-600 text-white"
+                                : "self-start bg-gradient-to-r from-gray-100 to-gray-200 text-gray-800"
+                        } ${
                             editingMessage?._id === msg._id
                                 ? "ring-2 ring-yellow-400"
                                 : ""
                         }`}
                     >
-                        {msg.content}
+                        <div className="flex flex-col">
+                            <span className="text-xs opacity-70 mb-1">
+                                {msg.sender.username}
+                            </span>
+                            {msg.content}
+                        </div>
                     </div>
                 ))}
             </div>
@@ -269,7 +291,7 @@ const RightSection = ({ selectedFriend }) => {
             )}
 
             {/* Message Input */}
-            <div className="flex items-center space-x-2 mt-4">
+            <div className="flex items-center space-x-3">
                 <div className="relative w-full">
                     <textarea
                         value={message}
@@ -280,7 +302,7 @@ const RightSection = ({ selectedFriend }) => {
                                 ? "Editing message..."
                                 : "Type your message here..."
                         }
-                        className="w-full p-3 rounded-full border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none min-h-[40px] pr-16"
+                        className="w-full p-2 rounded-xl border-2 border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none min-h-[38px] pr-24 bg-white/90 backdrop-blur-sm transition-all duration-300"
                         rows="1"
                     />
                     <div className="absolute right-2 top-1/2 transform -translate-y-1/2 flex gap-2">
@@ -290,15 +312,14 @@ const RightSection = ({ selectedFriend }) => {
                                     setEditingMessage(null);
                                     setMessage("");
                                 }}
-                                className="bg-gray-500 text-white py-2 px-4 rounded-full shadow-md hover:bg-gray-600"
+                                className="bg-gray-500 text-white py-1.5 px-3 rounded-xl shadow-md hover:bg-gray-600 transition-colors duration-300"
                             >
                                 ✕
                             </button>
                         )}
                         <button
                             onClick={handleSend}
-                            className="bg-blue-500 text-white py-2 px-4 rounded-full shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
-                            // disabled={!message.trim()}
+                            className="bg-gradient-to-r from-blue-500 to-blue-600 text-white py-1.5 px-4 rounded-xl shadow-md hover:from-blue-600 hover:to-blue-700 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105"
                         >
                             {editingMessage ? "Edit" : "Send"}
                         </button>

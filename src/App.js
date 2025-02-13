@@ -8,6 +8,7 @@ import Profile from "./Project/Profile";
 import UpdateProfile from "./Project/UpdateProfile";
 import LoadingScreen from "./Project/Loadingpage";
 import Navbar from "./Project/Navbar";
+import Settings from "./Project/Settings";
 const App = () => {
     return (
         <Router>
@@ -27,6 +28,7 @@ const App = () => {
                             path="/updateprofile"
                             element={<UpdateProfile />}
                         />
+                        <Route path="/settings" element={<Settings />} />
                     </Route>
                 </Routes>
             </div>
@@ -44,6 +46,7 @@ const LayoutWithNavbar = () => {
                 <Route path="/popup" element={<Popup />} />
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/updateprofile" element={<UpdateProfile />} />
+                <Route path="/settings" element={<Settings />} />
             </Routes>
         </>
     );

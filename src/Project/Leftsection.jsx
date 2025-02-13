@@ -111,95 +111,91 @@ const LeftSection = ({ onSelectFriend }) => {
     };
 
     return (
-        <div className="bg-gray-100 min-h-screen flex flex-col items-center p-4 md:p-6">
-            <div className="bg-white shadow-md rounded-lg p-4 md:p-6 w-full max-w-sm sm:max-w-md lg:max-w-lg">
-                <div className="relative mb-4">
+        <div className="bg-gradient-to-br from-gray-50 to-gray-100 min-h-screen flex flex-col items-center p-4 md:p-6">
+            <div className="bg-white shadow-xl rounded-xl p-6 w-full max-w-sm sm:max-w-md lg:max-w-lg border border-gray-100">
+                {/* Search Section */}
+                <div className="relative mb-6">
                     <input
                         type="text"
                         value={searchQuery}
                         onChange={handleSearchChange}
-                        placeholder={
-                            isGlobalSearch
-                                ? "Search globally..."
-                                : "Search friends..."
-                        }
-                        className="w-full p-3 rounded-md border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        placeholder={isGlobalSearch ? "Search globally..." : "Search friends..."}
+                        className="w-full p-4 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all duration-300 bg-gray-50"
                     />
-                    <div className="flex items-center mt-2">
+                    <div className="flex items-center mt-3">
                         <input
                             type="checkbox"
                             checked={isGlobalSearch}
                             onChange={handleCheckboxChange}
-                            className="mr-2"
+                            className="w-4 h-4 text-blue-500 rounded focus:ring-blue-400"
                         />
-                        <label className="text-gray-700">Search Globally</label>
+                        <label className="ml-2 text-gray-600 text-sm font-medium">Search Globally</label>
                     </div>
                 </div>
 
-                <h3 className="text-xl font-semibold text-gray-800 mb-4">
-                    {isGlobalSearch ? "Global Search Results" : ""}
-                </h3>
-                <div className="space-y-5">
+                {isGlobalSearch && (
+                    <h3 className="text-xl font-semibold text-gray-800 mb-4 border-b pb-2">
+                        Global Search Results
+                    </h3>
+                )}
+
+                <div className="space-y-3">
                     {!isGlobalSearch ? (
                         filteredFriends.length > 0 ? (
                             filteredFriends.map((friend) => (
                                 <div
                                     key={friend.name}
-                                    className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 bg-gray-50 rounded-lg shadow-md hover:bg-gray-200 transition-colors duration-300 cursor-pointer"
-                                    // onClick={() => onSelectFriend(friend)}
+                                    className="flex items-center p-4 bg-white rounded-xl border border-gray-100 hover:shadow-md hover:border-blue-100 transition-all duration-300 cursor-pointer"
                                     onClick={() => handleSelectChat(friend)}
                                 >
-                                    <div className="flex items-center space-x-3">
-                                        <img
-                                            src={
-                                                friend.avatar ||
-                                                "https://i.pravatar.cc/150?img=2"
-                                            } // Default to Jane Smith's avatar
-                                            alt={friend.name}
-                                            className="w-12 h-12 rounded-full border-2"
-                                        />
-                                        <div>
-                                            <h4 className="font-semibold text-gray-800">
-                                                {friend.name}
-                                            </h4>
+                                    <div className="flex items-center space-x-4 w-full">
+                                        <div className="relative">
+                                            <img
+                                                src={friend.avatar || "https://i.pravatar.cc/150?img=2"}
+                                                alt={friend.name}
+                                                className="w-12 h-12 rounded-full object-cover border-2 border-gray-100"
+                                            />
+                                            {friend.isGroup && (
+                                                <span className="absolute -top-1 -right-1 bg-blue-500 rounded-full p-1">
+                                                    <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                                                    </svg>
+                                                </span>
+                                            )}
+                                        </div>
+                                        <div className="flex-1">
+                                            <h4 className="font-semibold text-gray-800">{friend.name}</h4>
                                         </div>
                                     </div>
                                 </div>
                             ))
                         ) : (
-                            <p className="text-gray-500">No friends found</p>
+                            <p className="text-gray-500 text-center py-4">No friends found</p>
                         )
                     ) : loading ? (
-                        <p className="text-gray-500">Searching globally...</p>
+                        <div className="flex justify-center py-4">
+                            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+                        </div>
                     ) : globalSearchResult ? (
                         <div
-                            className="p-4 bg-gray-50 rounded-lg shadow-md hover:bg-gray-200 transition-colors duration-300 cursor-pointer"
+                            className="p-4 bg-white rounded-xl border border-gray-100 hover:shadow-md hover:border-blue-100 transition-all duration-300 cursor-pointer"
                             onClick={() => setShowSendRequest(true)}
                         >
                             <div className="flex flex-col space-y-2">
-                                <h4 className="font-semibold text-gray-800">
-                                    {globalSearchResult.name}
-                                </h4>
-                                <p className="text-sm text-gray-600">
-                                    Username: {globalSearchResult.username}
-                                </p>
-                                <p className="text-sm text-gray-600">
-                                    Email: {globalSearchResult.email}
-                                </p>
+                                <h4 className="font-semibold text-gray-800">{globalSearchResult.name}</h4>
+                                <p className="text-sm text-gray-600">@{globalSearchResult.username}</p>
+                                <p className="text-sm text-gray-600">{globalSearchResult.email}</p>
                             </div>
                         </div>
                     ) : (
-                        <p className="text-gray-500">
+                        <p className="text-gray-500 text-center py-4">
                             {error || (searchQuery ? "No user found" : "")}
                         </p>
                     )}
                 </div>
             </div>
 
-            {/* Render SendRequest popup if true */}
-            {showSendRequest && (
-                <SendRequest username={globalSearchResult.username} />
-            )}
+            {showSendRequest && <SendRequest username={globalSearchResult.username} />}
         </div>
     );
 };
