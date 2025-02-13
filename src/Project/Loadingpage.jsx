@@ -1,78 +1,73 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { apiEndpoints } from "../Api";
 const LoadingScreen = () => {
     const [isLoading, setIsLoading] = useState(true);
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const [progress, setProgress] = useState(0); // State for progress bar
+    const [progress, setProgress] = useState(0);
     const navigate = useNavigate();
 
+    const checkLoginStatus = useCallback(async () => {
+        let tokenres = { status: 400 };
+
+        try {
+            tokenres = await apiEndpoints.refershauthenticationtoken();
+        } catch (error) {
+            console.error('Authentication error:', error);
+        }
+
+        const isLoggedIn = tokenres.status === 200;
+        localStorage.setItem("islogged", String(isLoggedIn));
+        
+        return isLoggedIn;
+    }, []);
+
     useEffect(() => {
-        // Simulate an API call or check login status
-        const checkLoginStatus = async () => {
-            var tokenres = {
-                status: 400,
-            };
+        let progressInterval;
+        let navigationTimeout;
 
-            try {
-                tokenres = await apiEndpoints.refershauthenticationtoken();
-                // console.log(tokenres.status);
-            } catch (error) {
-                // console.log(error);
-            }
-            localStorage.setItem(
-                "islogged",
-                tokenres.status === 200 ? "true" : "false"
-            );
+        const initializeLoading = async () => {
+            const isLoggedIn = await checkLoginStatus();
 
-            const loggedIn = localStorage.getItem("islogged"); // Check login status from localStorage
-            setIsLoggedIn(loggedIn);
+            // Start progress animation
+            progressInterval = setInterval(() => {
+                setProgress(prev => prev >= 100 ? 100 : prev + 2);
+            }, 50);
 
-            // Start progress bar animation
-            const interval = setInterval(() => {
-                setProgress((prevProgress) => {
-                    if (prevProgress >= 100) {
-                        clearInterval(interval); // Clear the interval when progress reaches 100%
-                        return 100;
-                    }
-                    return prevProgress + 2; // Increase progress by 2% every interval
-                });
-            }, 100); // Update progress every 100ms
-
-            // After 2 seconds, stop loading and navigate to the appropriate page
-            setTimeout(() => {
+            // Setup navigation
+            navigationTimeout = setTimeout(() => {
                 setIsLoading(false);
-                if (loggedIn === "true") {
-                    navigate("/main"); // Redirect to main page if logged in
-                } else {
-                    navigate("/login"); // Redirect to login page if not logged in
-                }
-            }, 2000); // Simulate loading time (e.g., 2 seconds)
+                navigate(isLoggedIn ? "/main" : "/login");
+            }, 2000);
         };
 
-        checkLoginStatus();
-    }, [navigate]);
+        initializeLoading();
 
-    if (isLoading) {
-        return (
-            <div className="bg-gray-900 h-screen flex items-center justify-center bg-cover">
-                <div className="flex flex-col items-center">
-                    <img src="/chirplogo.png" alt="Logo" className="mb-4" />
-                    <div className="w-64 bg-gray-300 rounded-full h-2.5 mb-4">
-                        <div
-                            className="bg-blue-600 h-2.5 rounded-full"
-                            style={{
-                                width: `${progress}%`, // Set dynamic width
-                                transition: "width 0.1s ease-in-out", // Smooth transition
-                            }}
-                        ></div>
-                    </div>
+        // Cleanup function
+        return () => {
+            clearInterval(progressInterval);
+            clearTimeout(navigationTimeout);
+        };
+    }, [navigate, checkLoginStatus]);
+
+    // Early return if not loading
+    if (!isLoading) return null;
+
+    return (
+        <div className="bg-gray-900 h-screen flex items-center justify-center bg-cover">
+            <div className="flex flex-col items-center">
+                <img src="/chirplogo.png" alt="Logo" className="mb-4" />
+                <div className="w-64 bg-gray-300 rounded-full h-2.5 mb-4">
+                    <div
+                        className="bg-blue-600 h-2.5 rounded-full"
+                        style={{
+                            width: `${Math.min(progress, 100)}%`,
+                            transition: "width 0.05s ease-in-out",
+                        }}
+                    ></div>
                 </div>
             </div>
-        );
-    }
-
-    return null;
+        </div>
+    );
 };
 
 export default LoadingScreen;

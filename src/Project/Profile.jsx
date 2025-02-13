@@ -9,6 +9,9 @@ const Profile = () => {
     const [pendingRequests, setPendingRequests] = useState([]);
     const [blockedUsers, setBlockedUsers] = useState([]);
     const [loading, setLoading] = useState(false);
+    
+    // Get username from localStorage
+    const username = localStorage.getItem('currentUsername');
 
     const navigate = useNavigate();
 
@@ -131,28 +134,29 @@ const Profile = () => {
     ];
 
     return (
-        <div
-            className="relative min-h-screen flex flex-col items-center justify-center bg-cover bg-center"
-            style={{ backgroundImage: "url('/bg1.jpeg')" }}
-        >
-            {/* Blur Overlay */}
-            <div className="absolute inset-0 bg-black/30 backdrop-blur-xs"></div>
-
-            <div className="relative z-10 w-full max-w-4xl bg-gray-900 bg-opacity-70 rounded-lg shadow-xl p-8 sm:p-10 transform transition duration-500 hover:scale-105 hover:shadow-2xl">
-                <h1 className="text-3xl font-bold text-transparent bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-center mb-8">
-                    Profile Overview
+        <div className="min-h-screen bg-gray-100 py-8 px-4">
+            {/* Welcome Message */}
+            <div className="text-center mb-8">
+                <h1 className="text-3xl font-bold text-gray-800">
+                    Hi, {username}! 👋
                 </h1>
+                <p className="text-gray-600 mt-2">Welcome to your profile</p>
+            </div>
 
+            {/* Main Content */}
+            <div className="max-w-4xl mx-auto">
                 {/* Cards */}
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
                     {cardsData.map((card, index) => (
                         <div
                             key={index}
-                            className="bg-white bg-opacity-20 backdrop-blur-lg shadow-lg hover:shadow-2xl transition-transform transform hover:scale-105 p-6 rounded-xl text-center cursor-pointer flex flex-col items-center"
+                            className="bg-white shadow-lg rounded-xl p-6 text-center cursor-pointer hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
                             onClick={() => handleCardClick(card)}
                         >
-                            {card.icon}
-                            <h2 className="text-lg font-semibold text-gray-200 mt-4">
+                            <div className="flex justify-center mb-4">
+                                {card.icon}
+                            </div>
+                            <h2 className="text-lg font-semibold text-gray-700">
                                 {card.title}
                             </h2>
                         </div>
@@ -162,96 +166,86 @@ const Profile = () => {
 
             {/* Popup Modal */}
             {isPopupOpen && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                    <div className="bg-white bg-opacity-90 backdrop-blur-lg p-6 rounded-xl shadow-2xl w-full max-w-md">
-                        <h2 className="text-xl font-bold text-gray-800 text-center mb-4">
-                            {popupContent.title}
-                        </h2>
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+                    <div className="bg-white rounded-xl shadow-2xl w-full max-w-md">
+                        <div className="p-6">
+                            <h2 className="text-xl font-bold text-gray-800 text-center mb-4">
+                                {popupContent.title}
+                            </h2>
 
-                        {popupContent.title === "List of Pending Requests" &&
-                            (loading ? (
-                                <p className="text-center">Loading...</p>
-                            ) : pendingRequests.length === 0 ? (
-                                <p className="text-center">
-                                    No pending requests.
-                                </p>
-                            ) : (
-                                pendingRequests.map((request) => (
-                                    <div
-                                        key={request.id}
-                                        className="flex justify-between items-center bg-gray-100 p-3 rounded-lg mb-3"
-                                    >
-                                        <span className="text-gray-800 font-semibold">
-                                            {request.sender.username}
-                                        </span>
-                                        <div className="space-x-2">
+                            {popupContent.title === "List of Pending Requests" &&
+                                (loading ? (
+                                    <p className="text-center">Loading...</p>
+                                ) : pendingRequests.length === 0 ? (
+                                    <p className="text-center text-gray-600">
+                                        No pending requests.
+                                    </p>
+                                ) : (
+                                    pendingRequests.map((request) => (
+                                        <div
+                                            key={request.id}
+                                            className="flex justify-between items-center bg-gray-50 p-3 rounded-lg mb-3"
+                                        >
+                                            <span className="text-gray-800 font-semibold">
+                                                {request.sender.username}
+                                            </span>
+                                            <div className="space-x-2">
+                                                <button
+                                                    onClick={() => handleAcceptRequest(request.sender.username)}
+                                                    className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-md transition-colors"
+                                                >
+                                                    Accept
+                                                </button>
+                                                <button
+                                                    onClick={() => handleRejectRequest(request.sender.username)}
+                                                    className="bg-gray-500 hover:bg-gray-600 text-white px-3 py-1 rounded-md transition-colors"
+                                                >
+                                                    Reject
+                                                </button>
+                                                <button
+                                                    onClick={() => handleBlockRequest(request.sender.username)}
+                                                    className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md transition-colors"
+                                                >
+                                                    Block
+                                                </button>
+                                            </div>
+                                        </div>
+                                    ))
+                                ))}
+
+                            {popupContent.title === "Blocked Users" &&
+                                (loading ? (
+                                    <p className="text-center">Loading...</p>
+                                ) : blockedUsers.length === 0 ? (
+                                    <p className="text-center text-gray-600">
+                                        No blocked users.
+                                    </p>
+                                ) : (
+                                    blockedUsers.map((user) => (
+                                        <div
+                                            key={user.id}
+                                            className="flex justify-between items-center bg-gray-50 p-3 rounded-lg mb-3"
+                                        >
+                                            <span className="text-gray-800 font-semibold">
+                                                {user.username}
+                                            </span>
                                             <button
-                                                onClick={() =>
-                                                    handleAcceptRequest(
-                                                        request.sender.username
-                                                    )
-                                                }
-                                                className="bg-green-500 text-white px-3 py-1 rounded-md"
+                                                onClick={() => handleUnblockUser(user.username)}
+                                                className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-md transition-colors"
                                             >
-                                                Accept
-                                            </button>
-                                            <button
-                                                onClick={() =>
-                                                    handleRejectRequest(
-                                                        request.sender.username
-                                                    )
-                                                }
-                                                className="bg-gray-500 text-white px-3 py-1 rounded-md"
-                                            >
-                                                Reject
-                                            </button>
-                                            <button
-                                                onClick={() =>
-                                                    handleBlockRequest(
-                                                        request.sender.username
-                                                    )
-                                                }
-                                                className="bg-red-500 text-white px-3 py-1 rounded-md"
-                                            >
-                                                Block
+                                                Unblock
                                             </button>
                                         </div>
-                                    </div>
-                                ))
-                            ))}
+                                    ))
+                                ))}
 
-                        {popupContent.title === "Blocked Users" &&
-                            (loading ? (
-                                <p className="text-center">Loading...</p>
-                            ) : blockedUsers.length === 0 ? (
-                                <p className="text-center">No blocked users.</p>
-                            ) : (
-                                blockedUsers.map((user) => (
-                                    <div
-                                        key={user.id}
-                                        className="flex justify-between items-center bg-gray-100 p-3 rounded-lg mb-3"
-                                    >
-                                        <span className="text-gray-800 font-semibold">
-                                            {user.username}
-                                        </span>
-                                        <button
-                                            onClick={() =>
-                                                handleUnblockUser(user.username)
-                                            }
-                                            className="bg-blue-500 text-white px-3 py-1 rounded-md"
-                                        >
-                                            Unblock
-                                        </button>
-                                    </div>
-                                ))
-                            ))}
-
-                        <button
-                            onClick={closePopup}
-                            className="mt-4 w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition duration-300"
-                        >
-                            Close
-                        </button>
+                            <button
+                                onClick={closePopup}
+                                className="mt-4 w-full bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md transition-colors"
+                            >
+                                Close
+                            </button>
+                        </div>
                     </div>
                 </div>
             )}

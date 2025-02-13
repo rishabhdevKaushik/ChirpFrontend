@@ -41,7 +41,7 @@ const Navbar = () => {
     const [hoveredButton, setHoveredButton] = useState(null);
 
     return (
-        <header className="bg-gray-900 p-4 shadow-md">
+        <header className=" bg-gray-900 p-4 shadow-md">
             <div className="max-w-7xl mx-auto flex justify-between items-center">
                 {/* Logo */}
                 <div className="text-white text-2xl font-bold flex items-center space-x-2">
