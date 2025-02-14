@@ -115,9 +115,6 @@ const RightSection = ({ selectedFriend }) => {
                     );
 
                     socket.emit("newMessage", response.data);
-
-                    // Focus back on the textarea after sending the message
-                    document.getElementById("messageInput").focus();
                 } catch (error) {
                     console.error("Failed to send message:", error);
                     setMessages((prev) =>
@@ -156,11 +153,6 @@ const RightSection = ({ selectedFriend }) => {
                 messagesEndRef.current.scrollHeight;
         }
     }, [messages]);
-
-    useEffect(() => {
-        // Focus on the textarea whenever the component mounts or updates
-        document.getElementById("messageInput").focus();
-    }, [selectedFriend, messages]); // Add dependencies to focus on updates
 
     const handleDoubleClick = (msg) => {
         setSelectedMsg(msg);
@@ -291,7 +283,6 @@ const RightSection = ({ selectedFriend }) => {
                     <div className="flex items-center space-x-3">
                         <div className="relative w-full">
                             <textarea
-                                id="messageInput"
                                 value={message}
                                 onChange={handleChange}
                                 onKeyDown={handleKeyDown}
