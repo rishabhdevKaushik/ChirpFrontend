@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState} from "react";
 import { useNavigate } from "react-router-dom";
 import { apiEndpoints } from "../Api"; // Import your API endpoints
 
@@ -40,31 +40,30 @@ const Login = () => {
     };
 
     return (
-        <div
-            className="relative min-h-screen flex items-center justify-center bg-cover bg-center"
-            style={{ backgroundImage: "url('/bg1.jpeg')" }}
-        >
-            {/* Blur Overlay */}
-            <div className="absolute inset-0 bg-black/30 backdrop-blur-xs"></div>
+        <div className="relative min-h-screen flex items-center justify-center bg-cover bg-center px-4 sm:px-6">
+            {/* Enhanced Blur Overlay */}
+            <div className="absolute inset-0 bg-black/40 backdrop-blur-sm"></div>
 
-            <div className="relative z-10 backdrop-blur-md w-full max-w-lg bg-gray-900 bg-opacity-70 rounded-lg shadow-xl p-8 sm:p-10 transform transition duration-500 hover:scale-105 hover:shadow-2xl rounded-full">
-                <div className="text-center mb-6">
-                    <h1 className="text-5xl font-extrabold text-transparent bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text leading-tight animate__animated animate__fadeIn">
+            <div className="relative z-10 w-full max-w-sm sm:max-w-lg mx-auto bg-gray-900/80 rounded-2xl shadow-2xl p-6 sm:p-12 transform transition-all duration-300 hover:scale-[1.02] hover:shadow-3xl">
+                <div className="text-center mb-6 sm:mb-8">
+                    <h1 className="text-4xl sm:text-5xl font-extrabold text-transparent bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 bg-clip-text leading-tight animate-fade-in-down">
                         Welcome Back!
                     </h1>
-                    <p className="text-xl text-gray-300">
+                    <p className="text-lg sm:text-xl text-gray-300 mt-3 animate-fade-in">
                         Login to your account
                     </p>
                 </div>
 
                 {error && (
-                    <p className="text-red-500 text-center mb-4 animate__animated animate__fadeIn">
-                        {error}
-                    </p>
+                    <div className="bg-red-500/10 border border-red-500/50 rounded-lg p-3 mb-6">
+                        <p className="text-red-400 text-center text-sm">
+                            {error}
+                        </p>
+                    </div>
                 )}
 
-                <form className="space-y-6" onSubmit={handleLogin}>
-                    <div>
+                <form className="space-y-4 sm:space-y-6" onSubmit={handleLogin}>
+                    <div className="space-y-2">
                         <label
                             htmlFor="identifier"
                             className="block text-sm font-medium text-gray-300"
@@ -78,12 +77,12 @@ const Login = () => {
                             value={formData.identifier}
                             onChange={handleChange}
                             required
-                            className="mt-1 block w-full px-4 py-3 border border-gray-600 bg-gray-800 text-white rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition duration-300 ease-in-out transform hover:scale-105"
+                            className="block w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-700 bg-gray-800/50 text-white rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base transition-all duration-300 placeholder-gray-500"
                             placeholder="Enter your username or email"
                         />
                     </div>
 
-                    <div>
+                    <div className="space-y-2">
                         <label
                             htmlFor="password"
                             className="block text-sm font-medium text-gray-300"
@@ -97,7 +96,7 @@ const Login = () => {
                             value={formData.password}
                             onChange={handleChange}
                             required
-                            className="mt-1 block w-full px-4 py-3 border border-gray-600 bg-gray-800 text-white rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition duration-300 ease-in-out transform hover:scale-105"
+                            className="block w-full px-4 py-3 border border-gray-700 bg-gray-800/50 text-white rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent sm:text-sm transition-all duration-300 placeholder-gray-500"
                             placeholder="Enter your password"
                         />
                     </div>
@@ -105,22 +104,32 @@ const Login = () => {
                     <button
                         type="submit"
                         disabled={loading}
-                        className={`w-full ${
+                        className={`w-full py-3 px-4 rounded-lg shadow-lg ${
                             loading
-                                ? "bg-gray-600"
-                                : "bg-gradient-to-r from-blue-500 to-purple-600"
-                        } text-white py-3 px-4 rounded-md shadow-md hover:from-blue-600 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-300 ease-in-out`}
+                                ? "bg-gray-600 cursor-not-allowed"
+                                : "bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 hover:from-blue-600 hover:via-purple-600 hover:to-pink-600"
+                        } text-white font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-900 transition-all duration-300`}
                     >
-                        {loading ? "Logging in..." : "Login"}
+                        {loading ? (
+                            <span className="flex items-center justify-center">
+                                <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                                Logging in...
+                            </span>
+                        ) : (
+                            "Login"
+                        )}
                     </button>
                 </form>
 
-                <div className="mt-6 text-center">
+                <div className="mt-8 text-center">
                     <p className="text-gray-400">
                         Don't have an account?{" "}
                         <button
                             onClick={handleSignup}
-                            className="text-blue-400 hover:underline font-medium"
+                            className="text-blue-400 hover:text-blue-300 font-medium transition-colors duration-300"
                         >
                             Sign Up
                         </button>

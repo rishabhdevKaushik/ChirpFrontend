@@ -134,10 +134,10 @@ const Profile = () => {
     ];
 
     return (
-        <div className="min-h-screen bg-gray-100 py-8 px-4">
+        <div className="min-h-screen bg-gray-100 py-4 sm:py-8 px-4 sm:px-6">
             {/* Welcome Message */}
-            <div className="text-center mb-8">
-                <h1 className="text-3xl font-bold text-gray-800">
+            <div className="text-center mb-6 sm:mb-8">
+                <h1 className="text-2xl sm:text-3xl font-bold text-gray-800">
                     Hi, {username}! 👋
                 </h1>
                 <p className="text-gray-600 mt-2">Welcome to your profile</p>
@@ -146,11 +146,11 @@ const Profile = () => {
             {/* Main Content */}
             <div className="max-w-4xl mx-auto">
                 {/* Cards */}
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                     {cardsData.map((card, index) => (
                         <div
                             key={index}
-                            className="bg-white shadow-lg rounded-xl p-6 text-center cursor-pointer hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
+                            className="bg-white shadow-lg rounded-xl p-4 sm:p-6 text-center cursor-pointer hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
                             onClick={() => handleCardClick(card)}
                         >
                             <div className="flex justify-center mb-4">
@@ -167,8 +167,8 @@ const Profile = () => {
             {/* Popup Modal */}
             {isPopupOpen && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-                    <div className="bg-white rounded-xl shadow-2xl w-full max-w-md">
-                        <div className="p-6">
+                    <div className="bg-white rounded-xl shadow-2xl w-full max-w-xs sm:max-w-md">
+                        <div className="p-4 sm:p-6">
                             <h2 className="text-xl font-bold text-gray-800 text-center mb-4">
                                 {popupContent.title}
                             </h2>

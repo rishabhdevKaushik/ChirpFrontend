@@ -57,8 +57,10 @@ const Settings = () => {
     const navigate = useNavigate();
 
     const handleLogout = async () => {
+        setIsPopupOpen(true);
+
         try {
-            setIsPopupOpen(true);
+            
             await apiEndpoints.logout();
             localStorage.clear();
             navigate("/login");
