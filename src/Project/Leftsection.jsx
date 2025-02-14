@@ -111,16 +111,16 @@ const LeftSection = ({ onSelectFriend }) => {
     };
 
     return (
-        <div className="bg-gradient-to-br from-gray-50 to-gray-100 min-h-screen flex flex-col items-center p-4 md:p-6">
-            <div className="bg-white shadow-xl rounded-xl p-6 w-full max-w-sm sm:max-w-md lg:max-w-lg border border-gray-100">
+        <div className="bg-gradient-to-br from-gray-50 to-gray-100 min-h-full flex flex-col items-center p-2 sm:p-4">
+            <div className="bg-white shadow-xl rounded-xl p-3 sm:p-6 w-full max-w-full sm:max-w-md lg:max-w-lg border border-gray-100">
                 {/* Search Section */}
-                <div className="relative mb-6">
+                <div className="relative mb-4 sm:mb-6">
                     <input
                         type="text"
                         value={searchQuery}
                         onChange={handleSearchChange}
                         placeholder={isGlobalSearch ? "Search globally..." : "Search friends..."}
-                        className="w-full p-4 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all duration-300 bg-gray-50"
+                        className="w-full p-2 sm:p-4 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all duration-300 bg-gray-50 text-sm sm:text-base"
                     />
                     <div className="flex items-center mt-3">
                         <input
@@ -139,59 +139,62 @@ const LeftSection = ({ onSelectFriend }) => {
                     </h3>
                 )}
 
-                <div className="space-y-3">
-                    {!isGlobalSearch ? (
-                        filteredFriends.length > 0 ? (
-                            filteredFriends.map((friend) => (
-                                <div
-                                    key={friend.name}
-                                    className="flex items-center p-4 bg-white rounded-xl border border-gray-100 hover:shadow-md hover:border-blue-100 transition-all duration-300 cursor-pointer"
-                                    onClick={() => handleSelectChat(friend)}
-                                >
-                                    <div className="flex items-center space-x-4 w-full">
-                                        <div className="relative">
-                                            <img
-                                                src={friend.avatar || "https://i.pravatar.cc/150?img=2"}
-                                                alt={friend.name}
-                                                className="w-12 h-12 rounded-full object-cover border-2 border-gray-100"
-                                            />
-                                            {friend.isGroup && (
-                                                <span className="absolute -top-1 -right-1 bg-blue-500 rounded-full p-1">
-                                                    <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                                                    </svg>
-                                                </span>
-                                            )}
-                                        </div>
-                                        <div className="flex-1">
-                                            <h4 className="font-semibold text-gray-800">{friend.name}</h4>
+                {/* Friends List - Horizontal on mobile, vertical on desktop */}
+                <div className="overflow-x-auto sm:overflow-x-visible">
+                    <div className="flex flex-row sm:flex-col gap-3 sm:gap-4 min-w-min sm:min-w-full">
+                        {!isGlobalSearch ? (
+                            filteredFriends.length > 0 ? (
+                                filteredFriends.map((friend) => (
+                                    <div
+                                        key={friend.name}
+                                        className="flex-shrink-0 w-[200px] sm:w-full bg-white rounded-xl border border-gray-100 hover:shadow-md hover:border-blue-100 transition-all duration-300 cursor-pointer"
+                                        onClick={() => handleSelectChat(friend)}
+                                    >
+                                        <div className="flex items-center p-3 sm:p-4">
+                                            <div className="relative">
+                                                <img
+                                                    src={friend.avatar || "https://i.pravatar.cc/150?img=2"}
+                                                    alt={friend.name}
+                                                    className="w-10 h-10 sm:w-12 sm:h-12 rounded-full object-cover border-2 border-gray-100"
+                                                />
+                                                {friend.isGroup && (
+                                                    <span className="absolute -top-1 -right-1 bg-blue-500 rounded-full p-1">
+                                                        <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                                                        </svg>
+                                                    </span>
+                                                )}
+                                            </div>
+                                            <div className="ml-3">
+                                                <h4 className="font-semibold text-gray-800 text-sm sm:text-base">{friend.name}</h4>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            ))
-                        ) : (
-                            <p className="text-gray-500 text-center py-4">No friends found</p>
-                        )
-                    ) : loading ? (
-                        <div className="flex justify-center py-4">
-                            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
-                        </div>
-                    ) : globalSearchResult ? (
-                        <div
-                            className="p-4 bg-white rounded-xl border border-gray-100 hover:shadow-md hover:border-blue-100 transition-all duration-300 cursor-pointer"
-                            onClick={() => setShowSendRequest(true)}
-                        >
-                            <div className="flex flex-col space-y-2">
-                                <h4 className="font-semibold text-gray-800">{globalSearchResult.name}</h4>
-                                <p className="text-sm text-gray-600">@{globalSearchResult.username}</p>
-                                <p className="text-sm text-gray-600">{globalSearchResult.email}</p>
+                                ))
+                            ) : (
+                                <p className="text-gray-500 text-center py-4 w-full">No friends found</p>
+                            )
+                        ) : loading ? (
+                            <div className="flex justify-center py-4 w-full">
+                                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
                             </div>
-                        </div>
-                    ) : (
-                        <p className="text-gray-500 text-center py-4">
-                            {error || (searchQuery ? "No user found" : "")}
-                        </p>
-                    )}
+                        ) : globalSearchResult ? (
+                            <div
+                                className="w-full p-4 bg-white rounded-xl border border-gray-100 hover:shadow-md hover:border-blue-100 transition-all duration-300 cursor-pointer"
+                                onClick={() => setShowSendRequest(true)}
+                            >
+                                <div className="flex flex-col space-y-2">
+                                    <h4 className="font-semibold text-gray-800">{globalSearchResult.name}</h4>
+                                    <p className="text-sm text-gray-600">@{globalSearchResult.username}</p>
+                                    <p className="text-sm text-gray-600">{globalSearchResult.email}</p>
+                                </div>
+                            </div>
+                        ) : (
+                            <p className="text-gray-500 text-center py-4 w-full">
+                                {error || (searchQuery ? "No user found" : "")}
+                            </p>
+                        )}
+                    </div>
                 </div>
             </div>
 

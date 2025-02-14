@@ -1,7 +1,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
-
+import { apiEndpoints } from "../Api";
 const Button = ({ children, onClick, className }) => {
     return (
         <button
@@ -34,21 +34,14 @@ const Popup = ({ setIsPopupOpen }) => {
 
     const handleClose = () => setIsPopupOpen(false);
 
-    const handleLogout = () => {
-        // Add your logout logic here
-        // console.log("User logged out");
-        // axios
-        // .post('http://localhost:4000/api/user/logout', refreshToken) // Add the correct protocol
-        // .then((response) => {
-        //   console.log("Login Successful:", response.data);
-        //   navigate("/main"); // Navigate to the main page
-        // })
-        // .catch((error) => {
-        //   console.error("Login Error:", error.response?.data || error.message);
-        //   // setError("Login failed. Please check your credentials."); // Update error state
-        // })
-        setIsPopupOpen(false);
-        navigate("/");
+    const handleLogout = async() => {
+        try {
+            await apiEndpoints.logout;
+            localStorage.clear();
+            navigate("/");
+        } catch (error) {
+            // Log the error for debugging
+        }
     };
 
     const handleCancel = () => {
@@ -60,31 +53,31 @@ const Popup = ({ setIsPopupOpen }) => {
         <div>
             <Dialog
                 onClose={handleClose}
-                className="fixed inset-0 z-50 flex items-center justify-center"
+                className="fixed inset-0 z-50 flex items-center justify-center px-4 sm:px-0"
             >
                 <motion.div
                     initial={{ opacity: 0, scale: 0.8 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.8 }}
-                    className="bg-white p-6 rounded-2xl shadow-xl w-96"
+                    className="bg-white p-4 sm:p-6 rounded-2xl shadow-xl w-full max-w-xs sm:max-w-sm md:max-w-md"
                 >
-                    <h2 className="text-xl font-semibold text-gray-800 mb-4">
+                    <h2 className="text-lg sm:text-xl font-semibold text-gray-800 mb-3 sm:mb-4">
                         Confirm Logout
                     </h2>
-                    <p className="text-gray-600 mb-6">
+                    <p className="text-gray-600 mb-4 sm:mb-6 text-sm sm:text-base">
                         Are you sure you want to log out?
                     </p>
 
-                    <div className="flex justify-end gap-4">
+                    <div className="flex justify-end gap-3 sm:gap-4">
                         <Button
                             onClick={handleCancel}
-                            className="bg-gray-300 text-gray-700 hover:bg-gray-400"
+                            className="bg-gray-300 text-gray-700 hover:bg-gray-400 text-sm sm:text-base px-3 sm:px-4 py-2"
                         >
                             Cancel
                         </Button>
                         <Button
                             onClick={handleLogout}
-                            className="bg-red-500 text-white hover:bg-red-600"
+                            className="bg-red-500 text-white hover:bg-red-600 text-sm sm:text-base px-3 sm:px-4 py-2"
                         >
                             Logout
                         </Button>
