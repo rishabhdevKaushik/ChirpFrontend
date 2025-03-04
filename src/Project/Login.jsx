@@ -22,8 +22,9 @@ const Login = () => {
 
         try {
             const response = await apiEndpoints.login(formData);
-            const { accessToken, currentUser } = response.data;
-            localStorage.setItem("accessToken", accessToken);
+            const { token, currentUser } = response.data;
+            localStorage.setItem("accessToken", token.accessToken);
+            localStorage.setItem("refreshToken", token.refreshToken);
             localStorage.setItem("currentUsername", currentUser.username);
             localStorage.setItem("currentUserId", currentUser.id);
             navigate("/main");
