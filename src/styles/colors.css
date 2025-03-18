@@ -1,0 +1,19 @@
+:root {
+    /* Main palette */
+    --primary: #a72608; /* Red accent */
+    --secondary: #bbc5aa; /* Sage green */
+    --background: #090c02; /* Dark background */
+    --surface: #1a1e0f; /* Slightly lighter dark for cards/surfaces */
+    --accent: #e6eed6; /* Light accent */
+    --muted: #dde2c6; /* Muted accent */
+
+    /* Additional shades */
+    --primary-light: #c43a1c;
+    --primary-dark: #8a1e06;
+    --secondary-light: #ccd3bc;
+    --secondary-dark: #9ba389;
+    --text-primary: #e6eed6;
+    --text-secondary: #bbc5aa;
+    --text-muted: #8b957a;
+    --text-dark: #090c02;
+}

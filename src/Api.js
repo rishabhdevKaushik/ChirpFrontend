@@ -1,9 +1,11 @@
 import axios from "axios";
-const BASE_URL = "https://chirpbackend-9pjh.onrender.com/api";
+const BASE_URL = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
 const api = axios.create({
     baseURL: BASE_URL,
 });
+console.log(BASE_URL);
+
 
 api.interceptors.request.use(
     (config) => {
@@ -30,9 +32,8 @@ api.interceptors.response.use(
             originalRequest._retry = true;
             try {
                 const refreshToken = localStorage.getItem("refreshToken");
-                const response = await axios.post(
-                    `${BASE_URL}/user/refresh-token`,
-                    { refreshToken }
+                const response = await apiEndpoints.refershAuthenticationToken(
+                    refreshToken
                 );
                 localStorage.setItem("accessToken", response.data.accessToken);
                 api.defaults.headers[
@@ -55,7 +56,8 @@ const apiEndpoints = {
     deleteUser: (data) => api.delete("/user/delete", data),
     logout: () => api.post("/user/logout"),
     findUser: (username) => api.get(`/user/${username}`),
-    refershauthenticationtoken: () => api.post("/user/authenticate-token"),
+    refershAuthenticationToken: (refreshToken) =>
+        api.post("/user/refresh-token", { refreshToken }),
 
     sendFriendRequest: (username) => api.post(`/friendreq/${username}`),
     updateFriendRequest: (data, username) =>
@@ -70,12 +72,12 @@ const apiEndpoints = {
     fetchChat: () => api.get("/chat/chats"),
     createGroupchat: (data) => api.post("/chat/group", data),
     updateGroupchat: (data) => api.put("/chat/group", data),
-    removeuserfromgroup: (data, chatid) =>
+    removeUserFromGroup: (data, chatid) =>
         api.post(`/chat/group/${chatid}`, data),
 
-    sendmsg: (data) => api.post("/message", data),
-    getallmsgofchat: (chatid) => api.get(`/message/${chatid}`),
-    editmsg: (data) => api.put("/message", data),
+    sendMessage: (data) => api.post("/message", data),
+    getAllMessagesOfChat: (chatid) => api.get(`/message/${chatid}`),
+    editMessage: (data) => api.put("/message", data),
     deleteMessage: (messageid) => api.delete(`/message/${messageid}`),
 };
 

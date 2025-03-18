@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { apiEndpoints } from "../Api";
 import socket from "../socket.js";
 
-const RightSection = ({ selectedFriend }) => {
+const RightSection = ({ selectedChat, onBackClick, isMobile }) => {
     const [message, setMessage] = useState("");
     const [messages, setMessages] = useState([]);
     const [selectedMsg, setSelectedMsg] = useState(null); // Tracks the selected message for popup
@@ -16,11 +16,24 @@ const RightSection = ({ selectedFriend }) => {
     const selectedChatId = localStorage.getItem("selectedChatId");
 
     useEffect(() => {
-        socket.connect();
-        socket.emit("setup", currentUserId); // Send current user id
+        // Connect socket if not already connected
+        if (!socket.connected) {
+            socket.connect();
+        }
 
+        // Setup user and join chat
+        if (currentUserId) {
+            socket.emit("setup", currentUserId);
+        }
+
+        // Join chat room if there's a selected chat
+        if (selectedChatId) {
+            socket.emit("join chat", selectedChatId);
+        }
+
+        // Socket event listeners
         socket.on("connected", () => {
-            // console.log('Connected to socket io server');
+            console.log("Connected to socket io server");
         });
 
         socket.on("typing", () => {
@@ -33,21 +46,39 @@ const RightSection = ({ selectedFriend }) => {
             setTyping(false);
         });
 
-        // For incoming message
         socket.on("messageReceived", (msg) => {
-            setMessages((prevMessages) => {
-                if (prevMessages.find((message) => message._id === msg._id)) {
-                    return prevMessages; // Avoid duplicate messages
-                }
-                return [...prevMessages, msg];
-            });
+            console.log("Message received:", msg);
+            if (msg.chat._id === selectedChatId) {
+                setMessages((prevMessages) => {
+                    if (
+                        prevMessages.find((message) => message._id === msg._id)
+                    ) {
+                        return prevMessages;
+                    }
+                    return [...prevMessages, msg];
+                });
+            }
         });
 
-        // Cleanup on unmount
+        // Cleanup function
         return () => {
-            socket.disconnect();
+            socket.off("connected");
+            socket.off("messageReceived");
+            socket.off("typing");
+            socket.off("stopTyping");
+            // Don't disconnect here - we want to maintain the connection
         };
-    }, [currentUserId]);
+    }, [currentUserId, selectedChatId]); // Add currentUserId as dependency
+
+    // Handle socket disconnection on component unmount
+    useEffect(() => {
+        return () => {
+            // Only disconnect if we're actually connected
+            if (socket.connected) {
+                socket.disconnect();
+            }
+        };
+    }, []);
 
     let typingTimeout;
     const handleChange = (e) => {
@@ -76,7 +107,7 @@ const RightSection = ({ selectedFriend }) => {
                         content: message,
                     };
 
-                    await apiEndpoints.editmsg(data);
+                    await apiEndpoints.editMessage(data);
                     setMessages((prevMessages) =>
                         prevMessages.map((msg) =>
                             msg._id === editingMessage._id
@@ -101,9 +132,9 @@ const RightSection = ({ selectedFriend }) => {
                     setMessages((prev) => [...prev, tempMessage]);
                     setMessage("");
 
-                    const response = await apiEndpoints.sendmsg({
+                    const response = await apiEndpoints.sendMessage({
                         content: message,
-                        chatId: selectedFriend.id,
+                        chatId: selectedChat.id,
                     });
 
                     setMessages((prev) =>
@@ -114,7 +145,7 @@ const RightSection = ({ selectedFriend }) => {
                         )
                     );
 
-                    socket.emit("newMessage", response.data);
+                    // socket.emit("newMessage", response.data._id);
                 } catch (error) {
                     console.error("Failed to send message:", error);
                     setMessages((prev) =>
@@ -134,7 +165,7 @@ const RightSection = ({ selectedFriend }) => {
 
     const getMessages = async (chatId) => {
         try {
-            const response = await apiEndpoints.getallmsgofchat(chatId);
+            const response = await apiEndpoints.getAllMessagesOfChat(chatId);
             setMessages(response.data);
         } catch (error) {
             console.error("Failed to fetch messages:", error);
@@ -142,10 +173,10 @@ const RightSection = ({ selectedFriend }) => {
     };
 
     useEffect(() => {
-        if (selectedFriend) {
-            getMessages(selectedFriend.id);
+        if (selectedChat) {
+            getMessages(selectedChat.id);
         }
-    }, [selectedFriend]);
+    }, [selectedChat]);
 
     useEffect(() => {
         if (messagesEndRef.current) {
@@ -182,21 +213,59 @@ const RightSection = ({ selectedFriend }) => {
     };
 
     return (
-        <div className="flex flex-col p-4 bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl shadow-lg h-[calc(100vh-2rem)] w-full max-w-full">
-            {selectedFriend ? (
+        <div
+            className={`flex flex-col ${
+                isMobile ? "h-screen p-0" : "p-4"
+            } bg-gradient-to-br from-gray-50 to-gray-100 ${
+                isMobile ? "rounded-none" : "rounded-xl"
+            } shadow-lg h-full w-full`}
+        >
+            {selectedChat ? (
                 <>
-                    <div className="flex items-center space-x-4 mb-4 p-3 bg-white/90 backdrop-blur-sm shadow-md rounded-xl hover:bg-white/95 transition duration-300 ease-in-out border border-gray-100">
-                        <img
-                            src={selectedFriend.avatar || "https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y"}
-                            alt={selectedFriend.name}
-                            className="w-14 h-14 rounded-full border-2 border-blue-400 p-0.5 hover:scale-105 transition-transform duration-300"
-                            onError={(e) => {
-                                e.target.src = "https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y";
-                            }}
-                        />
+                    <div
+                        className={`flex items-center space-x-4 ${
+                            isMobile ? "mb-2" : "mb-4"
+                        } p-3 bg-white/90 backdrop-blur-sm shadow-md ${
+                            isMobile ? "rounded-none" : "rounded-xl"
+                        } hover:bg-white/95 transition duration-300 ease-in-out border border-gray-100`}
+                    >
+                        {isMobile && (
+                            <button
+                                onClick={onBackClick}
+                                className="p-2 hover:bg-gray-100 rounded-full transition-colors duration-300"
+                            >
+                                <svg
+                                    className="w-6 h-6 text-gray-600"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth="2"
+                                        d="M15 19l-7-7 7-7"
+                                    />
+                                </svg>
+                            </button>
+                        )}
+                        {selectedChat.avatar ? (
+                            <img
+                                src={selectedChat.avatar}
+                                alt={selectedChat.name}
+                                className="w-14 h-14 rounded-full border-2 border-blue-400 p-0.5 hover:scale-105 transition-transform duration-300"
+                            />
+                        ) : (
+                            <div className="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-full bg-gray-100 text-gray-700 font-bold border-2 border-gray-100">
+                                {selectedChat.name
+                                    ? selectedChat.name.charAt(0).toUpperCase()
+                                    : "?"}
+                            </div>
+                        )}
+
                         <div>
                             <h3 className="text-xl font-semibold text-gray-800 hover:text-blue-600 transition-colors duration-300">
-                                {selectedFriend.name}
+                                {selectedChat.name}
                             </h3>
                             {typing && (
                                 <span className="text-sm text-blue-500 animate-pulse">
@@ -209,8 +278,7 @@ const RightSection = ({ selectedFriend }) => {
                     {/* Messages Display */}
                     <div
                         ref={messagesEndRef}
-                        className="flex-grow mb-4 overflow-y-auto bg-white/90 backdrop-blur-sm p-4 rounded-xl shadow-md flex flex-col space-y-3"
-                        style={{ overflowY: "auto", maxHeight: "calc(100vh - 200px)" }}
+                        className="flex-grow overflow-y-auto bg-white/90 backdrop-blur-sm p-4 rounded-xl shadow-md flex flex-col space-y-3 mb-4"
                     >
                         {messages.map((msg) => (
                             <div
@@ -243,7 +311,8 @@ const RightSection = ({ selectedFriend }) => {
                                 <h3 className="text-lg font-bold text-gray-700">
                                     Message Actions
                                 </h3>
-                                {selectedMsg.sender.username === currentUsername ? (
+                                {selectedMsg.sender.username ===
+                                currentUsername ? (
                                     <>
                                         <button
                                             onClick={handleEdit}
@@ -260,7 +329,8 @@ const RightSection = ({ selectedFriend }) => {
                                     </>
                                 ) : (
                                     <p className="text-gray-500">
-                                        You can only edit or delete your own messages.
+                                        You can only edit or delete your own
+                                        messages.
                                     </p>
                                 )}
                                 <button
@@ -319,12 +389,22 @@ const RightSection = ({ selectedFriend }) => {
             ) : (
                 <div className="flex flex-col items-center justify-center h-full space-y-4 text-center">
                     <div className="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center">
-                        <svg className="w-10 h-10 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                        <svg
+                            className="w-10 h-10 text-blue-500"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                        >
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth="2"
+                                d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+                            />
                         </svg>
                     </div>
                     <p className="text-gray-500 text-lg">
-                        Select a friend to start chatting
+                        Select a chat to start chatting
                     </p>
                 </div>
             )}

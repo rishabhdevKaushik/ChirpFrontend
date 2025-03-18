@@ -29,8 +29,7 @@ const SignupPage = () => {
 
         setLoading(true);
         try {
-            const response = await apiEndpoints.signup(formData);
-            console.log("SignUp Successful:", response.data);
+            await apiEndpoints.signup(formData);
             navigate("/main");
         } catch (error) {
             console.error(
@@ -48,28 +47,35 @@ const SignupPage = () => {
     };
 
     return (
-        <div className="relative min-h-screen flex items-center justify-center bg-cover bg-center px-4 sm:px-6">
+        <div className="relative bg-dark-background min-h-screen flex items-center justify-center bg-cover bg-center px-4 sm:px-6">
             {/* Blur Overlay */}
-            <div className="absolute inset-0 bg-black/30 backdrop-blur-xs"></div>
+            <div className="absolute inset-0 bg-black/40 backdrop-blur-sm"></div>
 
-            <div className="relative z-10 backdrop-blur-md w-full max-w-sm sm:max-w-md lg:max-w-lg bg-gray-900 bg-opacity-70 rounded-lg shadow-xl p-4 sm:p-6 md:p-8 transform transition duration-500 hover:scale-105 hover:shadow-2xl">
+            <div className="relative z-10 w-full max-w-sm sm:max-w-lg mx-auto bg-surface rounded-2xl shadow-2xl p-6 sm:p-12 transform transition-all duration-300 hover:shadow-3xl">
                 <div className="text-center mb-4 sm:mb-6">
-                    <h1 className="text-2xl sm:text-3xl font-extrabold text-transparent bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text leading-tight animate__animated animate__fadeIn">
+                    <h1 className="text-4xl  sm:text-5xl font-extrabold text-primary bg-clip-text leading-tight animate-fade-in-down">
                         Sign Up
                     </h1>
-                    <p className="text-sm sm:text-base text-gray-300">Create your account</p>
+                    <p className="text-lg sm:text-xl text-primary mt-3 animate-fade-in">
+                        Create your account
+                    </p>
                 </div>
 
                 {error && (
-                    <p className="text-red-500 text-center mb-2 text-sm sm:text-base animate__animated animate__fadeIn">
-                        {error}
-                    </p>
+                    <div className="bg-red-500/10 border border-red-500/50 rounded-lg p-3 mb-6">
+                        <p className="text-red-400 text-center text-sm">
+                            {error}
+                        </p>
+                    </div>
                 )}
 
-                <form className="space-y-3 sm:space-y-4" onSubmit={handleSubmit}>
-                    {/* Form Fields */}
-                    <div>
-                        <label className="block text-xs sm:text-sm font-medium text-gray-300">
+                <form
+                    className="space-y-4 sm:space-y-6"
+                    onSubmit={handleSubmit}
+                >
+                    {/* Name */}
+                    <div className="space-y-2">
+                        <label className="block text-sm font-medium text-primary">
                             Name
                         </label>
                         <input
@@ -78,14 +84,14 @@ const SignupPage = () => {
                             value={formData.name}
                             onChange={handleChange}
                             required
-                            className="mt-1 block w-full px-3 py-2 sm:px-4 sm:py-3 border border-gray-600 bg-gray-800 text-white rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm sm:text-base"
+                            className="block w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-700 bg-text-primary text-dark rounded-lg shadow-sm text-sm sm:text-base transition-all duration-300 placeholder-text-muted"
                             placeholder="Your name"
                         />
                     </div>
 
                     {/* Username */}
-                    <div>
-                        <label className="block text-xs sm:text-sm font-medium text-gray-300">
+                    <div className="space-y-2">
+                        <label className="block text-sm font-medium text-primary">
                             Username
                         </label>
                         <input
@@ -94,14 +100,14 @@ const SignupPage = () => {
                             value={formData.username}
                             onChange={handleChange}
                             required
-                            className="mt-1 block w-full px-3 py-2 sm:px-4 sm:py-3 border border-gray-600 bg-gray-800 text-white rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm sm:text-base"
+                            className="block w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-700 bg-text-primary text-dark rounded-lg shadow-sm text-sm sm:text-base transition-all duration-300 placeholder-text-muted"
                             placeholder="Your username"
                         />
                     </div>
 
                     {/* Email */}
-                    <div>
-                        <label className="block text-xs sm:text-sm font-medium text-gray-300">
+                    <div className="space-y-2">
+                        <label className="block text-sm font-medium text-primary">
                             Email
                         </label>
                         <input
@@ -110,14 +116,14 @@ const SignupPage = () => {
                             value={formData.email}
                             onChange={handleChange}
                             required
-                            className="mt-1 block w-full px-3 py-2 sm:px-4 sm:py-3 border border-gray-600 bg-gray-800 text-white rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm sm:text-base"
+                            className="block w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-700 bg-text-primary text-dark rounded-lg shadow-sm text-sm sm:text-base transition-all duration-300 placeholder-text-muted"
                             placeholder="Your email"
                         />
                     </div>
 
                     {/* Password */}
-                    <div>
-                        <label className="block text-xs sm:text-sm font-medium text-gray-300">
+                    <div className="space-y-2">
+                        <label className="block text-sm font-medium text-primary">
                             Password
                         </label>
                         <input
@@ -126,14 +132,14 @@ const SignupPage = () => {
                             value={formData.password}
                             onChange={handleChange}
                             required
-                            className="mt-1 block w-full px-3 py-2 sm:px-4 sm:py-3 border border-gray-600 bg-gray-800 text-white rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm sm:text-base"
+                            className="block w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-700 bg-text-primary text-dark rounded-lg shadow-sm text-sm sm:text-base transition-all duration-300 placeholder-text-muted"
                             placeholder="Your password"
                         />
                     </div>
 
                     {/* Confirm Password */}
-                    <div>
-                        <label className="block text-xs sm:text-sm font-medium text-gray-300">
+                    <div className="space-y-2">
+                        <label className="block text-sm font-medium text-primary">
                             Confirm Password
                         </label>
                         <input
@@ -142,7 +148,7 @@ const SignupPage = () => {
                             value={formData.confirmPassword}
                             onChange={handleChange}
                             required
-                            className="mt-1 block w-full px-3 py-2 sm:px-4 sm:py-3 border border-gray-600 bg-gray-800 text-white rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm sm:text-base"
+                            className="block w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-700 bg-text-primary text-dark rounded-lg shadow-sm text-sm sm:text-base transition-all duration-300 placeholder-text-muted"
                             placeholder="Confirm password"
                         />
                     </div>
@@ -152,20 +158,20 @@ const SignupPage = () => {
                         disabled={loading}
                         className={`w-full ${
                             loading
-                                ? "bg-gray-600"
-                                : "bg-gradient-to-r from-blue-500 to-purple-600"
-                        } text-white py-2 sm:py-3 rounded-md shadow-md hover:from-blue-600 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 text-sm sm:text-base transition-all duration-300`}
+                                ? "bg-primary-light"
+                                : "bg-primary hover:bg-primary-dark"
+                        } text-primary py-2 sm:py-3 rounded-md shadow-md focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 text-sm sm:text-base transition-all duration-300`}
                     >
                         {loading ? "Signing Up..." : "Sign Up"}
                     </button>
                 </form>
 
                 <div className="mt-4 text-center">
-                    <p className="text-xs sm:text-sm text-gray-400">
+                    <p className="text-xs sm:text-sm text-muted">
                         Already have an account?{" "}
                         <button
                             onClick={handleLogin}
-                            className="text-blue-400 hover:underline font-medium"
+                            className="text-accent font-medium hover:underline duration-300"
                         >
                             Login
                         </button>

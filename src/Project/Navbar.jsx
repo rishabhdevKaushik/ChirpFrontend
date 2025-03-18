@@ -44,22 +44,23 @@ const Navbar = () => {
     };
 
     return (
-        <header className="bg-gray-900 p-3 sm:p-4 shadow-md relative">
-            <div className="max-w-7xl mx-auto flex justify-between items-center">
+        <header className="bg-background p-3 sm:p-4 shadow-md relative">
+            <div className="max-w-7xl mx-auto flex justify-between items-center h-14">
                 {/* Logo */}
-                <div className="text-white text-xl sm:text-2xl font-bold flex items-center space-x-2">
+                <div className="text-primary text-xl sm:text-2xl font-bold flex items-center h-full">
                     <img
-                        className="w-8 h-8 sm:w-12 sm:h-12"
-                        src="/chirplogo.png"
+                        onClick={() => navigate("/")}
+                        className="h-full w-auto"
+                        src="/Chirp.svg"
                         alt="Chirp Logo"
                     />
-                    <span>Chirp</span>
+                    <p className="text-primary">CHIRP</p>
                 </div>
 
                 {/* Desktop Navigation Links */}
                 <nav className="hidden md:flex items-center space-x-2 sm:space-x-4 text-base sm:text-lg">
                     {/* Home Button */}
-                    <button
+                    {/* <button
                         onClick={() => navigate("/main")}
                         style={buttonStyle}
                         onMouseEnter={() => setHoveredButton("home")}
@@ -77,7 +78,7 @@ const Navbar = () => {
                                         : "scaleX(0)",
                             }}
                         />
-                    </button>
+                    </button> */}
 
                     {/* Profile Button */}
                     <button
@@ -144,16 +145,25 @@ const Navbar = () => {
                 </nav>
 
                 {/* Mobile Menu Button */}
-                <button 
+                <button
                     className="md:hidden text-white p-2"
                     onClick={toggleMobileMenu}
                 >
-                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path 
-                            strokeLinecap="round" 
-                            strokeLinejoin="round" 
-                            strokeWidth="2" 
-                            d={isMobileMenuOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16m-16 6h16"}
+                    <svg
+                        className="w-6 h-6"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                    >
+                        <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d={
+                                isMobileMenuOpen
+                                    ? "M6 18L18 6M6 6l12 12"
+                                    : "M4 6h16M4 12h16m-16 6h16"
+                            }
                         />
                     </svg>
                 </button>
@@ -163,7 +173,7 @@ const Navbar = () => {
             {isMobileMenuOpen && (
                 <div className="md:hidden absolute top-full left-0 right-0 bg-gray-900 shadow-lg z-50">
                     <div className="flex flex-col p-4 space-y-3">
-                        <button
+                        {/* <button
                             onClick={() => {
                                 navigate("/main");
                                 setIsMobileMenuOpen(false);
@@ -172,7 +182,7 @@ const Navbar = () => {
                         >
                             <FaHome className="text-lg" />
                             <span>Home</span>
-                        </button>
+                        </button> */}
                         <button
                             onClick={() => {
                                 navigate("/profile");
@@ -208,9 +218,7 @@ const Navbar = () => {
             )}
 
             {/* Popup Confirmation */}
-            {isPopupOpen && (
-                <Popup setIsPopupOpen={setIsPopupOpen} />
-            )}
+            {isPopupOpen && <Popup setIsPopupOpen={setIsPopupOpen} />}
         </header>
     );
 };

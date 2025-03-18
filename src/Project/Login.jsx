@@ -1,4 +1,4 @@
-import React, { useState} from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { apiEndpoints } from "../Api"; // Import your API endpoints
 
@@ -41,16 +41,16 @@ const Login = () => {
     };
 
     return (
-        <div className="relative min-h-screen flex items-center justify-center bg-cover bg-center px-4 sm:px-6">
+        <div className="relative bg-dark-background min-h-screen flex items-center justify-center bg-cover bg-center px-4 sm:px-6">
             {/* Enhanced Blur Overlay */}
             <div className="absolute inset-0 bg-black/40 backdrop-blur-sm"></div>
 
-            <div className="relative z-10 w-full max-w-sm sm:max-w-lg mx-auto bg-gray-900/80 rounded-2xl shadow-2xl p-6 sm:p-12 transform transition-all duration-300 hover:scale-[1.02] hover:shadow-3xl">
+            <div className="relative z-10 w-full max-w-sm sm:max-w-lg mx-auto bg-surface rounded-2xl shadow-2xl p-6 sm:p-12 transform transition-all duration-300 hover:shadow-3xl">
                 <div className="text-center mb-6 sm:mb-8">
-                    <h1 className="text-4xl sm:text-5xl font-extrabold text-transparent bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 bg-clip-text leading-tight animate-fade-in-down">
+                    <h1 className="text-4xl sm:text-5xl font-extrabold text-primary bg-clip-text leading-tight animate-fade-in-down">
                         Welcome Back!
                     </h1>
-                    <p className="text-lg sm:text-xl text-gray-300 mt-3 animate-fade-in">
+                    <p className="text-lg sm:text-xl text-primary mt-3 animate-fade-in">
                         Login to your account
                     </p>
                 </div>
@@ -67,7 +67,7 @@ const Login = () => {
                     <div className="space-y-2">
                         <label
                             htmlFor="identifier"
-                            className="block text-sm font-medium text-gray-300"
+                            className="block text-sm font-medium text-primary"
                         >
                             Username or Email
                         </label>
@@ -78,7 +78,7 @@ const Login = () => {
                             value={formData.identifier}
                             onChange={handleChange}
                             required
-                            className="block w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-700 bg-gray-800/50 text-white rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base transition-all duration-300 placeholder-gray-500"
+                            className="block w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-700 bg-text-primary text-dark rounded-lg shadow-sm text-sm sm:text-base transition-all duration-300 placeholder-text-muted"
                             placeholder="Enter your username or email"
                         />
                     </div>
@@ -86,7 +86,7 @@ const Login = () => {
                     <div className="space-y-2">
                         <label
                             htmlFor="password"
-                            className="block text-sm font-medium text-gray-300"
+                            className="block text-sm font-medium text-primary"
                         >
                             Password
                         </label>
@@ -97,7 +97,7 @@ const Login = () => {
                             value={formData.password}
                             onChange={handleChange}
                             required
-                            className="block w-full px-4 py-3 border border-gray-700 bg-gray-800/50 text-white rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent sm:text-sm transition-all duration-300 placeholder-gray-500"
+                            className="block w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-700 bg-text-primary text-dark rounded-lg shadow-sm text-sm sm:text-base transition-all duration-300 placeholder-text-muted"
                             placeholder="Enter your password"
                         />
                     </div>
@@ -107,15 +107,31 @@ const Login = () => {
                         disabled={loading}
                         className={`w-full py-3 px-4 rounded-lg shadow-lg ${
                             loading
-                                ? "bg-gray-600 cursor-not-allowed"
-                                : "bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 hover:from-blue-600 hover:via-purple-600 hover:to-pink-600"
-                        } text-white font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-900 transition-all duration-300`}
+                                ? "bg-primary-light cursor-not-allowed"
+                                : "bg-primary hover:bg-primary-dark"
+                        } text-primary font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 transition-all duration-300`}
                     >
                         {loading ? (
                             <span className="flex items-center justify-center">
-                                <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                <svg
+                                    className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <circle
+                                        className="opacity-25"
+                                        cx="12"
+                                        cy="12"
+                                        r="10"
+                                        stroke="currentColor"
+                                        strokeWidth="4"
+                                    ></circle>
+                                    <path
+                                        className="opacity-75"
+                                        fill="currentColor"
+                                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                                    ></path>
                                 </svg>
                                 Logging in...
                             </span>
@@ -126,11 +142,11 @@ const Login = () => {
                 </form>
 
                 <div className="mt-8 text-center">
-                    <p className="text-gray-400">
+                    <p className="text-xs sm:text-sm text-muted">
                         Don't have an account?{" "}
                         <button
                             onClick={handleSignup}
-                            className="text-blue-400 hover:text-blue-300 font-medium transition-colors duration-300"
+                            className="text-accent font-medium hover:underline duration-300"
                         >
                             Sign Up
                         </button>

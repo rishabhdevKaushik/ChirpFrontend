@@ -7,18 +7,16 @@ const LoadingScreen = () => {
     const navigate = useNavigate();
 
     const checkLoginStatus = useCallback(async () => {
-        let tokenres = { status: 400 };
-
         try {
-            tokenres = await apiEndpoints.refershauthenticationtoken();
+            const refreshToken = localStorage.getItem("refreshToken");
+            await apiEndpoints.refershAuthenticationToken(refreshToken);
+            localStorage.setItem("islogged", true);
+            return true;
         } catch (error) {
-            console.error('Authentication error:', error);
+            console.error("Authentication error:", error);
+            localStorage.setItem("islogged", false);
+            return false;
         }
-
-        const isLoggedIn = tokenres.status === 200;
-        localStorage.setItem("islogged", String(isLoggedIn));
-        
-        return isLoggedIn;
     }, []);
 
     useEffect(() => {
@@ -30,8 +28,8 @@ const LoadingScreen = () => {
 
             // Start progress animation
             progressInterval = setInterval(() => {
-                setProgress(prev => prev >= 100 ? 100 : prev + 2);
-            }, 50);
+                setProgress((prev) => (prev >= 100 ? 100 : prev + 2));
+            }, 60);
 
             // Setup navigation
             navigationTimeout = setTimeout(() => {
@@ -53,12 +51,15 @@ const LoadingScreen = () => {
     if (!isLoading) return null;
 
     return (
-        <div className="bg-gray-900 h-screen flex items-center justify-center bg-cover">
-            <div className="flex flex-col items-center">
-                <img src="/chirplogo.png" alt="Logo" className="mb-4" />
-                <div className="w-64 bg-gray-300 rounded-full h-2.5 mb-4">
+        <div className="relative bg-dark-background bg-cover h-screen flex items-center justify-center ">
+            {/* Enhanced Blur Overlay */}
+            <div className="absolute inset-0 bg-black/40 backdrop-blur-sm"></div>
+
+            <div className="relative flex flex-col items-center">
+                <img src="/Chirp.svg" alt="Logo" className="mb-4" />
+                <div className="relative w-64 bg-surface rounded-full h-2.5 mb-4">
                     <div
-                        className="bg-blue-600 h-2.5 rounded-full"
+                        className="relative bg-accent h-2.5 rounded-full"
                         style={{
                             width: `${Math.min(progress, 100)}%`,
                             transition: "width 0.05s ease-in-out",
