@@ -47,7 +47,7 @@ const RightSection = ({ selectedChat, onBackClick, isMobile }) => {
         });
 
         socket.on("messageReceived", (msg) => {
-            console.log("Message received:", msg);
+            // console.log("Message received:", msg);
             if (msg.chat._id === selectedChatId) {
                 setMessages((prevMessages) => {
                     if (
@@ -208,7 +208,7 @@ const RightSection = ({ selectedChat, onBackClick, isMobile }) => {
     };
 
     const handleSelect = () => {
-        console.log("Selected Message:", selectedMsg);
+        // console.log("Selected Message:", selectedMsg);
         setSelectedMsg(null);
     };
 
@@ -267,11 +267,11 @@ const RightSection = ({ selectedChat, onBackClick, isMobile }) => {
                             <h3 className="text-xl font-semibold text-gray-800 hover:text-blue-600 transition-colors duration-300">
                                 {selectedChat.name}
                             </h3>
-                            {typing && (
+                            {/* {typing && (
                                 <span className="text-sm text-blue-500 animate-pulse">
                                     typing...
                                 </span>
-                            )}
+                            )}   */}
                         </div>
                     </div>
 

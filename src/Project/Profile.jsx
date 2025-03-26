@@ -9,9 +9,9 @@ const Profile = () => {
     const [pendingRequests, setPendingRequests] = useState([]);
     const [blockedUsers, setBlockedUsers] = useState([]);
     const [loading, setLoading] = useState(false);
-    
+
     // Get username from localStorage
-    const username = localStorage.getItem('currentUsername');
+    const username = localStorage.getItem("currentUsername");
 
     const navigate = useNavigate();
 
@@ -173,7 +173,8 @@ const Profile = () => {
                                 {popupContent.title}
                             </h2>
 
-                            {popupContent.title === "List of Pending Requests" &&
+                            {popupContent.title ===
+                                "List of Pending Requests" &&
                                 (loading ? (
                                     <p className="text-center">Loading...</p>
                                 ) : pendingRequests.length === 0 ? (
@@ -191,19 +192,34 @@ const Profile = () => {
                                             </span>
                                             <div className="space-x-2">
                                                 <button
-                                                    onClick={() => handleAcceptRequest(request.sender.username)}
+                                                    onClick={() =>
+                                                        handleAcceptRequest(
+                                                            request.sender
+                                                                .username
+                                                        )
+                                                    }
                                                     className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-md transition-colors"
                                                 >
                                                     Accept
                                                 </button>
                                                 <button
-                                                    onClick={() => handleRejectRequest(request.sender.username)}
+                                                    onClick={() =>
+                                                        handleRejectRequest(
+                                                            request.sender
+                                                                .username
+                                                        )
+                                                    }
                                                     className="bg-gray-500 hover:bg-gray-600 text-white px-3 py-1 rounded-md transition-colors"
                                                 >
                                                     Reject
                                                 </button>
                                                 <button
-                                                    onClick={() => handleBlockRequest(request.sender.username)}
+                                                    onClick={() =>
+                                                        handleBlockRequest(
+                                                            request.sender
+                                                                .username
+                                                        )
+                                                    }
                                                     className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md transition-colors"
                                                 >
                                                     Block
@@ -230,7 +246,11 @@ const Profile = () => {
                                                 {user.username}
                                             </span>
                                             <button
-                                                onClick={() => handleUnblockUser(user.username)}
+                                                onClick={() =>
+                                                    handleUnblockUser(
+                                                        user.username
+                                                    )
+                                                }
                                                 className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-md transition-colors"
                                             >
                                                 Unblock

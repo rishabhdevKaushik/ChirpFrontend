@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Login from "./Project/Login"; // Default page
 import SignupPage from "./Project/SignupPage"; // Signup page
 import Main from "./Project/Main";
+import Otp from "./Project/Otp";
 import Popup from "./Project/Popup";
 import Profile from "./Project/Profile";
 import UpdateProfile from "./Project/UpdateProfile";
@@ -18,7 +19,7 @@ const App = () => {
                     <Route path="/" element={<LoadingScreen />} />
                     <Route path="/login" element={<Login />} />
                     <Route path="/signup" element={<SignupPage />} />
-
+                    <Route path="/otp" element={<Otp />} />
                     {/* Routes WITH Navbar */}
                     <Route element={<LayoutWithNavbar />}>
                         <Route path="/main" element={<Main />} />

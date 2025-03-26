@@ -4,7 +4,7 @@ const BASE_URL = `${process.env.REACT_APP_BACKEND_URL}/api`;
 const api = axios.create({
     baseURL: BASE_URL,
 });
-console.log(BASE_URL);
+// console.log(BASE_URL);
 
 
 api.interceptors.request.use(
@@ -58,6 +58,7 @@ const apiEndpoints = {
     findUser: (username) => api.get(`/user/${username}`),
     refershAuthenticationToken: (refreshToken) =>
         api.post("/user/refresh-token", { refreshToken }),
+    verifyOtp:(data)=> api.post("/user/verifyotp", data),
 
     sendFriendRequest: (username) => api.post(`/friendreq/${username}`),
     updateFriendRequest: (data, username) =>

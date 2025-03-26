@@ -30,7 +30,7 @@ const SignupPage = () => {
         setLoading(true);
         try {
             await apiEndpoints.signup(formData);
-            navigate("/main");
+            navigate("/Otp");
         } catch (error) {
             console.error(
                 "SignUp Error:",

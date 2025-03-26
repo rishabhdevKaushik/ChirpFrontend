@@ -9,7 +9,7 @@ const SendRequest = ({ username }) => {
 
     const handleFriendRequest = async () => {
         try {
-            console.log("username ", username);
+            // console.log("username ", username);
 
             await apiEndpoints.sendFriendRequest(username);
             // alert(`Friend request sent to ${username}!`);
