@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FaUser, FaCog, FaBell, FaHome } from "react-icons/fa";
+import { FaUser, FaCog, FaBell } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import Popup from "./Popup"; // Import the Popup component
 

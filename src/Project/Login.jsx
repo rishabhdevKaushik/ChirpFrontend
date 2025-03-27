@@ -29,6 +29,9 @@ const Login = () => {
             localStorage.setItem("currentUserId", currentUser.id);
             navigate("/main");
         } catch (error) {
+            if (error.response.status === 409) {
+                navigate("/otp");
+            }
             console.error(error);
             setError("Login failed. Please check your credentials.");
         } finally {

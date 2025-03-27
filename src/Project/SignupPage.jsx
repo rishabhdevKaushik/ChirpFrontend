@@ -29,7 +29,10 @@ const SignupPage = () => {
 
         setLoading(true);
         try {
-            await apiEndpoints.signup(formData);
+            await apiEndpoints.signup(formData, {
+                withCredentials: true,
+                credentials: "include",
+            });
             navigate("/Otp");
         } catch (error) {
             console.error(
