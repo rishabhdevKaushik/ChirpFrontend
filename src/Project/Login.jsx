@@ -30,6 +30,7 @@ const Login = () => {
             navigate("/main");
         } catch (error) {
             if (error.response.status === 409) {
+                sessionStorage.setItem("tempUserId", error.response.data.tempUserId);
                 navigate("/otp");
             }
             console.error(error);

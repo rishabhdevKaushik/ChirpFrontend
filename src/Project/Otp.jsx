@@ -45,6 +45,7 @@ const Otp = () => {
         const otpString = otp.join("");
         const data = {
             otp: otpString,
+            tempUserId: sessionStorage.getItem("tempUserId")
         };
 
         try {
@@ -80,10 +81,10 @@ const Otp = () => {
             {/* Softened overlay for contrast without obscuring the background image */}
             <div className="absolute inset-0 bg-black/40 backdrop-blur-sm"></div>
 
-            <div className="relative z-10 w-full max-w-sm sm:max-w-lg mx-auto bg-surface rounded-2xl shadow-2xl p-6 sm:p-12 transform transition-all duration-300 hover:shadow-3xl">
-                {/* Centered Verify OTP text in white */}
+            <div className="relative z-10 w-full max-w-md md:max-w-lg mx-auto bg-surface rounded-2xl shadow-2xl p-6 sm:p-12 transform transition-all duration-300 hover:shadow-3xl">
+                {/* Centered Verify OTP text */}
                 <div className="text-center mb-6 sm:mb-8">
-                    <h1 className="text-4xl sm:text-5xl font-extrabold text-primary bg-clip-text leading-tight animate-fade-in-down">
+                    <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-primary bg-clip-text leading-tight animate-fade-in-down">
                         Verify OTP
                     </h1>
                 </div>
@@ -102,11 +103,9 @@ const Otp = () => {
                             maxLength="1"
                             value={digit}
                             ref={(el) => (inputRefs.current[index] = el)}
-                            onChange={(e) =>
-                                handleChange(index, e.target.value)
-                            }
+                            onChange={(e) => handleChange(index, e.target.value)}
                             onKeyDown={(e) => handleKeyDown(index, e)}
-                            className="w-12 h-12 text-center text-xl font-medium border border-gray-300 rounded-lg focus:border-red-500 focus:ring-2 focus:ring-red-300 transition-all duration-300 bg-gray-100"
+                            className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 text-center text-lg sm:text-xl md:text-2xl font-medium border border-gray-300 rounded-lg focus:border-red-500 focus:ring-2 focus:ring-red-300 transition-all duration-300 bg-gray-100"
                         />
                     ))}
                 </div>
@@ -128,11 +127,7 @@ const Otp = () => {
                         type="submit"
                         onClick={handleSubmit}
                         disabled={loading}
-                        className={`w-full py-3 px-4 rounded-lg shadow-lg ${
-                            loading
-                                ? "bg-primary-light cursor-not-allowed"
-                                : "bg-primary hover:bg-primary-dark"
-                        } text-primary font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 transition-all duration-300`}
+                        className={`w-full py-3 px-4 rounded-lg shadow-lg ${loading ? "bg-primary-light cursor-not-allowed" : "bg-primary hover:bg-primary-dark"} text-primary font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 transition-all duration-300`}
                     >
                         {loading ? (
                             <span className="flex items-center justify-center">
