@@ -24,11 +24,14 @@ const RightSection = ({ selectedChat, onBackClick, isMobile }) => {
         // Setup user and join chat
         if (currentUserId) {
             socket.emit("setup", currentUserId);
+            console.log("sent user id");
+            
         }
 
         // Join chat room if there's a selected chat
         if (selectedChatId) {
             socket.emit("join chat", selectedChatId);
+            console.log("sent chat id");
         }
 
         // Socket event listeners
@@ -37,17 +40,15 @@ const RightSection = ({ selectedChat, onBackClick, isMobile }) => {
         });
 
         socket.on("typing", () => {
-            console.log("Typing...");
             setTyping(true);
         });
 
         socket.on("stopTyping", () => {
-            console.log("Stopped typing");
             setTyping(false);
         });
 
         socket.on("messageReceived", (msg) => {
-            // console.log("Message received:", msg);
+            console.log("Message received:", msg);
             if (msg.chat._id === selectedChatId) {
                 setMessages((prevMessages) => {
                     if (
@@ -66,14 +67,12 @@ const RightSection = ({ selectedChat, onBackClick, isMobile }) => {
             socket.off("messageReceived");
             socket.off("typing");
             socket.off("stopTyping");
-            // Don't disconnect here - we want to maintain the connection
         };
-    }, [currentUserId, selectedChatId]); // Add currentUserId as dependency
+    }, [currentUserId, selectedChatId]); 
 
     // Handle socket disconnection on component unmount
     useEffect(() => {
         return () => {
-            // Only disconnect if we're actually connected
             if (socket.connected) {
                 socket.disconnect();
             }
@@ -183,13 +182,13 @@ const RightSection = ({ selectedChat, onBackClick, isMobile }) => {
             messagesEndRef.current.scrollTop =
                 messagesEndRef.current.scrollHeight;
         }
-    }, [messages]);
+    }, [messages, typing]); // Add typing as a dependency
 
     const handleDoubleClick = (msg) => {
         setSelectedMsg(msg);
     };
 
-    const handleEdit = async (msg) => {
+    const handleEdit = async () => {
         setEditingMessage(selectedMsg);
         setMessage(selectedMsg.content);
         setSelectedMsg(null);
@@ -267,11 +266,6 @@ const RightSection = ({ selectedChat, onBackClick, isMobile }) => {
                             <h3 className="text-xl font-semibold text-gray-800 hover:text-blue-600 transition-colors duration-300">
                                 {selectedChat.name}
                             </h3>
-                            {/* {typing && (
-                                <span className="text-sm text-blue-500 animate-pulse">
-                                    typing...
-                                </span>
-                            )}   */}
                         </div>
                     </div>
 
@@ -302,6 +296,15 @@ const RightSection = ({ selectedChat, onBackClick, isMobile }) => {
                                 </div>
                             </div>
                         ))}
+                        {typing && (
+                            <div className="group p-4 rounded-xl mb-2 shadow-sm max-w-sm break-words transition-all duration-300 hover:-translate-y-0.5 self-start bg-gradient-to-r from-gray-100 to-gray-200">
+                                <div className="flex space-x-1">
+                                    <div className="w-2 h-2 bg-gray-800 rounded-full animate-bounce [animation-delay:-0.3s]"></div>
+                                    <div className="w-2 h-2 bg-gray-800 rounded-full animate-bounce [animation-delay:-0.15s]"></div>
+                                    <div className="w-2 h-2 bg-gray-800 rounded-full animate-bounce"></div>
+                                </div>
+                            </div>
+                        )}
                     </div>
 
                     {/* Popup for Message Options */}

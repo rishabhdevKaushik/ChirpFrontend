@@ -29,7 +29,7 @@ const Login = () => {
             localStorage.setItem("currentUserId", currentUser.id);
             navigate("/main");
         } catch (error) {
-            if (error.response.status === 409) {
+            if (error.response && error.response.status && error.response.status === 409) {
                 sessionStorage.setItem("tempUserId", error.response.data.tempUserId);
                 navigate("/otp");
             }
