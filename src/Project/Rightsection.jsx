@@ -23,6 +23,8 @@ const RightSection = ({ selectedChat, onBackClick, isMobile }) => {
 
         // Setup user and join chat
         if (currentUserId) {
+            console.log(currentUserId);
+            
             socket.emit("setup", currentUserId);
             console.log("sent user id");
             
@@ -182,7 +184,7 @@ const RightSection = ({ selectedChat, onBackClick, isMobile }) => {
             messagesEndRef.current.scrollTop =
                 messagesEndRef.current.scrollHeight;
         }
-    }, [messages, typing]); // Add typing as a dependency
+    }, [messages, typing]);
 
     const handleDoubleClick = (msg) => {
         setSelectedMsg(msg);
@@ -207,7 +209,6 @@ const RightSection = ({ selectedChat, onBackClick, isMobile }) => {
     };
 
     const handleSelect = () => {
-        // console.log("Selected Message:", selectedMsg);
         setSelectedMsg(null);
     };
 
