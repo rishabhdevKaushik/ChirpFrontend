@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 
 const Otp = () => {
     const [otp, setOtp] = useState(["", "", "", "", "", ""]);
-    // const [isVerified, setIsVerified] = useState(false);
     const [timer, setTimer] = useState(30);
     const [canResend, setCanResend] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -52,7 +51,6 @@ const Otp = () => {
             const response = await apiEndpoints.verifyOtp(data);
             console.log(response.data);
             if (response.data.message === "OTP verified") {
-                // setIsVerified(true);
                 navigate("/main");
             } else {
                 setError("OTP is incorrect. Please try again.");
