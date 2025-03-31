@@ -266,7 +266,7 @@ const RightSection = ({ selectedChat, onBackClick, isMobile }) => {
                     {/* Messages Display */}
                     <div
                         ref={messagesEndRef}
-                        className={`flex-grow overflow-y-auto bg-white/90 backdrop-blur-sm p-4 rounded-xl shadow-md flex flex-col-reverse space-y-3 mb-4 ${
+                        className={`flex-grow overflow-y-auto bg-white/90 backdrop-blur-sm p-4 rounded-xl shadow-md flex flex-col space-y-3 mb-4 ${
                             isMobile ? "mb-24" : ""
                         }`}
                     >
