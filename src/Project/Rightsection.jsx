@@ -9,6 +9,7 @@ const RightSection = ({ selectedChat, onBackClick, isMobile }) => {
     const [editingMessage, setEditingMessage] = useState(null);
     const [typing, setTyping] = useState(false);
     const messagesEndRef = useRef(null);
+    const messageInputRef = useRef(null);
 
     const currentUsername = localStorage.getItem("currentUsername");
     const currentUserId = localStorage.getItem("currentUserId");
@@ -145,9 +146,12 @@ const RightSection = ({ selectedChat, onBackClick, isMobile }) => {
                     );
                 }
             }
+
+            if (messageInputRef.current) {
+            messageInputRef.current.focus();
+        }
     
-            // Hide keyboard by blurring the input field
-            document.activeElement.blur();
+            
         }
     };
     
@@ -358,6 +362,7 @@ const RightSection = ({ selectedChat, onBackClick, isMobile }) => {
                     >
                         <div className="relative w-full">
                             <textarea
+                                ref={messageInputRef}
                                 value={message}
                                 onChange={handleChange}
                                 onKeyDown={handleKeyDown}
