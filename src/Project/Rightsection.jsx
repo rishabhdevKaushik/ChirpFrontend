@@ -96,13 +96,12 @@ const RightSection = ({ selectedChat, onBackClick, isMobile }) => {
         e.preventDefault();
         if (message.trim()) {
             if (editingMessage) {
-                // Handle message edit
                 try {
                     const data = {
                         messageId: editingMessage._id,
                         content: message,
                     };
-
+    
                     await apiEndpoints.editMessage(data);
                     setMessages((prevMessages) =>
                         prevMessages.map((msg) =>
@@ -117,22 +116,21 @@ const RightSection = ({ selectedChat, onBackClick, isMobile }) => {
                     console.error("Error editing message:", error);
                 }
             } else {
-                // Handle new message creation
                 const tempMessage = {
                     tempId: Date.now(),
                     content: message,
                     sender: { username: currentUsername },
                 };
-
+    
                 try {
                     setMessages((prev) => [...prev, tempMessage]);
                     setMessage("");
-
+    
                     const response = await apiEndpoints.sendMessage({
                         content: message,
                         chatId: selectedChat.id,
                     });
-
+    
                     setMessages((prev) =>
                         prev.map((msg) =>
                             msg.tempId === tempMessage.tempId
@@ -147,8 +145,12 @@ const RightSection = ({ selectedChat, onBackClick, isMobile }) => {
                     );
                 }
             }
+    
+            // Hide keyboard by blurring the input field
+            document.activeElement.blur();
         }
     };
+    
 
     const handleKeyDown = (e) => {
         if (e.key === "Enter" && !e.shiftKey) {
