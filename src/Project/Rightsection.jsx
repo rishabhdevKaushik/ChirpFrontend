@@ -12,7 +12,6 @@ const RightSection = ({ selectedChat, onBackClick, isMobile }) => {
 
     const currentUsername = localStorage.getItem("currentUsername");
     const currentUserId = localStorage.getItem("currentUserId");
-    // const selectedChat = localStorage.getItem("selectedChat");
     const selectedChatId = localStorage.getItem("selectedChatId");
 
     useEffect(() => {
@@ -24,10 +23,8 @@ const RightSection = ({ selectedChat, onBackClick, isMobile }) => {
         // Setup user and join chat
         if (currentUserId) {
             console.log(currentUserId);
-            
             socket.emit("setup", currentUserId);
             console.log("sent user id");
-            
         }
 
         // Join chat room if there's a selected chat
@@ -53,9 +50,7 @@ const RightSection = ({ selectedChat, onBackClick, isMobile }) => {
             console.log("Message received:", msg);
             if (msg.chat._id === selectedChatId) {
                 setMessages((prevMessages) => {
-                    if (
-                        prevMessages.find((message) => message._id === msg._id)
-                    ) {
+                    if (prevMessages.find((message) => message._id === msg._id)) {
                         return prevMessages;
                     }
                     return [...prevMessages, msg];
@@ -70,7 +65,7 @@ const RightSection = ({ selectedChat, onBackClick, isMobile }) => {
             socket.off("typing");
             socket.off("stopTyping");
         };
-    }, [currentUserId, selectedChatId]); 
+    }, [currentUserId, selectedChatId]);
 
     // Handle socket disconnection on component unmount
     useEffect(() => {
@@ -145,8 +140,6 @@ const RightSection = ({ selectedChat, onBackClick, isMobile }) => {
                                 : msg
                         )
                     );
-
-                    // socket.emit("newMessage", response.data._id);
                 } catch (error) {
                     console.error("Failed to send message:", error);
                     setMessages((prev) =>
@@ -273,7 +266,9 @@ const RightSection = ({ selectedChat, onBackClick, isMobile }) => {
                     {/* Messages Display */}
                     <div
                         ref={messagesEndRef}
-                        className="flex-grow overflow-y-auto bg-white/90 backdrop-blur-sm p-4 rounded-xl shadow-md flex flex-col space-y-3 mb-4"
+                        className={`flex-grow overflow-y-auto bg-white/90 backdrop-blur-sm p-4 rounded-xl shadow-md flex flex-col-reverse space-y-3 mb-4 ${
+                            isMobile ? "mb-24" : ""
+                        }`}
                     >
                         {messages.map((msg) => (
                             <div
@@ -315,8 +310,7 @@ const RightSection = ({ selectedChat, onBackClick, isMobile }) => {
                                 <h3 className="text-lg font-bold text-gray-700">
                                     Message Actions
                                 </h3>
-                                {selectedMsg.sender.username ===
-                                currentUsername ? (
+                                {selectedMsg.sender.username === currentUsername ? (
                                     <>
                                         <button
                                             onClick={handleEdit}
@@ -333,8 +327,7 @@ const RightSection = ({ selectedChat, onBackClick, isMobile }) => {
                                     </>
                                 ) : (
                                     <p className="text-gray-500">
-                                        You can only edit or delete your own
-                                        messages.
+                                        You can only edit or delete your own messages.
                                     </p>
                                 )}
                                 <button
@@ -354,7 +347,13 @@ const RightSection = ({ selectedChat, onBackClick, isMobile }) => {
                     )}
 
                     {/* Message Input */}
-                    <div className="flex items-center space-x-3">
+                    <div
+                        className={`${
+                            isMobile
+                                ? "sticky bottom-0 bg-white/90 p-3"
+                                : "flex items-center space-x-3"
+                        }`}
+                    >
                         <div className="relative w-full">
                             <textarea
                                 value={message}
