@@ -93,6 +93,14 @@ const RightSection = ({ selectedChat, onBackClick, isMobile }) => {
         }, 2000); // Emit after 2 seconds of no typing
     };
 
+    useEffect(() => {
+        if (message === "" && messageInputRef.current) {
+            requestAnimationFrame(() => {
+                messageInputRef.current.focus();
+            });
+        }
+    }, [message]);
+    
     const handleSend = async (e) => {
         e.preventDefault();
         if (message.trim()) {
@@ -112,7 +120,7 @@ const RightSection = ({ selectedChat, onBackClick, isMobile }) => {
                         )
                     );
                     setEditingMessage(null);
-                    setMessage("");
+                    setMessage("");  // Triggers useEffect for refocusing
                 } catch (error) {
                     console.error("Error editing message:", error);
                 }
@@ -125,7 +133,7 @@ const RightSection = ({ selectedChat, onBackClick, isMobile }) => {
     
                 try {
                     setMessages((prev) => [...prev, tempMessage]);
-                    setMessage("");
+                    setMessage(""); // Triggers useEffect for refocusing
     
                     const response = await apiEndpoints.sendMessage({
                         content: message,
@@ -146,14 +154,9 @@ const RightSection = ({ selectedChat, onBackClick, isMobile }) => {
                     );
                 }
             }
-
-            if (messageInputRef.current) {
-            messageInputRef.current.focus();
-        }
-    
-            
         }
     };
+    
     
 
     const handleKeyDown = (e) => {
