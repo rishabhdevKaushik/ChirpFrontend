@@ -51,7 +51,9 @@ const RightSection = ({ selectedChat, onBackClick, isMobile }) => {
             console.log("Message received:", msg);
             if (msg.chat._id === selectedChatId) {
                 setMessages((prevMessages) => {
-                    if (prevMessages.find((message) => message._id === msg._id)) {
+                    if (
+                        prevMessages.find((message) => message._id === msg._id)
+                    ) {
                         return prevMessages;
                     }
                     return [...prevMessages, msg];
@@ -100,7 +102,7 @@ const RightSection = ({ selectedChat, onBackClick, isMobile }) => {
             });
         }
     }, [message]);
-    
+
     const handleSend = async (e) => {
         e.preventDefault();
         if (message.trim()) {
@@ -110,7 +112,7 @@ const RightSection = ({ selectedChat, onBackClick, isMobile }) => {
                         messageId: editingMessage._id,
                         content: message,
                     };
-    
+
                     await apiEndpoints.editMessage(data);
                     setMessages((prevMessages) =>
                         prevMessages.map((msg) =>
@@ -120,7 +122,7 @@ const RightSection = ({ selectedChat, onBackClick, isMobile }) => {
                         )
                     );
                     setEditingMessage(null);
-                    setMessage("");  // Triggers useEffect for refocusing
+                    setMessage(""); // Triggers useEffect for refocusing
                 } catch (error) {
                     console.error("Error editing message:", error);
                 }
@@ -130,16 +132,16 @@ const RightSection = ({ selectedChat, onBackClick, isMobile }) => {
                     content: message,
                     sender: { username: currentUsername },
                 };
-    
+
                 try {
                     setMessages((prev) => [...prev, tempMessage]);
                     setMessage(""); // Triggers useEffect for refocusing
-    
+
                     const response = await apiEndpoints.sendMessage({
                         content: message,
                         chatId: selectedChat.id,
                     });
-    
+
                     setMessages((prev) =>
                         prev.map((msg) =>
                             msg.tempId === tempMessage.tempId
@@ -156,8 +158,6 @@ const RightSection = ({ selectedChat, onBackClick, isMobile }) => {
             }
         }
     };
-    
-    
 
     const handleKeyDown = (e) => {
         if (e.key === "Enter" && !e.shiftKey) {
@@ -218,7 +218,7 @@ const RightSection = ({ selectedChat, onBackClick, isMobile }) => {
         <div
             className={`flex flex-col ${
                 isMobile ? "h-screen p-0" : "p-4"
-            } bg-gradient-to-br from-gray-50 to-gray-100 ${
+            } bg-surface ${
                 isMobile ? "rounded-none" : "rounded-xl"
             } shadow-lg h-full w-full`}
         >
@@ -227,17 +227,17 @@ const RightSection = ({ selectedChat, onBackClick, isMobile }) => {
                     <div
                         className={`flex items-center space-x-4 ${
                             isMobile ? "mb-2" : "mb-4"
-                        } p-3 bg-white/90 backdrop-blur-sm shadow-md ${
+                        } p-3 bg-surface backdrop-blur-sm shadow-md ${
                             isMobile ? "rounded-none" : "rounded-xl"
-                        } hover:bg-white/95 transition duration-300 ease-in-out border border-gray-100`}
+                        } hover:bg-surface/95 transition duration-300 ease-in-out border border-gray-700`}
                     >
                         {isMobile && (
                             <button
                                 onClick={onBackClick}
-                                className="p-2 hover:bg-gray-100 rounded-full transition-colors duration-300"
+                                className="p-2 hover:bg-surface rounded-full transition-colors duration-300"
                             >
                                 <svg
-                                    className="w-6 h-6 text-gray-600"
+                                    className="w-6 h-6 text-secondary"
                                     fill="none"
                                     stroke="currentColor"
                                     viewBox="0 0 24 24"
@@ -255,10 +255,10 @@ const RightSection = ({ selectedChat, onBackClick, isMobile }) => {
                             <img
                                 src={selectedChat.avatar}
                                 alt={selectedChat.name}
-                                className="w-14 h-14 rounded-full border-2 border-blue-400 p-0.5 hover:scale-105 transition-transform duration-300"
+                                className="w-14 h-14 rounded-full border-2 border-primary p-0.5 hover:scale-105 transition-transform duration-300"
                             />
                         ) : (
-                            <div className="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-full bg-gray-100 text-gray-700 font-bold border-2 border-gray-100">
+                            <div className="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-full bg-surface text-primary font-bold border-2 border-gray-700">
                                 {selectedChat.name
                                     ? selectedChat.name.charAt(0).toUpperCase()
                                     : "?"}
@@ -266,7 +266,7 @@ const RightSection = ({ selectedChat, onBackClick, isMobile }) => {
                         )}
 
                         <div>
-                            <h3 className="text-xl font-semibold text-gray-800 hover:text-blue-600 transition-colors duration-300">
+                            <h3 className="text-xl font-semibold text-primary hover:text-primary transition-colors duration-300">
                                 {selectedChat.name}
                             </h3>
                         </div>
@@ -275,7 +275,7 @@ const RightSection = ({ selectedChat, onBackClick, isMobile }) => {
                     {/* Messages Display */}
                     <div
                         ref={messagesEndRef}
-                        className={`flex-grow overflow-y-auto bg-white/90 backdrop-blur-sm p-4 rounded-xl shadow-md flex flex-col space-y-3 mb-4 ${
+                        className={`flex-grow overflow-y-auto bg-surface backdrop-blur-sm p-4 rounded-xl shadow-md flex flex-col space-y-3 mb-4 ${
                             isMobile ? "mb-24" : ""
                         }`}
                     >
@@ -285,8 +285,8 @@ const RightSection = ({ selectedChat, onBackClick, isMobile }) => {
                                 onDoubleClick={() => handleDoubleClick(msg)}
                                 className={`group p-4 rounded-xl mb-2 shadow-sm max-w-sm break-words transition-all duration-300 hover:-translate-y-0.5 ${
                                     msg.sender.username === currentUsername
-                                        ? "self-end bg-gradient-to-r from-blue-500 to-blue-600 text-white"
-                                        : "self-start bg-gradient-to-r from-gray-100 to-gray-200 text-gray-800"
+                                        ? "self-end bg-primary text-primary"
+                                        : "self-start bg-surface border border-gray-700 text-primary"
                                 } ${
                                     editingMessage?._id === msg._id
                                         ? "ring-2 ring-yellow-400"
@@ -302,11 +302,11 @@ const RightSection = ({ selectedChat, onBackClick, isMobile }) => {
                             </div>
                         ))}
                         {typing && (
-                            <div className="group p-4 rounded-xl mb-2 shadow-sm max-w-sm break-words transition-all duration-300 hover:-translate-y-0.5 self-start bg-gradient-to-r from-gray-100 to-gray-200">
+                            <div className="group p-4 rounded-xl mb-2 shadow-sm max-w-sm break-words transition-all duration-300 hover:-translate-y-0.5 self-start bg-surface border border-gray-700">
                                 <div className="flex space-x-1">
-                                    <div className="w-2 h-2 bg-gray-800 rounded-full animate-bounce [animation-delay:-0.3s]"></div>
-                                    <div className="w-2 h-2 bg-gray-800 rounded-full animate-bounce [animation-delay:-0.15s]"></div>
-                                    <div className="w-2 h-2 bg-gray-800 rounded-full animate-bounce"></div>
+                                    <div className="w-2 h-2 bg-text-primary rounded-full animate-bounce [animation-delay:-0.3s]"></div>
+                                    <div className="w-2 h-2 bg-text-primary rounded-full animate-bounce [animation-delay:-0.15s]"></div>
+                                    <div className="w-2 h-2 bg-text-primary rounded-full animate-bounce"></div>
                                 </div>
                             </div>
                         )}
@@ -315,39 +315,41 @@ const RightSection = ({ selectedChat, onBackClick, isMobile }) => {
                     {/* Popup for Message Options */}
                     {selectedMsg && (
                         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-10">
-                            <div className="bg-white p-6 rounded-lg shadow-xl space-y-4">
-                                <h3 className="text-lg font-bold text-gray-700">
+                            <div className="bg-surface p-6 rounded-lg shadow-xl space-y-4 border border-gray-700">
+                                <h3 className="text-lg font-bold text-primary">
                                     Message Actions
                                 </h3>
-                                {selectedMsg.sender.username === currentUsername ? (
+                                {selectedMsg.sender.username ===
+                                currentUsername ? (
                                     <>
                                         <button
                                             onClick={handleEdit}
-                                            className="w-full bg-yellow-400 text-white py-2 px-4 rounded-lg shadow-md hover:bg-yellow-500"
+                                            className="w-full bg-primary text-primary py-2 px-4 rounded-lg shadow-md hover:bg-primary-dark"
                                         >
                                             Edit
                                         </button>
                                         <button
                                             onClick={handleDelete}
-                                            className="w-full bg-red-500 text-white py-2 px-4 rounded-lg shadow-md hover:bg-red-600"
+                                            className="w-full bg-red-500 text-primary py-2 px-4 rounded-lg shadow-md hover:bg-red-600"
                                         >
                                             Delete
                                         </button>
                                     </>
                                 ) : (
-                                    <p className="text-gray-500">
-                                        You can only edit or delete your own messages.
+                                    <p className="text-muted">
+                                        You can only edit or delete your own
+                                        messages.
                                     </p>
                                 )}
                                 <button
                                     onClick={handleSelect}
-                                    className="w-full bg-green-500 text-white py-2 px-4 rounded-lg shadow-md hover:bg-green-600"
+                                    className="w-full bg-primary text-primary py-2 px-4 rounded-lg shadow-md hover:bg-primary-dark"
                                 >
                                     Select
                                 </button>
                                 <button
                                     onClick={() => setSelectedMsg(null)}
-                                    className="w-full bg-gray-300 text-gray-800 py-2 px-4 rounded-lg shadow-md hover:bg-gray-400"
+                                    className="w-full bg-surface text-primary py-2 px-4 rounded-lg shadow-md hover:bg-surface border border-gray-700"
                                 >
                                     Cancel
                                 </button>
@@ -359,7 +361,7 @@ const RightSection = ({ selectedChat, onBackClick, isMobile }) => {
                     <div
                         className={`${
                             isMobile
-                                ? "sticky bottom-0 bg-white/90 p-3"
+                                ? "sticky bottom-0 bg-surface/90 p-3"
                                 : "flex items-center space-x-3"
                         }`}
                     >
@@ -374,7 +376,7 @@ const RightSection = ({ selectedChat, onBackClick, isMobile }) => {
                                         ? "Editing message..."
                                         : "Type your message here..."
                                 }
-                                className="w-full p-2 rounded-xl border-2 border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none min-h-[38px] pr-24 bg-white/90 backdrop-blur-sm transition-all duration-300"
+                                className="w-full p-2 rounded-xl border-2 border-gray-700 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent resize-none min-h-[38px] pr-24 bg-surface text-primary placeholder-text-muted transition-all duration-300"
                                 rows="1"
                             />
                             <div className="absolute right-2 top-1/2 transform -translate-y-1/2 flex gap-2">
@@ -384,14 +386,14 @@ const RightSection = ({ selectedChat, onBackClick, isMobile }) => {
                                             setEditingMessage(null);
                                             setMessage("");
                                         }}
-                                        className="bg-gray-500 text-white py-1.5 px-3 rounded-xl shadow-md hover:bg-gray-600 transition-colors duration-300"
+                                        className="bg-surface text-primary py-1.5 px-3 rounded-xl shadow-md hover:bg-surface/80 transition-colors duration-300 border border-gray-700"
                                     >
                                         ✕
                                     </button>
                                 )}
                                 <button
                                     onClick={handleSend}
-                                    className="bg-gradient-to-r from-blue-500 to-blue-600 text-white py-1.5 px-4 rounded-xl shadow-md hover:from-blue-600 hover:to-blue-700 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105"
+                                    className="bg-primary text-primary py-1.5 px-4 rounded-xl shadow-md hover:bg-primary-dark transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105"
                                 >
                                     {editingMessage ? "Edit" : "Send"}
                                 </button>
@@ -401,9 +403,9 @@ const RightSection = ({ selectedChat, onBackClick, isMobile }) => {
                 </>
             ) : (
                 <div className="flex flex-col items-center justify-center h-full space-y-4 text-center">
-                    <div className="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center">
+                    <div className="w-20 h-20 bg-surface rounded-full flex items-center justify-center border border-gray-700">
                         <svg
-                            className="w-10 h-10 text-blue-500"
+                            className="w-10 h-10 text-primary"
                             fill="none"
                             stroke="currentColor"
                             viewBox="0 0 24 24"
@@ -416,7 +418,7 @@ const RightSection = ({ selectedChat, onBackClick, isMobile }) => {
                             />
                         </svg>
                     </div>
-                    <p className="text-gray-500 text-lg">
+                    <p className="text-muted text-lg">
                         Select a chat to start chatting
                     </p>
                 </div>

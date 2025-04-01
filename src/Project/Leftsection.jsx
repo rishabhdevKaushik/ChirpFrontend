@@ -115,9 +115,9 @@ const LeftSection = ({ onSelectChat, isMobile }) => {
             className={`flex flex-col h-full ${isMobile ? "rounded-none" : ""}`}
         >
             <div
-                className={`bg-white shadow-xl ${
+                className={`bg-surface shadow-xl ${
                     isMobile ? "rounded-none" : "rounded-xl"
-                } p-4 w-full border border-gray-100 flex flex-col h-full`}
+                } p-4 w-full border border-gray-700 flex flex-col h-full`}
             >
                 {/* Search Section */}
                 <div className="relative mb-4">
@@ -130,23 +130,23 @@ const LeftSection = ({ onSelectChat, isMobile }) => {
                                 ? "Search globally..."
                                 : "Search chats..."
                         }
-                        className="w-full p-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all duration-300 bg-gray-50"
+                        className="w-full p-3 rounded-lg border border-gray-700 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-300 bg-surface text-primary placeholder-text-muted"
                     />
                     <div className="flex items-center mt-2">
                         <input
                             type="checkbox"
                             checked={isGlobalSearch}
                             onChange={handleCheckboxChange}
-                            className="w-4 h-4 text-blue-500 rounded focus:ring-blue-400"
+                            className="w-4 h-4 text-primary rounded focus:ring-primary-light"
                         />
-                        <label className="ml-2 text-gray-600 text-sm font-medium">
+                        <label className="ml-2 text-secondary text-sm font-medium">
                             Search Globally
                         </label>
                     </div>
                 </div>
 
                 {isGlobalSearch && (
-                    <h3 className="text-xl font-semibold text-gray-800 mb-4 border-b pb-2">
+                    <h3 className="text-xl font-semibold text-primary mb-4 border-b border-gray-700 pb-2">
                         Global Search Results
                     </h3>
                 )}
@@ -159,7 +159,7 @@ const LeftSection = ({ onSelectChat, isMobile }) => {
                                 filteredChats.map((chat) => (
                                     <div
                                         key={chat.name}
-                                        className="bg-white rounded-xl border border-gray-100 hover:shadow-md hover:border-blue-100 transition-all duration-300 cursor-pointer"
+                                        className="bg-surface rounded-xl border border-gray-700 hover:border-primary hover:shadow-md transition-all duration-300 cursor-pointer"
                                         onClick={() => handleSelectChat(chat)}
                                     >
                                         <div className="flex items-center p-3">
@@ -168,10 +168,10 @@ const LeftSection = ({ onSelectChat, isMobile }) => {
                                                     <img
                                                         src={chat.avatar}
                                                         alt={chat.name}
-                                                        className="w-10 h-10 sm:w-12 sm:h-12 rounded-full object-cover border-2 border-gray-100"
+                                                        className="w-10 h-10 sm:w-12 sm:h-12 rounded-full object-cover border-2 border-gray-700"
                                                     />
                                                 ) : (
-                                                    <div className="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-full bg-gray-100 text-gray-700 font-bold border-2 border-gray-100">
+                                                    <div className="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-full bg-surface text-primary font-bold border-2 border-gray-700">
                                                         {chat.name
                                                             ? chat.name
                                                                   .charAt(0)
@@ -181,9 +181,9 @@ const LeftSection = ({ onSelectChat, isMobile }) => {
                                                 )}
 
                                                 {chat.isGroup && (
-                                                    <span className="absolute -top-1 -right-1 bg-blue-500 rounded-full p-1">
+                                                    <span className="absolute -top-1 -right-1 bg-primary rounded-full p-1">
                                                         <svg
-                                                            className="w-3 h-3 text-white"
+                                                            className="w-3 h-3 text-primary"
                                                             fill="none"
                                                             stroke="currentColor"
                                                             viewBox="0 0 24 24"
@@ -199,7 +199,7 @@ const LeftSection = ({ onSelectChat, isMobile }) => {
                                                 )}
                                             </div>
                                             <div className="ml-3">
-                                                <h4 className="font-semibold text-gray-800 text-sm sm:text-base">
+                                                <h4 className="font-semibold text-primary text-sm sm:text-base">
                                                     {chat.name}
                                                 </h4>
                                             </div>
@@ -207,33 +207,33 @@ const LeftSection = ({ onSelectChat, isMobile }) => {
                                     </div>
                                 ))
                             ) : (
-                                <p className="text-gray-500 text-center py-4">
+                                <p className="text-muted text-center py-4">
                                     No chats found
                                 </p>
                             )
                         ) : loading ? (
                             <div className="flex justify-center py-4">
-                                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+                                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
                             </div>
                         ) : globalSearchResult ? (
                             <div
-                                className="p-4 bg-white rounded-xl border border-gray-100 hover:shadow-md hover:border-blue-100 transition-all duration-300 cursor-pointer"
+                                className="p-4 bg-surface rounded-xl border border-gray-700 hover:border-primary hover:shadow-md transition-all duration-300 cursor-pointer"
                                 onClick={() => setShowSendRequest(true)}
                             >
                                 <div className="flex flex-col space-y-2">
-                                    <h4 className="font-semibold text-gray-800">
+                                    <h4 className="font-semibold text-primary">
                                         {globalSearchResult.name}
                                     </h4>
-                                    <p className="text-sm text-gray-600">
+                                    <p className="text-sm text-secondary">
                                         @{globalSearchResult.username}
                                     </p>
-                                    <p className="text-sm text-gray-600">
+                                    <p className="text-sm text-muted">
                                         {globalSearchResult.email}
                                     </p>
                                 </div>
                             </div>
                         ) : (
-                            <p className="text-gray-500 text-center py-4">
+                            <p className="text-muted text-center py-4">
                                 {error || (searchQuery ? "No user found" : "")}
                             </p>
                         )}
