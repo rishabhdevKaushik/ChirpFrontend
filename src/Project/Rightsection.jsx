@@ -23,20 +23,16 @@ const RightSection = ({ selectedChat, onBackClick, isMobile }) => {
 
         // Setup user and join chat
         if (currentUserId) {
-            console.log(currentUserId);
             socket.emit("setup", currentUserId);
-            console.log("sent user id");
         }
 
         // Join chat room if there's a selected chat
         if (selectedChatId) {
             socket.emit("join chat", selectedChatId);
-            console.log("sent chat id");
         }
 
         // Socket event listeners
         socket.on("connected", () => {
-            console.log("Connected to socket io server");
         });
 
         socket.on("typing", () => {
@@ -48,7 +44,6 @@ const RightSection = ({ selectedChat, onBackClick, isMobile }) => {
         });
 
         socket.on("messageReceived", (msg) => {
-            console.log("Message received:", msg);
             if (msg.chat._id === selectedChatId) {
                 setMessages((prevMessages) => {
                     if (

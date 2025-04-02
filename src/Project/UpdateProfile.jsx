@@ -10,9 +10,7 @@ const UpdateProfile = () => {
 
     const updateFriendRequest = async (data) => {
         try {
-            const response = await apiEndpoints.updateUser(data);
-
-            console.log(response);
+            await apiEndpoints.updateUser(data);
         } catch (error) {
             console.error("Error updating profile:", error);
         }
@@ -29,8 +27,6 @@ const UpdateProfile = () => {
             newPassword: newPassword || undefined,
             confirmNewPassword: confirmNewPassword || undefined,
         };
-
-        console.log("form Data:", formData);
 
         // Call the API function
         updateFriendRequest(formData);

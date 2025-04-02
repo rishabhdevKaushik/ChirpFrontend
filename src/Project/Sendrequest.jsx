@@ -9,13 +9,9 @@ const SendRequest = ({ username }) => {
 
     const handleFriendRequest = async () => {
         try {
-            // console.log("username ", username);
-
             await apiEndpoints.sendFriendRequest(username);
-            // alert(`Friend request sent to ${username}!`);
             setShowPopup(false); // Hide the popup
         } catch (error) {
-            // alert('Failed to send the friend request. Please try again.');
             console.error(error);
         }
     };

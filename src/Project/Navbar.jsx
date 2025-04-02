@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { FaUser, FaCog, FaBell } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import Popup from "./Popup"; // Import the Popup component
+import Popup from "./Popup";
 
 const Navbar = () => {
     const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -9,33 +9,28 @@ const Navbar = () => {
     const [hoveredButton, setHoveredButton] = useState(null);
     const navigate = useNavigate();
 
-    // const handleLogoutClick = () => {
-    //     setIsPopupOpen(true); // Show the popup when logout is clicked
-    // };
-
-    // Styles for the buttons
     const buttonStyle = {
         position: "relative",
-        background: "inherit",
-        color: "white", // Tailwind's blue-500
+        background: "var(--surface)",
+        color: "var(--text-primary)",
         padding: "0.5rem 1rem",
-        borderRadius: "0.375rem", // Tailwind's rounded-md
-        boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1)",
+        borderRadius: "0.375rem",
+        boxShadow: "0 2px 5px rgba(0, 0, 0, 0.2)",
         display: "flex",
         alignItems: "center",
         cursor: "pointer",
-        transition: "color 0.3s ease",
+        transition: "all 0.3s ease",
     };
 
     const underlineStyle = {
         content: "''",
         position: "absolute",
         left: 0,
-        bottom: "-4px", // Adjust position of underline
+        bottom: "-4px",
         width: "100%",
-        height: "2px", // Thickness of underline
-        backgroundColor: "#3B82F6", // Underline color
-        transform: "scaleX(0)", // Start with no width
+        height: "2px",
+        backgroundColor: "var(--primary)",
+        transform: "scaleX(0)",
         transition: "transform 0.3s ease",
     };
 
@@ -44,42 +39,21 @@ const Navbar = () => {
     };
 
     return (
-        <header className="bg-background p-3 sm:p-4 shadow-md relative">
+        <header className="bg-[var(--background)] p-3 sm:p-4 shadow-md relative border-b border-[var(--surface)]">
             <div className="max-w-7xl mx-auto flex justify-between items-center h-14">
                 {/* Logo */}
-                <div className="text-primary text-xl sm:text-2xl font-bold flex items-center h-full">
+                <div onClick={() => navigate("/")} className="text-[var(--primary)] text-xl sm:text-2xl font-bold flex items-center h-full">
                     <img
-                        onClick={() => navigate("/")}
+                        
                         className="h-full w-auto"
                         src="/Chirp.svg"
                         alt="Chirp Logo"
                     />
-                    <p className="text-primary">CHIRP</p>
+                    <p className="text-[var(--text-primary)]">CHIRP</p>
                 </div>
 
                 {/* Desktop Navigation Links */}
                 <nav className="hidden md:flex items-center space-x-2 sm:space-x-4 text-base sm:text-lg">
-                    {/* Home Button */}
-                    {/* <button
-                        onClick={() => navigate("/main")}
-                        style={buttonStyle}
-                        onMouseEnter={() => setHoveredButton("home")}
-                        onMouseLeave={() => setHoveredButton(null)}
-                        className="px-2 sm:px-4"
-                    >
-                        <FaHome className="text-sm sm:text-base" />
-                        <span className="px-1 sm:px-2">Home</span>
-                        <span
-                            style={{
-                                ...underlineStyle,
-                                transform:
-                                    hoveredButton === "home"
-                                        ? "scaleX(1)"
-                                        : "scaleX(0)",
-                            }}
-                        />
-                    </button> */}
-
                     {/* Profile Button */}
                     <button
                         onClick={() => navigate("/profile")}
@@ -146,7 +120,7 @@ const Navbar = () => {
 
                 {/* Mobile Menu Button */}
                 <button
-                    className="md:hidden text-white p-2"
+                    className="md:hidden text-[var(--text-primary)] hover:text-[var(--primary)]"
                     onClick={toggleMobileMenu}
                 >
                     <svg
@@ -171,49 +145,37 @@ const Navbar = () => {
 
             {/* Mobile Menu Dropdown */}
             {isMobileMenuOpen && (
-                <div className="md:hidden absolute top-full left-0 right-0 bg-gray-900 shadow-lg z-50">
-                    <div className="flex flex-col p-4 space-y-3">
-                        {/* <button
-                            onClick={() => {
-                                navigate("/main");
-                                setIsMobileMenuOpen(false);
-                            }}
-                            className="flex items-center space-x-2 text-white hover:bg-gray-800 p-2 rounded-lg transition-colors duration-200"
-                        >
-                            <FaHome className="text-lg" />
-                            <span>Home</span>
-                        </button> */}
-                        <button
-                            onClick={() => {
-                                navigate("/profile");
-                                setIsMobileMenuOpen(false);
-                            }}
-                            className="flex items-center space-x-2 text-white hover:bg-gray-800 p-2 rounded-lg transition-colors duration-200"
-                        >
-                            <FaUser className="text-lg" />
-                            <span>Profile</span>
-                        </button>
-                        <button
-                            onClick={() => {
-                                navigate("/settings");
-                                setIsMobileMenuOpen(false);
-                            }}
-                            className="flex items-center space-x-2 text-white hover:bg-gray-800 p-2 rounded-lg transition-colors duration-200"
-                        >
-                            <FaCog className="text-lg" />
-                            <span>Settings</span>
-                        </button>
-                        <button
-                            onClick={() => {
-                                navigate("/notis");
-                                setIsMobileMenuOpen(false);
-                            }}
-                            className="flex items-center space-x-2 text-white hover:bg-gray-800 p-2 rounded-lg transition-colors duration-200"
-                        >
-                            <FaBell className="text-lg" />
-                            <span>Notis</span>
-                        </button>
-                    </div>
+                <div className="absolute top-full right-0 w-48 mt-2 py-2 bg-[var(--surface)] border border-[var(--secondary-dark)] rounded-lg shadow-xl md:hidden z-50">
+                    <button
+                        onClick={() => {
+                            navigate("/profile");
+                            setIsMobileMenuOpen(false);
+                        }}
+                        className="w-full flex items-center gap-3 px-4 py-2 text-[var(--text-primary)] hover:bg-[var(--primary)] hover:text-[var(--text-primary)]"
+                    >
+                        <FaUser className="text-lg" />
+                        <span>Profile</span>
+                    </button>
+                    <button
+                        onClick={() => {
+                            navigate("/settings");
+                            setIsMobileMenuOpen(false);
+                        }}
+                        className="w-full flex items-center gap-3 px-4 py-2 text-[var(--text-primary)] hover:bg-[var(--primary)] hover:text-[var(--text-primary)]"
+                    >
+                        <FaCog className="text-lg" />
+                        <span>Settings</span>
+                    </button>
+                    <button
+                        onClick={() => {
+                            navigate("/notis");
+                            setIsMobileMenuOpen(false);
+                        }}
+                        className="w-full flex items-center gap-3 px-4 py-2 text-[var(--text-primary)] hover:bg-[var(--primary)] hover:text-[var(--text-primary)]"
+                    >
+                        <FaBell className="text-lg" />
+                        <span>Notifications</span>
+                    </button>
                 </div>
             )}
 

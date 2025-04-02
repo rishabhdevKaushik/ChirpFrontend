@@ -49,7 +49,6 @@ const Otp = () => {
 
         try {
             const response = await apiEndpoints.verifyOtp(data);
-            console.log(response.data);
             if (response.data.message === "OTP verified") {
                 navigate("/main");
             } else {
