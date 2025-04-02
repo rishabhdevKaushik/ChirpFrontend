@@ -103,8 +103,7 @@ const RightSection = ({ selectedChat, onBackClick, isMobile }) => {
         }
     }, [message]);
 
-    const handleSend = async (e) => {
-        e.preventDefault();
+    const handleSend = async () => {
         if (message.trim()) {
             if (editingMessage) {
                 try {
@@ -162,7 +161,7 @@ const RightSection = ({ selectedChat, onBackClick, isMobile }) => {
     const handleKeyDown = (e) => {
         if (e.key === "Enter" && !e.shiftKey) {
             e.preventDefault();
-            handleSend(e);
+            handleSend();
         }
     };
 
@@ -207,10 +206,6 @@ const RightSection = ({ selectedChat, onBackClick, isMobile }) => {
         } catch (error) {
             console.error("Error while deleting message:", error);
         }
-        setSelectedMsg(null);
-    };
-
-    const handleSelect = () => {
         setSelectedMsg(null);
     };
 
@@ -304,9 +299,9 @@ const RightSection = ({ selectedChat, onBackClick, isMobile }) => {
                         {typing && (
                             <div className="group p-4 rounded-xl mb-2 shadow-sm max-w-sm break-words transition-all duration-300 hover:-translate-y-0.5 self-start bg-surface border border-gray-700">
                                 <div className="flex space-x-1">
-                                    <div className="w-2 h-2 bg-text-primary rounded-full animate-bounce [animation-delay:-0.3s]"></div>
-                                    <div className="w-2 h-2 bg-text-primary rounded-full animate-bounce [animation-delay:-0.15s]"></div>
-                                    <div className="w-2 h-2 bg-text-primary rounded-full animate-bounce"></div>
+                                    <div className="w-2 h-2 bg-primary rounded-full animate-bounce [animation-delay:-0.3s]"></div>
+                                    <div className="w-2 h-2 bg-primary rounded-full animate-bounce [animation-delay:-0.15s]"></div>
+                                    <div className="w-2 h-2 bg-primary rounded-full animate-bounce"></div>
                                 </div>
                             </div>
                         )}
@@ -342,12 +337,6 @@ const RightSection = ({ selectedChat, onBackClick, isMobile }) => {
                                     </p>
                                 )}
                                 <button
-                                    onClick={handleSelect}
-                                    className="w-full bg-primary text-primary py-2 px-4 rounded-lg shadow-md hover:bg-primary-dark"
-                                >
-                                    Select
-                                </button>
-                                <button
                                     onClick={() => setSelectedMsg(null)}
                                     className="w-full bg-surface text-primary py-2 px-4 rounded-lg shadow-md hover:bg-surface border border-gray-700"
                                 >
@@ -365,7 +354,7 @@ const RightSection = ({ selectedChat, onBackClick, isMobile }) => {
                                 : "flex items-center space-x-3"
                         }`}
                     >
-                        <div className="relative w-full">
+                        <div className="relative w-full flex items-center">
                             <textarea
                                 ref={messageInputRef}
                                 value={message}
@@ -376,10 +365,10 @@ const RightSection = ({ selectedChat, onBackClick, isMobile }) => {
                                         ? "Editing message..."
                                         : "Type your message here..."
                                 }
-                                className="w-full p-2 rounded-xl border-2 border-gray-700 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent resize-none min-h-[38px] pr-24 bg-surface text-primary placeholder-text-muted transition-all duration-300"
+                                className="w-full p-2 rounded-xl border-2 border-gray-700 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent resize-none min-h-[38px] pr-24 bg-surface text-primary placeholder-text-muted transition-all duration-300 flex items-center"
                                 rows="1"
                             />
-                            <div className="absolute right-2 top-1/2 transform -translate-y-1/2 flex gap-2">
+                            <div className="absolute right-2 top-0 bottom-0 flex items-center gap-2">
                                 {editingMessage && (
                                     <button
                                         onClick={() => {
