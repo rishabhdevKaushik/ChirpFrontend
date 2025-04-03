@@ -32,8 +32,7 @@ const RightSection = ({ selectedChat, onBackClick, isMobile }) => {
         }
 
         // Socket event listeners
-        socket.on("connected", () => {
-        });
+        socket.on("connected", () => {});
 
         socket.on("typing", () => {
             setTyping(true);
@@ -207,31 +206,25 @@ const RightSection = ({ selectedChat, onBackClick, isMobile }) => {
     return (
         <div
             className={`flex flex-col ${
-                isMobile ? "h-screen p-0" : "p-4"
-            } bg-surface ${
-                isMobile ? "rounded-none" : "rounded-xl"
-            } shadow-lg h-full w-full`}
-        >
+                isMobile
+                    ? "p-0 rounded-none fixed inset-0"
+                    : "p-4 rounded-xl  h-full"
+            } bg-surface shadow-lg w-full`}>
             {selectedChat ? (
                 <>
                     <div
                         className={`flex items-center space-x-4 ${
-                            isMobile ? "mb-2" : "mb-4"
-                        } p-3 bg-surface backdrop-blur-sm shadow-md ${
-                            isMobile ? "rounded-none" : "rounded-xl"
-                        } hover:bg-surface/95 transition duration-300 ease-in-out border border-gray-700`}
-                    >
+                            isMobile ? "mb-2 rounded-none" : "mb-4 rounded-xl"
+                        } p-3 bg-surface backdrop-blur-sm shadow-md hover:bg-surface/95 transition duration-300 ease-in-out border border-gray-700`}>
                         {isMobile && (
                             <button
                                 onClick={onBackClick}
-                                className="p-2 hover:bg-surface rounded-full transition-colors duration-300"
-                            >
+                                className="p-2 hover:bg-surface rounded-full transition-colors duration-300">
                                 <svg
                                     className="w-6 h-6 text-secondary"
                                     fill="none"
                                     stroke="currentColor"
-                                    viewBox="0 0 24 24"
-                                >
+                                    viewBox="0 0 24 24">
                                     <path
                                         strokeLinecap="round"
                                         strokeLinejoin="round"
@@ -256,7 +249,7 @@ const RightSection = ({ selectedChat, onBackClick, isMobile }) => {
                         )}
 
                         <div>
-                            <h3 className="text-xl font-semibold text-primary hover:text-primary transition-colors duration-300">
+                            <h3 className="text-xl font-semibold text-primary">
                                 {selectedChat.name}
                             </h3>
                         </div>
@@ -265,10 +258,11 @@ const RightSection = ({ selectedChat, onBackClick, isMobile }) => {
                     {/* Messages Display */}
                     <div
                         ref={messagesEndRef}
-                        className={`flex-grow overflow-y-auto bg-surface backdrop-blur-sm p-4 rounded-xl shadow-md flex flex-col space-y-3 mb-4 ${
-                            isMobile ? "mb-24" : ""
-                        }`}
-                    >
+                        className={`${
+                            isMobile
+                                ? "flex-1 overflow-y-auto"
+                                : "flex-grow overflow-y-auto"
+                        } bg-surface backdrop-blur-sm p-4 rounded-xl shadow-md flex flex-col space-y-3 mb-4 custom-scrollbar`}>
                         {messages.map((msg) => (
                             <div
                                 key={msg._id || msg.tempId}
@@ -281,8 +275,7 @@ const RightSection = ({ selectedChat, onBackClick, isMobile }) => {
                                     editingMessage?._id === msg._id
                                         ? "ring-2 ring-yellow-400"
                                         : ""
-                                }`}
-                            >
+                                }`}>
                                 <div className="flex flex-col">
                                     <span className="text-xs opacity-70 mb-1">
                                         {msg.sender.username}
@@ -302,53 +295,13 @@ const RightSection = ({ selectedChat, onBackClick, isMobile }) => {
                         )}
                     </div>
 
-                    {/* Popup for Message Options */}
-                    {selectedMsg && (
-                        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-10">
-                            <div className="bg-surface p-6 rounded-lg shadow-xl space-y-4 border border-gray-700">
-                                <h3 className="text-lg font-bold text-primary">
-                                    Message Actions
-                                </h3>
-                                {selectedMsg.sender.username ===
-                                currentUsername ? (
-                                    <>
-                                        <button
-                                            onClick={handleEdit}
-                                            className="w-full bg-primary text-primary py-2 px-4 rounded-lg shadow-md hover:bg-primary-dark"
-                                        >
-                                            Edit
-                                        </button>
-                                        <button
-                                            onClick={handleDelete}
-                                            className="w-full bg-red-500 text-primary py-2 px-4 rounded-lg shadow-md hover:bg-red-600"
-                                        >
-                                            Delete
-                                        </button>
-                                    </>
-                                ) : (
-                                    <p className="text-muted">
-                                        You can only edit or delete your own
-                                        messages.
-                                    </p>
-                                )}
-                                <button
-                                    onClick={() => setSelectedMsg(null)}
-                                    className="w-full bg-surface text-primary py-2 px-4 rounded-lg shadow-md hover:bg-surface border border-gray-700"
-                                >
-                                    Cancel
-                                </button>
-                            </div>
-                        </div>
-                    )}
-
                     {/* Message Input */}
                     <div
                         className={`${
                             isMobile
-                                ? "sticky bottom-0 bg-surface/90 p-3"
+                                ? "bg-surface/90 p-3 border-t border-gray-700"
                                 : "flex items-center space-x-3"
-                        }`}
-                    >
+                        }`}>
                         <div className="relative w-full flex items-center">
                             <textarea
                                 ref={messageInputRef}
@@ -370,20 +323,54 @@ const RightSection = ({ selectedChat, onBackClick, isMobile }) => {
                                             setEditingMessage(null);
                                             setMessage("");
                                         }}
-                                        className="bg-surface text-primary py-1.5 px-3 rounded-xl shadow-md hover:bg-surface/80 transition-colors duration-300 border border-gray-700"
-                                    >
+                                        className="bg-surface text-primary py-1.5 px-3 rounded-xl shadow-md hover:bg-surface/80 transition-colors duration-300 border border-gray-700">
                                         ✕
                                     </button>
                                 )}
                                 <button
                                     onClick={handleSend}
-                                    className="bg-primary text-primary py-1.5 px-4 rounded-xl shadow-md hover:bg-primary-dark transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105"
-                                >
+                                    className="bg-primary text-primary py-1.5 px-4 rounded-xl shadow-md hover:bg-primary-dark transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transform">
                                     {editingMessage ? "Edit" : "Send"}
                                 </button>
                             </div>
                         </div>
                     </div>
+
+                    {/* Popup for Message Options */}
+                    {selectedMsg && (
+                        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-10">
+                            <div className="bg-surface p-6 rounded-lg shadow-xl space-y-4 border border-gray-700">
+                                <h3 className="text-lg font-bold text-primary">
+                                    Message Actions
+                                </h3>
+                                {selectedMsg.sender.username ===
+                                currentUsername ? (
+                                    <>
+                                        <button
+                                            onClick={handleEdit}
+                                            className="w-full bg-primary text-primary py-2 px-4 rounded-lg shadow-md hover:bg-primary-dark">
+                                            Edit
+                                        </button>
+                                        <button
+                                            onClick={handleDelete}
+                                            className="w-full bg-primary text-primary py-2 px-4 rounded-lg shadow-md hover:bg-primary-dark">
+                                            Delete
+                                        </button>
+                                    </>
+                                ) : (
+                                    <p className="text-muted">
+                                        You can only edit or delete your own
+                                        messages.
+                                    </p>
+                                )}
+                                <button
+                                    onClick={() => setSelectedMsg(null)}
+                                    className="w-full bg-surface text-primary py-2 px-4 rounded-lg shadow-md hover:bg-surface border border-gray-700">
+                                    Cancel
+                                </button>
+                            </div>
+                        </div>
+                    )}
                 </>
             ) : (
                 <div className="flex flex-col items-center justify-center h-full space-y-4 text-center">
@@ -392,8 +379,7 @@ const RightSection = ({ selectedChat, onBackClick, isMobile }) => {
                             className="w-10 h-10 text-primary"
                             fill="none"
                             stroke="currentColor"
-                            viewBox="0 0 24 24"
-                        >
+                            viewBox="0 0 24 24">
                             <path
                                 strokeLinecap="round"
                                 strokeLinejoin="round"
