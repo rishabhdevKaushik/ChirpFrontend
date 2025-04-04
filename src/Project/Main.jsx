@@ -29,8 +29,8 @@ const Main = () => {
     }, [isMobile, selectedChat]);
 
     return (
-        <main className="h-full bg-background flex flex-col overflow-hidden">
-            <div className="h-full container mx-auto flex flex-col md:flex-row p-2 sm:p-4 gap-4">
+        <main className="h-[100dvh] bg-background flex flex-col overflow-hidden">
+            <div className="h-[100dvh] container mx-auto flex flex-col md:flex-row p-2 sm:p-4 gap-4">
                 {/* Left Section (Chats List) */}
                 <aside
                     className={`h-full md:w-1/3 lg:w-1/4 bg-surface rounded-lg mb-4 md:mb-0 ${

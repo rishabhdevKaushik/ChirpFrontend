@@ -13,7 +13,7 @@ import Settings from "./Project/Settings";
 const App = () => {
     return (
         <Router>
-            <div className="App h-screen flex flex-col overflow-hidden">
+            <div className="App h-[100dvh] flex flex-col overflow-hidden">
                 <Routes>
                     {/* Routes WITHOUT Navbar */}
                     <Route path="/" element={<LoadingScreen />} />

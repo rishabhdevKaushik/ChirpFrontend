@@ -51,7 +51,7 @@ const LoadingScreen = () => {
     if (!isLoading) return null;
 
     return (
-        <div className="relative bg-dark-background bg-cover h-screen flex items-center justify-center ">
+        <div className="relative bg-dark-background bg-cover h-[100dvh] flex items-center justify-center">
             {/* Enhanced Blur Overlay */}
             <div className="absolute inset-0 bg-black/40 backdrop-blur-sm"></div>
 
