@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { apiEndpoints } from "../Api"; // Import your API endpoints
+import { apiEndpoints } from "../Api";
 
-const Login = () => {
-    const [formData, setFormData] = useState({
-        identifier: "",
-        password: "",
+const ChangePassword = () => {
+    const [passwords, setPasswords] = useState({
+        newPassword: "",
+        confirmPassword: "",
     });
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -13,35 +13,35 @@ const Login = () => {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setFormData((prevData) => ({ ...prevData, [name]: value }));
+        setPasswords((prev) => ({
+            ...prev,
+            [name]: value,
+        }));
     };
 
-    const handleLogin = async (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
+        if (passwords.newPassword !== passwords.confirmPassword) {
+            setError("Passwords do not match");
+            return;
+        }
+
         setLoading(true);
+        setError(null);
 
         try {
-            const response = await apiEndpoints.login(formData);
-            const { token, currentUser } = response.data;
-            localStorage.setItem("accessToken", token.accessToken);
-            localStorage.setItem("refreshToken", token.refreshToken);
-            localStorage.setItem("currentUsername", currentUser.username);
-            localStorage.setItem("currentUserId", currentUser.id);
+            const tempUserId = sessionStorage.getItem("tempUserId");
+            await apiEndpoints.changePassword({
+                newPassword: passwords.newPassword,
+                tempUserId,
+            });
             navigate("/main");
         } catch (error) {
-            if (error.response && error.response.status && error.response.status === 409) {
-                sessionStorage.setItem("tempUserId", error.response.data.tempUserId);
-                navigate("/otp");
-            }
-            console.error(error);
-            setError("Login failed. Please check your credentials.");
+            console.error("Change password error:", error);
+            setError("Failed to change password. Please try again.");
         } finally {
             setLoading(false);
         }
-    };
-
-    const handleSignup = () => {
-        navigate("/Signup");
     };
 
     return (
@@ -52,11 +52,9 @@ const Login = () => {
             <div className="relative z-10 w-full max-w-sm sm:max-w-lg mx-auto bg-surface rounded-2xl shadow-2xl p-6 sm:p-8 transform transition-all duration-300 hover:shadow-3xl">
                 <div className="text-center mb-6 sm:mb-8">
                     <h1 className="text-4xl sm:text-5xl font-extrabold text-primary bg-clip-text leading-tight animate-fade-in-down">
-                        Welcome Back!
+                        Change Password
                     </h1>
-                    <p className="text-lg sm:text-xl text-primary mt-3 animate-fade-in">
-                        Login to your account
-                    </p>
+                    
                 </div>
 
                 {error && (
@@ -67,52 +65,43 @@ const Login = () => {
                     </div>
                 )}
 
-                <form className="space-y-4 sm:space-y-6" onSubmit={handleLogin}>
+                <form className="space-y-4 sm:space-y-6" onSubmit={handleSubmit}>
                     <div className="space-y-2">
                         <label
-                            htmlFor="identifier"
+                            htmlFor="newPassword"
                             className="block text-sm font-medium text-primary"
                         >
-                            Username or Email
+                            New Password
                         </label>
                         <input
-                            type="text"
-                            name="identifier"
-                            id="identifier"
-                            value={formData.identifier}
+                            type="password"
+                            name="newPassword"
+                            id="newPassword"
+                            value={passwords.newPassword}
                             onChange={handleChange}
                             required
                             className="block w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-700 bg-text-primary text-dark rounded-lg shadow-sm text-sm sm:text-base transition-all duration-300 placeholder-text-muted"
-                            placeholder="Enter your username or email"
+                            placeholder="Enter new password"
                         />
                     </div>
 
                     <div className="space-y-2">
                         <label
-                            htmlFor="password"
+                            htmlFor="confirmPassword"
                             className="block text-sm font-medium text-primary"
                         >
-                            Password
+                            Confirm Password
                         </label>
                         <input
                             type="password"
-                            name="password"
-                            id="password"
-                            value={formData.password}
+                            name="confirmPassword"
+                            id="confirmPassword"
+                            value={passwords.confirmPassword}
                             onChange={handleChange}
                             required
                             className="block w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-700 bg-text-primary text-dark rounded-lg shadow-sm text-sm sm:text-base transition-all duration-300 placeholder-text-muted"
-                            placeholder="Enter your password"
+                            placeholder="Confirm new password"
                         />
-                        <div className="flex justify-end">
-                            <button
-                                type="button"
-                                onClick={() => navigate("/ForgetPassword")}
-                                className="text-primary text-sm hover:underline transition-all duration-300"
-                            >
-                                Forgot Password?
-                            </button>
-                        </div>
                     </div>
 
                     <button
@@ -146,28 +135,16 @@ const Login = () => {
                                         d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                                     ></path>
                                 </svg>
-                                Logging in...
+                                Saving Changes...
                             </span>
                         ) : (
-                            "Login"
+                            "Save Changes"
                         )}
                     </button>
                 </form>
-
-                <div className="mt-8 text-center">
-                    <p className="text-xs sm:text-sm text-muted">
-                        Don't have an account?{" "}
-                        <button
-                            onClick={handleSignup}
-                            className="text-accent font-medium hover:underline duration-300"
-                        >
-                            Sign Up
-                        </button>
-                    </p>
-                </div>
             </div>
         </div>
     );
 };
 
-export default Login;
+export default ChangePassword;

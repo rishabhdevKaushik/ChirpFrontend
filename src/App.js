@@ -10,6 +10,8 @@ import UpdateProfile from "./Project/UpdateProfile";
 import LoadingScreen from "./Project/Loadingpage";
 import Navbar from "./Project/Navbar";
 import Settings from "./Project/Settings";
+import ForgetPassword from "./Project/ForgetPassword";
+import ChangePassword from "./Project/ChangePassword";
 const App = () => {
     return (
         <Router>
@@ -20,6 +22,8 @@ const App = () => {
                     <Route path="/login" element={<Login />} />
                     <Route path="/signup" element={<SignupPage />} />
                     <Route path="/otp" element={<Otp />} />
+                    <Route path="/ForgetPassword" element={<ForgetPassword />} />
+                    <Route path="/ChangePassword" element={<ChangePassword />} />
                     {/* Routes WITH Navbar */}
                     <Route element={<LayoutWithNavbar />}>
                         <Route path="/main" element={<Main />} />
