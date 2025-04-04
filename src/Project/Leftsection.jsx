@@ -19,9 +19,6 @@ const LeftSection = ({ onSelectChat, isMobile }) => {
                 const currentUsername = localStorage.getItem("currentUsername");
 
                 const response = await apiEndpoints.fetchChat();
-
-                // Assuming 'currentUser' data is available in the response
-                // Initialize an array to hold the chats
                 const fetchedChats = [];
 
                 // Iterate through each chat object in the response
@@ -95,12 +92,6 @@ const LeftSection = ({ onSelectChat, isMobile }) => {
         }
     };
 
-    const handleCheckboxChange = () => {
-        setIsGlobalSearch((prev) => !prev);
-        setGlobalSearchResult(null);
-        setSearchQuery("");
-    };
-
     const handleSelectChat = (chat) => {
         localStorage.setItem("selectedChat", chat);
         localStorage.setItem("selectedChatId", chat.id);
@@ -112,43 +103,43 @@ const LeftSection = ({ onSelectChat, isMobile }) => {
 
     return (
         <div
-            className={`flex flex-col h-full ${isMobile ? "rounded-none" : ""}`}
-        >
+            className={`flex flex-col h-full ${
+                isMobile ? "rounded-none" : ""
+            }`}>
             <div
                 className={`bg-surface shadow-xl ${
                     isMobile ? "rounded-none" : "rounded-xl"
-                } p-4 w-full border border-gray-700 flex flex-col h-full`}
-            >
+                } p-4 w-full border border-gray-700 flex flex-col h-full`}>
                 {/* Search Section */}
                 <div className="relative mb-4">
                     <input
                         type="text"
                         value={searchQuery}
                         onChange={handleSearchChange}
-                        placeholder={
-                            isGlobalSearch
-                                ? "Search globally..."
-                                : "Search chats..."
-                        }
+                        placeholder="Search chats..."
                         className="w-full p-3 rounded-lg border border-gray-700 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-300 bg-surface text-primary placeholder-text-muted"
                     />
-                    <div className="flex items-center mt-2">
-                        <input
-                            type="checkbox"
-                            checked={isGlobalSearch}
-                            onChange={handleCheckboxChange}
-                            className="w-4 h-4 text-primary rounded focus:ring-primary-light"
-                        />
-                        <label className="ml-2 text-secondary text-sm font-medium">
-                            Search Globally
-                        </label>
-                    </div>
                 </div>
 
-                {isGlobalSearch && (
-                    <h3 className="text-xl font-semibold text-primary mb-4 border-b border-gray-700 pb-2">
-                        Global Search Results
-                    </h3>
+                {searchQuery && !isGlobalSearch && (
+                    <div className="mb-4">
+                        <h3 className="text-xl font-semibold text-primary mb-4 border-b border-gray-700 pb-2">
+                            Chat Search Results
+                        </h3>
+                        <button
+                            onClick={() => setIsGlobalSearch(true)}
+                            className="w-full py-2 px-4 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors duration-300">
+                            Search Globally
+                        </button>
+                    </div>
+                )}
+
+                {isGlobalSearch && searchQuery && (
+                    <div>
+                        <h3 className="text-xl font-semibold text-primary mb-4 border-b border-gray-700 pb-2">
+                            Global Search Results
+                        </h3>
+                    </div>
                 )}
 
                 {/* Chats List */}
@@ -160,8 +151,7 @@ const LeftSection = ({ onSelectChat, isMobile }) => {
                                     <div
                                         key={chat.name}
                                         className="bg-surface rounded-xl border border-gray-700 hover:border-primary hover:shadow-md transition-all duration-300 cursor-pointer"
-                                        onClick={() => handleSelectChat(chat)}
-                                    >
+                                        onClick={() => handleSelectChat(chat)}>
                                         <div className="flex items-center p-3">
                                             <div className="relative">
                                                 {chat.avatar ? (
@@ -186,8 +176,7 @@ const LeftSection = ({ onSelectChat, isMobile }) => {
                                                             className="w-3 h-3 text-primary"
                                                             fill="none"
                                                             stroke="currentColor"
-                                                            viewBox="0 0 24 24"
-                                                        >
+                                                            viewBox="0 0 24 24">
                                                             <path
                                                                 strokeLinecap="round"
                                                                 strokeLinejoin="round"
@@ -218,14 +207,13 @@ const LeftSection = ({ onSelectChat, isMobile }) => {
                         ) : globalSearchResult ? (
                             <div
                                 className="p-4 bg-surface rounded-xl border border-gray-700 hover:border-primary hover:shadow-md transition-all duration-300 cursor-pointer"
-                                onClick={() => setShowSendRequest(true)}
-                            >
+                                onClick={() => setShowSendRequest(true)}>
                                 <div className="flex flex-col space-y-2">
                                     <h4 className="font-semibold text-primary">
                                         {globalSearchResult.name}
                                     </h4>
                                     <p className="text-sm text-secondary">
-                                        @{globalSearchResult.username}
+                                        {globalSearchResult.username}
                                     </p>
                                     <p className="text-sm text-muted">
                                         {globalSearchResult.email}

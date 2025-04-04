@@ -74,7 +74,7 @@ const Otp = () => {
     };
 
     return (
-        <div className="relative bg-dark-background min-h-screen flex items-center justify-center bg-cover bg-center px-4 sm:px-6">
+        <div className="relative bg-dark-background min-h-full flex items-center justify-center bg-cover bg-center px-4 sm:px-6">
             {/* Softened overlay for contrast without obscuring the background image */}
             <div className="absolute inset-0 bg-black/40 backdrop-blur-sm"></div>
 
