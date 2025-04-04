@@ -33,7 +33,7 @@ const Main = () => {
             <div className="h-[100dvh] container mx-auto flex flex-col md:flex-row p-2 sm:p-4 gap-4">
                 {/* Left Section (Chats List) */}
                 <aside
-                    className={`h-full md:w-1/3 lg:w-1/4 bg-surface rounded-lg mb-4 md:mb-0 ${
+                    className={`h-[84dvh] md:w-1/3 lg:w-1/4 bg-surface rounded-lg mb-4 md:mb-0 ${
                         isMobile && selectedChat ? "hidden" : "block"
                     }`}
                 >
@@ -42,7 +42,7 @@ const Main = () => {
 
                 {/* Right Section (Chat) */}
                 <section
-                    className={`h-full flex-1 bg-surface rounded-lg shadow-lg flex flex-col ${
+                    className={`h-[84dvh] flex-1 bg-surface rounded-lg shadow-lg flex flex-col ${
                         isMobile && !selectedChat ? "hidden" : "block"
                     }`}
                 >
