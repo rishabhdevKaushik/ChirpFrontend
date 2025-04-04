@@ -29,11 +29,11 @@ const Main = () => {
     }, [isMobile, selectedChat]);
 
     return (
-        <main className={`${isMobile ? "h-screen" : "h-[calc(100vh-88px)]"} bg-background`}>
-            <div className={`container mx-auto ${isMobile ? "h-screen" : "h-[calc(100vh-88px)]"} flex flex-col md:flex-row p-2 sm:p-4 gap-4`}>
+        <main className="h-full bg-background flex flex-col overflow-hidden">
+            <div className="h-full container mx-auto flex flex-col md:flex-row p-2 sm:p-4 gap-4">
                 {/* Left Section (Chats List) */}
                 <aside
-                    className={`md:w-1/3 lg:w-1/4 bg-surface rounded-lg mb-4 md:mb-0 ${
+                    className={`h-full md:w-1/3 lg:w-1/4 bg-surface rounded-lg mb-4 md:mb-0 ${
                         isMobile && selectedChat ? "hidden" : "block"
                     }`}
                 >
@@ -42,7 +42,7 @@ const Main = () => {
 
                 {/* Right Section (Chat) */}
                 <section
-                    className={`flex-1 bg-surface rounded-lg shadow-lg flex flex-col ${
+                    className={`h-full flex-1 bg-surface rounded-lg shadow-lg flex flex-col ${
                         isMobile && !selectedChat ? "hidden" : "block"
                     }`}
                 >

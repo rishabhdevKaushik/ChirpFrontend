@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { apiEndpoints } from "../Api"; // Ensure this path and file export are correct
 import SendRequest from "./Sendrequest"; // Import the SendRequest component
 import socket from "../socket";
+import "../styles/scrollbar.css";
 
 const LeftSection = ({ onSelectChat, isMobile }) => {
     const [searchQuery, setSearchQuery] = useState("");
@@ -103,13 +104,10 @@ const LeftSection = ({ onSelectChat, isMobile }) => {
 
     return (
         <div
-            className={`flex flex-col h-full ${
-                isMobile ? "rounded-none" : ""
-            }`}>
-            <div
-                className={`bg-surface shadow-xl ${
-                    isMobile ? "rounded-none" : "rounded-xl"
-                } p-4 w-full border border-gray-700 flex flex-col h-full`}>
+            className={`flex flex-col ${
+                isMobile ? "p-0 rounded-none fixed inset-0" : "p-4 rounded-xl h-full"
+            } bg-surface shadow-lg w-full`}>
+            <div className="flex flex-col h-full">
                 {/* Search Section */}
                 <div className="relative mb-4">
                     <input
@@ -143,7 +141,7 @@ const LeftSection = ({ onSelectChat, isMobile }) => {
                 )}
 
                 {/* Chats List */}
-                <div className="flex-grow overflow-y-auto">
+                <div className="flex-grow overflow-y-auto custom-scrollbar">
                     <div className="flex flex-col gap-3">
                         {!isGlobalSearch ? (
                             filteredChats.length > 0 ? (

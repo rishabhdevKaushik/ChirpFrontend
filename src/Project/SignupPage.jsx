@@ -50,11 +50,11 @@ const SignupPage = () => {
     };
 
     return (
-        <div className="relative bg-dark-background min-h-full flex items-center justify-center bg-cover bg-center px-4 sm:px-6">
+        <div className="relative bg-dark-background min-h-screen h-screen flex items-center justify-center bg-cover bg-center px-4 sm:px-6">
             {/* Blur Overlay */}
             <div className="absolute inset-0 bg-black/40 backdrop-blur-sm"></div>
 
-            <div className="relative z-10 w-full max-w-sm sm:max-w-lg mx-auto bg-surface rounded-2xl shadow-2xl p-6 sm:p-12 transform transition-all duration-300 hover:shadow-3xl">
+            <div className="relative z-10 w-full max-w-sm sm:max-w-lg mx-auto bg-surface rounded-2xl shadow-2xl p-6 sm:p-8 transform transition-all duration-300 hover:shadow-3xl max-h-[90vh] overflow-y-auto custom-scrollbar">
                 <div className="text-center mb-4 sm:mb-6">
                     <h1 className="text-4xl  sm:text-5xl font-extrabold text-primary bg-clip-text leading-tight animate-fade-in-down">
                         Sign Up

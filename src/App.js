@@ -13,7 +13,7 @@ import Settings from "./Project/Settings";
 const App = () => {
     return (
         <Router>
-            <div className="App">
+            <div className="App h-screen flex flex-col overflow-hidden">
                 <Routes>
                     {/* Routes WITHOUT Navbar */}
                     <Route path="/" element={<LoadingScreen />} />
@@ -40,16 +40,18 @@ const App = () => {
 // Layout component to include Navbar only for specific routes
 const LayoutWithNavbar = () => {
     return (
-        <>
+        <div className="h-full flex flex-col overflow-hidden">
             <Navbar />
-            <Routes>
+            <div className="flex-1">
+                <Routes>
                 <Route path="/main" element={<Main />} />
                 <Route path="/popup" element={<Popup />} />
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/updateprofile" element={<UpdateProfile />} />
                 <Route path="/settings" element={<Settings />} />
-            </Routes>
-        </>
+                </Routes>
+            </div>
+        </div>
     );
 };
 
