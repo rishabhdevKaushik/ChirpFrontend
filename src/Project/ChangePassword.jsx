@@ -1,8 +1,12 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { apiEndpoints } from "../Api";
 
+
+
 const ChangePassword = () => {
+    const [searchParams] = useSearchParams();
+    
     const [passwords, setPasswords] = useState({
         newPassword: "",
         confirmPassword: "",
@@ -30,11 +34,17 @@ const ChangePassword = () => {
         setError(null);
 
         try {
-            const tempUserId = sessionStorage.getItem("tempUserId");
-            await apiEndpoints.changePassword({
+            const userToken = searchParams.get('token');
+           
+            const response = await apiEndpoints.resetPassword({
                 newPassword: passwords.newPassword,
-                tempUserId,
+                token: userToken,
             });
+            const { token, currentUser } = response.data;
+            localStorage.setItem("accessToken", token.accessToken);
+            localStorage.setItem("refreshToken", token.refreshToken);
+            localStorage.setItem("currentUsername", currentUser.username);
+            localStorage.setItem("currentUserId", currentUser.id);
             navigate("/main");
         } catch (error) {
             console.error("Change password error:", error);

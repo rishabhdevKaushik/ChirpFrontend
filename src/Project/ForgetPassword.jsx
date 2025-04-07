@@ -14,9 +14,9 @@ const ForgetPassword = () => {
         setError(null);
 
         try {
-            const response = await apiEndpoints.forgotPassword({ email });
-            sessionStorage.setItem("tempUserId", response.data.tempUserId);
-            navigate("/otp");
+            await apiEndpoints.forgotPassword({ email });
+            
+            alert("Forgot password link is send to your mail successfully.");
         } catch (error) {
             console.error("Forgot password error:", error);
             setError("Failed to send OTP. Please check your email and try again.");

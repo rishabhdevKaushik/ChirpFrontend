@@ -61,6 +61,8 @@ const apiEndpoints = {
     refershAuthenticationToken: (refreshToken) =>
         api.post("/user/refresh-token", { refreshToken }),
     verifyOtp: (data) => api.post("/user/verifyotp", data),
+    forgotPassword: (data) => api.post("/user/forgot-password", data),
+    resetPassword: (data) => api.post("/user/reset-password", data),
 
     sendFriendRequest: (username) => api.post(`/friendreq/${username}`),
     updateFriendRequest: (data, username) =>
