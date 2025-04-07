@@ -2,11 +2,10 @@ import { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { apiEndpoints } from "../Api";
 
-
-
 const ChangePassword = () => {
     const [searchParams] = useSearchParams();
-    
+    const userToken = searchParams.get("token");
+
     const [passwords, setPasswords] = useState({
         newPassword: "",
         confirmPassword: "",
@@ -34,11 +33,9 @@ const ChangePassword = () => {
         setError(null);
 
         try {
-            const userToken = searchParams.get('token');
-           
             const response = await apiEndpoints.resetPassword({
                 newPassword: passwords.newPassword,
-                token: userToken,
+                resetToken: userToken,
             });
             const { token, currentUser } = response.data;
             localStorage.setItem("accessToken", token.accessToken);
@@ -64,7 +61,6 @@ const ChangePassword = () => {
                     <h1 className="text-4xl sm:text-5xl font-extrabold text-primary bg-clip-text leading-tight animate-fade-in-down">
                         Change Password
                     </h1>
-                    
                 </div>
 
                 {error && (
@@ -75,7 +71,10 @@ const ChangePassword = () => {
                     </div>
                 )}
 
-                <form className="space-y-4 sm:space-y-6" onSubmit={handleSubmit}>
+                <form
+                    className="space-y-4 sm:space-y-6"
+                    onSubmit={handleSubmit}
+                >
                     <div className="space-y-2">
                         <label
                             htmlFor="newPassword"
