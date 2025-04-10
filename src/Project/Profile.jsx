@@ -109,9 +109,9 @@ const Profile = () => {
     const handleCardClick = (card) => {
         setPopupContent(card);
         setIsPopupOpen(true);
-        if (card.title === "List of Pending Requests") fetchPendingRequests();
+        if (card.title === "Pending Requests") fetchPendingRequests();
         if (card.title === "Blocked Users") fetchBlockedUsers();
-        if (card.title === "User Updates") navigate("/updateprofile");
+        if (card.title === "Update User") navigate("/updateprofile");
     };
 
     const closePopup = () => {

@@ -209,13 +209,13 @@ const RightSection = ({ selectedChat, onBackClick, isMobile }) => {
                 isMobile
                     ? "p-0 rounded-none fixed inset-0"
                     : "p-4 rounded-xl  h-full"
-            } bg-surface shadow-lg w-full`}>
+            } bg-background shadow-lg w-full`}>
             {selectedChat ? (
                 <>
                     <div
                         className={`flex items-center space-x-4 ${
                             isMobile ? "mb-2 rounded-none" : "mb-4 rounded-xl"
-                        } p-3 bg-surface backdrop-blur-sm shadow-md hover:bg-surface/95 transition duration-300 ease-in-out border border-gray-700`}>
+                        } p-3 bg-background backdrop-blur-sm shadow-md hover:bg-surface/95 transition duration-300 ease-in-out border border-gray-700`}>
                         {isMobile && (
                             <button
                                 onClick={onBackClick}
@@ -374,7 +374,7 @@ const RightSection = ({ selectedChat, onBackClick, isMobile }) => {
                 </>
             ) : (
                 <div className="flex flex-col items-center justify-center h-full space-y-4 text-center">
-                    <div className="w-20 h-20 bg-surface rounded-full flex items-center justify-center border border-gray-700">
+                    <div className="w-20 h-20 bg-background rounded-full flex items-center justify-center border border-gray-700">
                         <svg
                             className="w-10 h-10 text-primary"
                             fill="none"

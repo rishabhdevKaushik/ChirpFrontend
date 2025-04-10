@@ -106,7 +106,7 @@ const LeftSection = ({ onSelectChat, isMobile }) => {
         <div
             className={`flex flex-col ${
                 isMobile ? "p-0 rounded-none fixed inset-0" : "p-4 rounded-xl h-full"
-            } bg-surface shadow-lg w-full`}>
+            } bg-background shadow-lg w-full`}>
             <div className="flex flex-col h-full">
                 {/* Search Section */}
                 <div className="relative mb-4">
