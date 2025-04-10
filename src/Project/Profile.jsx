@@ -120,7 +120,7 @@ const Profile = () => {
 
     const cardsData = [
         {
-            title: "List of Pending Requests",
+            title: "Pending Requests",
             icon: <FaUserPlus className="text-green-500 text-3xl" />,
         },
         {
@@ -128,147 +128,155 @@ const Profile = () => {
             icon: <FaBan className="text-red-500 text-3xl" />,
         },
         {
-            title: "User Updates",
+            title: "Update User",
             icon: <FaUserEdit className="text-yellow-500 text-3xl" />,
         },
     ];
 
     return (
-        <div className="min-h-screen bg-gray-100 py-4 sm:py-8 px-4 sm:px-6">
-            {/* Welcome Message */}
-            <div className="text-center mb-6 sm:mb-8">
-                <h1 className="text-2xl sm:text-3xl font-bold text-gray-800">
-                    Hi, {username}! 👋
-                </h1>
-                <p className="text-gray-600 mt-2">Welcome to your profile</p>
-            </div>
-
-            {/* Main Content */}
-            <div className="max-w-4xl mx-auto">
-                {/* Cards */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-                    {cardsData.map((card, index) => (
-                        <div
-                            key={index}
-                            className="bg-white shadow-lg rounded-xl p-4 sm:p-6 text-center cursor-pointer hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
-                            onClick={() => handleCardClick(card)}
-                        >
-                            <div className="flex justify-center mb-4">
-                                {card.icon}
-                            </div>
-                            <h2 className="text-lg font-semibold text-gray-700">
-                                {card.title}
-                            </h2>
-                        </div>
-                    ))}
+        <div className="relative bg-dark-background h-[90dvh] flex items-center justify-center bg-cover bg-center px-4 sm:px-6">
+            {/* Enhanced Blur Overlay */}
+            <div className="absolute inset-0 bg-black/40 backdrop-blur-sm"></div>
+            <div className="relative z-10 w-full max-w-sm sm:max-w-lg mx-auto bg-surface rounded-2xl shadow-2xl p-6 sm:p-8 transform transition-all duration-300 hover:shadow-3xl max-h-[75vh] overflow-y-auto custom-scrollbar">
+                {/* Welcome Message */}
+                <div className="text-center mb-6 sm:mb-8">
+                    <h1 className="text-2xl sm:text-3xl font-bold text-primary">
+                        Hi, {username}!
+                    </h1>
+                    <p className="text-secondary mt-2">
+                        Welcome to your profile
+                    </p>
                 </div>
-            </div>
-
-            {/* Popup Modal */}
-            {isPopupOpen && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-                    <div className="bg-white rounded-xl shadow-2xl w-full max-w-xs sm:max-w-md">
-                        <div className="p-4 sm:p-6">
-                            <h2 className="text-xl font-bold text-gray-800 text-center mb-4">
-                                {popupContent.title}
-                            </h2>
-
-                            {popupContent.title ===
-                                "List of Pending Requests" &&
-                                (loading ? (
-                                    <p className="text-center">Loading...</p>
-                                ) : pendingRequests.length === 0 ? (
-                                    <p className="text-center text-gray-600">
-                                        No pending requests.
-                                    </p>
-                                ) : (
-                                    pendingRequests.map((request) => (
-                                        <div
-                                            key={request.id}
-                                            className="flex justify-between items-center bg-gray-50 p-3 rounded-lg mb-3"
-                                        >
-                                            <span className="text-gray-800 font-semibold">
-                                                {request.sender.username}
-                                            </span>
-                                            <div className="space-x-2">
-                                                <button
-                                                    onClick={() =>
-                                                        handleAcceptRequest(
-                                                            request.sender
-                                                                .username
-                                                        )
-                                                    }
-                                                    className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-md transition-colors"
-                                                >
-                                                    Accept
-                                                </button>
-                                                <button
-                                                    onClick={() =>
-                                                        handleRejectRequest(
-                                                            request.sender
-                                                                .username
-                                                        )
-                                                    }
-                                                    className="bg-gray-500 hover:bg-gray-600 text-white px-3 py-1 rounded-md transition-colors"
-                                                >
-                                                    Reject
-                                                </button>
-                                                <button
-                                                    onClick={() =>
-                                                        handleBlockRequest(
-                                                            request.sender
-                                                                .username
-                                                        )
-                                                    }
-                                                    className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md transition-colors"
-                                                >
-                                                    Block
-                                                </button>
-                                            </div>
-                                        </div>
-                                    ))
-                                ))}
-
-                            {popupContent.title === "Blocked Users" &&
-                                (loading ? (
-                                    <p className="text-center">Loading...</p>
-                                ) : blockedUsers.length === 0 ? (
-                                    <p className="text-center text-gray-600">
-                                        No blocked users.
-                                    </p>
-                                ) : (
-                                    blockedUsers.map((user) => (
-                                        <div
-                                            key={user.id}
-                                            className="flex justify-between items-center bg-gray-50 p-3 rounded-lg mb-3"
-                                        >
-                                            <span className="text-gray-800 font-semibold">
-                                                {user.username}
-                                            </span>
-                                            <button
-                                                onClick={() =>
-                                                    handleUnblockUser(
-                                                        user.username
-                                                    )
-                                                }
-                                                className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-md transition-colors"
-                                            >
-                                                Unblock
-                                            </button>
-                                        </div>
-                                    ))
-                                ))}
-
-                            <button
-                                onClick={closePopup}
-                                className="mt-4 w-full bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md transition-colors"
+                {/* Main Content */}
+                <div className="max-w-4xl mx-auto">
+                    {/* Cards */}
+                    <div className="flex flex-col space-y-4 sm:space-y-6">
+                        {cardsData.map((card, index) => (
+                            <div
+                                key={index}
+                                    className="bg-surface shadow-lg rounded-xl p-3 sm:p-4 text-left cursor-pointer hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-primary/20"
+                                onClick={() => handleCardClick(card)}
                             >
-                                Close
-                            </button>
-                        </div>
+                                    <div className="flex items-center space-x-3">
+                                        <div className="text-xl sm:text-2xl">
+                                    {card.icon}
+                                </div>
+                                        <h2 className="text-sm sm:text-base font-semibold text-primary">
+                                    {card.title}
+                                </h2>
+                            </div>
+                                </div>
+                        ))}
                     </div>
                 </div>
-            )}
+
+                {/* Popup Modal */}
+                {isPopupOpen && (
+                    <div className="fixed inset-0 bg-background/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+                        <div className="bg-surface rounded-xl shadow-2xl w-full max-w-xs sm:max-w-md border border-primary/20">
+                            <div className="p-4 sm:p-6">
+                                <h2 className="text-xl font-bold text-primary text-center mb-4">
+                                    {popupContent.title}
+                                </h2>
+                                {popupContent.title ===
+                                    "List of Pending Requests" &&
+                                    (loading ? (
+                                        <p className="text-center text-muted">
+                                            Loading...
+                                        </p>
+                                    ) : pendingRequests.length === 0 ? (
+                                        <p className="text-center text-muted">
+                                            No pending requests.
+                                        </p>
+                                    ) : (
+                                        pendingRequests.map((request) => (
+                                            <div
+                                                key={request.id}
+                                                className="flex justify-between items-center bg-surface p-3 rounded-lg mb-3 border border-primary/20"
+                                            >
+                                                <span className="text-primary font-semibold">
+                                                    {request.sender.username}
+                                                </span>
+                                                <div className="space-x-2">
+                                                    <button
+                                                        onClick={() =>
+                                                            handleAcceptRequest(
+                                                                request.sender
+                                                                    .username
+                                                            )
+                                                        }
+                                                        className="bg-primary hover:bg-primary-dark text-primary py-1.5 px-3 rounded-md transition-colors duration-300"
+                                                    >
+                                                        Accept
+                                                    </button>
+                                                    <button
+                                                        onClick={() =>
+                                                            handleRejectRequest(
+                                                                request.sender
+                                                                    .username
+                                                            )
+                                                        }
+                                                        className="bg-surface hover:bg-surface/80 text-primary py-1.5 px-3 rounded-md transition-colors duration-300 border border-primary/20"
+                                                    >
+                                                        Reject
+                                                    </button>
+                                                    <button
+                                                        onClick={() =>
+                                                            handleBlockRequest(
+                                                                request.sender
+                                                                    .username
+                                                            )
+                                                        }
+                                                        className="bg-primary hover:bg-primary-dark text-primary py-1.5 px-3 rounded-md transition-colors duration-300"
+                                                    >
+                                                        Block
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        ))
+                                    ))}
+                                {popupContent.title === "Blocked Users" &&
+                                    (loading ? (
+                                        <p className="text-center text-muted">
+                                            Loading...
+                                        </p>
+                                    ) : blockedUsers.length === 0 ? (
+                                        <p className="text-center text-muted">
+                                            No blocked users.
+                                        </p>
+                                    ) : (
+                                        blockedUsers.map((user) => (
+                                            <div
+                                                key={user.id}
+                                                className="flex justify-between items-center bg-surface p-3 rounded-lg mb-3 border border-primary/20"
+                                            >
+                                                <span className="text-primary font-semibold">
+                                                    {user.username}
+                                                </span>
+                                                <button
+                                                    onClick={() =>
+                                                        handleUnblockUser(
+                                                            user.username
+                                                        )
+                                                    }
+                                                    className="bg-primary hover:bg-primary-dark text-primary py-1.5 px-3 rounded-md transition-colors duration-300"
+                                                >
+                                                    Unblock
+                                                </button>
+                                            </div>
+                                        ))
+                                    ))}
+                                <button
+                                    onClick={closePopup}
+                                    className="mt-4 w-full bg-primary hover:bg-primary-dark text-primary py-2 px-4 rounded-md transition-colors duration-300"
+                                >
+                                    Close
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                )}
+            </div>
         </div>
     );
 };
