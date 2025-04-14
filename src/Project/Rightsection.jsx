@@ -209,22 +209,26 @@ const RightSection = ({ selectedChat, onBackClick, isMobile }) => {
                 isMobile
                     ? "p-0 rounded-none fixed inset-0"
                     : "p-4 rounded-xl  h-full"
-            } bg-background shadow-lg w-full`}>
+            } bg-background shadow-lg w-full`}
+        >
             {selectedChat ? (
                 <>
                     <div
                         className={`flex items-center space-x-4 ${
                             isMobile ? "mb-2 rounded-none" : "mb-4 rounded-xl"
-                        } p-3 bg-background backdrop-blur-sm shadow-md hover:bg-surface/95 transition duration-300 ease-in-out border border-gray-700`}>
+                        } p-3 bg-background backdrop-blur-sm shadow-md hover:bg-surface/95 transition duration-300 ease-in-out border border-gray-700`}
+                    >
                         {isMobile && (
                             <button
                                 onClick={onBackClick}
-                                className="p-2 hover:bg-surface rounded-full transition-colors duration-300">
+                                className="p-2 hover:bg-surface rounded-full transition-colors duration-300"
+                            >
                                 <svg
                                     className="w-6 h-6 text-secondary"
                                     fill="none"
                                     stroke="currentColor"
-                                    viewBox="0 0 24 24">
+                                    viewBox="0 0 24 24"
+                                >
                                     <path
                                         strokeLinecap="round"
                                         strokeLinejoin="round"
@@ -238,8 +242,24 @@ const RightSection = ({ selectedChat, onBackClick, isMobile }) => {
                             <img
                                 src={selectedChat.avatar}
                                 alt={selectedChat.name}
-                                className="w-14 h-14 rounded-full border-2 border-primary p-0.5 hover:scale-105 transition-transform duration-300"
+                                className="w-10 h-10 sm:w-12 sm:h-12 rounded-full object-cover border-2 border-gray-700"
                             />
+                        ) : selectedChat.isGroup ? (
+                            <div className=" w-10 h-10 sm:w-12 sm:h-12 bg-surface flex items-center justify-center rounded-full object-cover border-2 border-gray-700">
+                                <svg
+                                    className="w-6 h-6 text-primary "
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth="1.5"
+                                        d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+                                    />
+                                </svg>
+                            </div>
                         ) : (
                             <div className="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-full bg-surface text-primary font-bold border-2 border-gray-700">
                                 {selectedChat.name
@@ -262,7 +282,8 @@ const RightSection = ({ selectedChat, onBackClick, isMobile }) => {
                             isMobile
                                 ? "flex-1 overflow-y-auto"
                                 : "flex-grow overflow-y-auto"
-                        } bg-surface backdrop-blur-sm p-4 rounded-xl shadow-md flex flex-col space-y-3 mb-4 custom-scrollbar`}>
+                        } bg-surface backdrop-blur-sm p-4 rounded-xl shadow-md flex flex-col space-y-3 mb-4 custom-scrollbar`}
+                    >
                         {messages.map((msg) => (
                             <div
                                 key={msg._id || msg.tempId}
@@ -275,7 +296,8 @@ const RightSection = ({ selectedChat, onBackClick, isMobile }) => {
                                     editingMessage?._id === msg._id
                                         ? "ring-2 ring-yellow-400"
                                         : ""
-                                }`}>
+                                }`}
+                            >
                                 <div className="flex flex-col">
                                     <span className="text-xs opacity-70 mb-1">
                                         {msg.sender.username}
@@ -301,7 +323,8 @@ const RightSection = ({ selectedChat, onBackClick, isMobile }) => {
                             isMobile
                                 ? "bg-surface/90 p-3 border-t border-gray-700"
                                 : "flex items-center space-x-3"
-                        }`}>
+                        }`}
+                    >
                         <div className="relative w-full flex items-center">
                             <textarea
                                 ref={messageInputRef}
@@ -323,13 +346,15 @@ const RightSection = ({ selectedChat, onBackClick, isMobile }) => {
                                             setEditingMessage(null);
                                             setMessage("");
                                         }}
-                                        className="bg-surface text-primary py-1.5 px-3 rounded-xl shadow-md hover:bg-surface/80 transition-colors duration-300 border border-gray-700">
+                                        className="bg-surface text-primary py-1.5 px-3 rounded-xl shadow-md hover:bg-surface/80 transition-colors duration-300 border border-gray-700"
+                                    >
                                         ✕
                                     </button>
                                 )}
                                 <button
                                     onClick={handleSend}
-                                    className="bg-primary text-primary py-1.5 px-4 rounded-xl shadow-md hover:bg-primary-dark transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transform">
+                                    className="bg-primary text-primary py-1.5 px-4 rounded-xl shadow-md hover:bg-primary-dark transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transform"
+                                >
                                     {editingMessage ? "Edit" : "Send"}
                                 </button>
                             </div>
@@ -348,12 +373,14 @@ const RightSection = ({ selectedChat, onBackClick, isMobile }) => {
                                     <>
                                         <button
                                             onClick={handleEdit}
-                                            className="w-full bg-primary text-primary py-2 px-4 rounded-lg shadow-md hover:bg-primary-dark">
+                                            className="w-full bg-primary text-primary py-2 px-4 rounded-lg shadow-md hover:bg-primary-dark"
+                                        >
                                             Edit
                                         </button>
                                         <button
                                             onClick={handleDelete}
-                                            className="w-full bg-primary text-primary py-2 px-4 rounded-lg shadow-md hover:bg-primary-dark">
+                                            className="w-full bg-primary text-primary py-2 px-4 rounded-lg shadow-md hover:bg-primary-dark"
+                                        >
                                             Delete
                                         </button>
                                     </>
@@ -365,7 +392,8 @@ const RightSection = ({ selectedChat, onBackClick, isMobile }) => {
                                 )}
                                 <button
                                     onClick={() => setSelectedMsg(null)}
-                                    className="w-full bg-surface text-primary py-2 px-4 rounded-lg shadow-md hover:bg-surface border border-gray-700">
+                                    className="w-full bg-surface text-primary py-2 px-4 rounded-lg shadow-md hover:bg-surface border border-gray-700"
+                                >
                                     Cancel
                                 </button>
                             </div>
@@ -379,7 +407,8 @@ const RightSection = ({ selectedChat, onBackClick, isMobile }) => {
                             className="w-10 h-10 text-primary"
                             fill="none"
                             stroke="currentColor"
-                            viewBox="0 0 24 24">
+                            viewBox="0 0 24 24"
+                        >
                             <path
                                 strokeLinecap="round"
                                 strokeLinejoin="round"

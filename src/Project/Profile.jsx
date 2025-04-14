@@ -179,7 +179,7 @@ const Profile = () => {
                                     {popupContent.title}
                                 </h2>
                                 {popupContent.title ===
-                                    "List of Pending Requests" &&
+                                    "Pending Requests" &&
                                     (loading ? (
                                         <p className="text-center text-muted">
                                             Loading...

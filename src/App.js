@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Login from "./Project/Login"; // Default page
-import SignupPage from "./Project/SignupPage"; // Signup page
+import Login from "./Project/Login";
+import SignupPage from "./Project/SignupPage";
 import Main from "./Project/Main";
 import Otp from "./Project/Otp";
 import Popup from "./Project/Popup";
@@ -12,6 +12,7 @@ import Navbar from "./Project/Navbar";
 import Settings from "./Project/Settings";
 import ForgetPassword from "./Project/ForgetPassword";
 import ChangePassword from "./Project/ChangePassword";
+import AddNew from "./Project/AddNew";
 const App = () => {
     return (
         <Router>
@@ -34,6 +35,7 @@ const App = () => {
                             element={<UpdateProfile />}
                         />
                         <Route path="/settings" element={<Settings />} />
+                        <Route path="/addnew" element={<AddNew />} />
                     </Route>
                 </Routes>
             </div>

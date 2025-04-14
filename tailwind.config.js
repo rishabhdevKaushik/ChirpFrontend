@@ -44,6 +44,7 @@ module.exports = {
             },
             textColor: {
                 primary: "var(--text-primary)",
+                onPrimary: "var(--primary)",
                 secondary: "var(--text-secondary)",
                 muted: "var(--text-muted)",
                 dark: "var(--text-dark)",
