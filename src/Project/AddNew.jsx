@@ -40,8 +40,13 @@ const AddNew = ({ onClose }) => {
         try {
             setLoading(true);
             setError(null);
-            await apiEndpoints.sendFriendRequest(foundUser.username);
-            setSuccessMessage(`Friend request sent to ${foundUser.username}!`);
+            const response = await apiEndpoints.sendFriendRequest(foundUser.username);
+            if (response.status === 201) {
+                setSuccessMessage(`Friend request sent to ${foundUser.username}!`);
+            }else {
+                setSuccessMessage(`${response.data.message}`);
+
+            }
             setTimeout(() => {
                 // setSuccessMessage(null);
                 onClose();

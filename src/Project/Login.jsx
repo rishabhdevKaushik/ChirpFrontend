@@ -33,7 +33,7 @@ const Login = () => {
                 sessionStorage.setItem("tempUserId", error.response.data.tempUserId);
                 navigate("/otp");
             }
-            console.error(error);
+            // console.error(error);
             setError("Login failed. Please check your credentials.");
         } finally {
             setLoading(false);
