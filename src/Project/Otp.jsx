@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { apiEndpoints } from "../Api";
 import { useNavigate } from "react-router-dom";
 
@@ -39,39 +39,89 @@ const Otp = () => {
         }
     };
 
-    const sendOtpToBackend = async () => {
+    const handleSubmit = useCallback(async () => {
         setLoading(true);
         const otpString = otp.join("");
         const data = {
             otp: otpString,
-            tempUserId: sessionStorage.getItem("tempUserId")
+            tempUserId: sessionStorage.getItem("tempUserId"),
         };
 
         try {
             const response = await apiEndpoints.verifyOtp(data);
             if (response.data.message === "OTP verified") {
+                sessionStorage.clear();
+                console.log(response);
+                const { token } = response.data;
+                localStorage.setItem("accessToken", token.accessToken);
+                localStorage.setItem("refreshToken", token.refreshToken);
+
                 navigate("/main");
             } else {
                 setError("OTP is incorrect. Please try again.");
             }
         } catch (error) {
-            setError("Error verifying OTP. Please try again.");
+
+            setError(error.response?.data?.message || "Error verifying OTP. Please try again.");
             console.error("Error verifying OTP", error);
         } finally {
             setLoading(false);
         }
+    }, [otp, navigate]);
+
+    const handleResend = async () => {
+        const data = {
+            tempUserId: sessionStorage.getItem("tempUserId"),
+            email: sessionStorage.getItem("email"),
+        };
+        try {
+            setOtp(["", "", "", "", "", ""]);
+            setTimer(30);
+            setCanResend(false);
+            setError(null);
+            await apiEndpoints.resendOtp(data);
+        } catch (error) {
+            setError("Error resending OTP. Please try again.");
+            console.error("Error resending OTP", error);
+        }
     };
 
-    const handleSubmit = () => {
-        sendOtpToBackend();
+    const handlePaste = (e) => {
+        e.preventDefault();
+        const paste = e.clipboardData.getData("text").replace(/\D/g, ""); // Only digits
+        if (paste.length === otp.length) {
+            const pasteArray = paste.split("");
+            setOtp(pasteArray);
+
+            // Move focus to the last input
+            inputRefs.current[otp.length - 1].focus();
+        }
     };
 
-    const handleResend = () => {
-        setOtp(["", "", "", "", "", ""]);
-        setTimer(30);
-        setCanResend(false);
-        setError(null);
+    const handleDrop = (e) => {
+        e.preventDefault();
+        const dropped = e.dataTransfer.getData("text").replace(/\D/g, ""); // Only digits
+        if (!dropped) return;
+        const newOtp = [...otp];
+        let start = inputRefs.current.findIndex(
+            (ref) => ref === document.activeElement
+        );
+        if (start === -1) start = 0;
+        for (let i = 0; i < dropped.length && start + i < otp.length; i++) {
+            newOtp[start + i] = dropped[i];
+        }
+        setOtp(newOtp);
+
+        // Move focus to the last filled input
+        const nextFocus = Math.min(start + dropped.length, otp.length - 1);
+        inputRefs.current[nextFocus].focus();
     };
+
+    useEffect(() => {
+        if (otp.every((digit) => digit !== "")) {
+            handleSubmit();
+        }
+    }, [otp, handleSubmit]);
 
     return (
         <div className="relative bg-dark-background h-[100dvh] flex items-center justify-center bg-cover bg-center px-4 sm:px-6">
@@ -97,10 +147,17 @@ const Otp = () => {
                         <input
                             key={index}
                             type="text"
+                            inputMode="numeric"
+                            pattern="[0-9]*"
                             maxLength="1"
                             value={digit}
+                            onPaste={handlePaste}
+                            onDrop={handleDrop}
+                            disabled={loading}
                             ref={(el) => (inputRefs.current[index] = el)}
-                            onChange={(e) => handleChange(index, e.target.value)}
+                            onChange={(e) =>
+                                handleChange(index, e.target.value)
+                            }
                             onKeyDown={(e) => handleKeyDown(index, e)}
                             className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 text-center text-lg sm:text-xl md:text-2xl font-medium border border-gray-300 rounded-lg focus:border-red-500 focus:ring-2 focus:ring-red-300 transition-all duration-300 bg-gray-100"
                         />
@@ -124,7 +181,11 @@ const Otp = () => {
                         type="submit"
                         onClick={handleSubmit}
                         disabled={loading}
-                        className={`w-full py-3 px-4 rounded-lg shadow-lg ${loading ? "bg-primary-light cursor-not-allowed" : "bg-primary hover:bg-primary-dark"} text-primary font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 transition-all duration-300`}
+                        className={`w-full py-3 px-4 rounded-lg shadow-lg ${
+                            loading
+                                ? "bg-primary-light cursor-not-allowed"
+                                : "bg-primary hover:bg-primary-dark"
+                        } text-primary font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 transition-all duration-300`}
                     >
                         {loading ? (
                             <span className="flex items-center justify-center">

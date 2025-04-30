@@ -28,11 +28,15 @@ const SignupPage = () => {
         }
 
         setLoading(true);
+        // Clear all localStorage
+        localStorage.clear();
         try {
-            await apiEndpoints.signup(formData, {
+            const response = await apiEndpoints.signup(formData, {
                 withCredentials: true,
                 credentials: "include",
             });
+            sessionStorage.setItem("tempUserId", response.data.tempUserId);
+            sessionStorage.setItem("email", formData.email);
             navigate("/Otp");
         } catch (error) {
             // console.error(

@@ -61,6 +61,7 @@ const apiEndpoints = {
     refershAuthenticationToken: (refreshToken) =>
         api.post("/user/refresh-token", { refreshToken }),
     verifyOtp: (data) => api.post("/user/verifyotp", data),
+    resendOtp: (data) => api.post("/user/resend-otp", data),
     forgotPassword: (data) => api.post("/user/forgot-password", data),
     resetPassword: (data) => api.post("/user/reset-password", data),
 

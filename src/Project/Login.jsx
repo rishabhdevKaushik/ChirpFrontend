@@ -19,6 +19,8 @@ const Login = () => {
     const handleLogin = async (e) => {
         e.preventDefault();
         setLoading(true);
+        // Clear all localStorage
+        localStorage.clear();
 
         try {
             const response = await apiEndpoints.login(formData);
@@ -29,8 +31,16 @@ const Login = () => {
             localStorage.setItem("currentUserId", currentUser.id);
             navigate("/main");
         } catch (error) {
-            if (error.response && error.response.status && error.response.status === 409) {
-                sessionStorage.setItem("tempUserId", error.response.data.tempUserId);
+            if (
+                error.response &&
+                error.response.status &&
+                error.response.status === 409
+            ) {
+                sessionStorage.setItem(
+                    "tempUserId",
+                    error.response.data.tempUserId
+                );
+                sessionStorage.setItem("email",error.response.data.email);
                 navigate("/otp");
             }
             // console.error(error);
