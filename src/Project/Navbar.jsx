@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { FaUser, FaCog, FaBell } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import Popup from "./Popup";
+// import Popup from "./Popup";
 
 const Navbar = () => {
-    const [isPopupOpen, setIsPopupOpen] = useState(false);
+    // const [isPopupOpen, setIsPopupOpen] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [hoveredButton, setHoveredButton] = useState(null);
     const navigate = useNavigate();
@@ -180,7 +180,7 @@ const Navbar = () => {
             )}
 
             {/* Popup Confirmation */}
-            {isPopupOpen && <Popup setIsPopupOpen={setIsPopupOpen} />}
+            {/* {isPopupOpen && <Popup setIsPopupOpen={setIsPopupOpen} />} */}
         </header>
     );
 };

@@ -56,7 +56,7 @@ const apiEndpoints = {
     login: (data) => api.post("/user/login", data),
     updateUser: (data) => api.put("/user", data),
     deleteUser: (data) => api.delete("/user/delete", data),
-    logout: () => api.post("/user/logout"),
+    logout: (data) => api.post("/user/logout", data),
     findUser: (username) => api.get(`/user/${username}`),
     refershAuthenticationToken: (refreshToken) =>
         api.post("/user/refresh-token", { refreshToken }),
