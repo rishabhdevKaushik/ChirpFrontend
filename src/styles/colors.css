@@ -17,3 +17,9 @@
     --text-muted: #8b957a;
     --text-dark: #090c02;
 }
+
+input,
+textarea,
+[contenteditable] {
+    caret-color: var(--primary);
+}

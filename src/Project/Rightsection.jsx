@@ -10,6 +10,7 @@ const RightSection = ({ selectedChat, onBackClick, isMobile }) => {
     const [typing, setTyping] = useState(false);
     const messagesEndRef = useRef(null);
     const messageInputRef = useRef(null);
+    const typingTimeoutRef = useRef(null);
 
     const currentUsername = localStorage.getItem("currentUsername");
     const currentUserId = localStorage.getItem("currentUserId");
@@ -73,18 +74,19 @@ const RightSection = ({ selectedChat, onBackClick, isMobile }) => {
         };
     }, []);
 
-    let typingTimeout;
     const handleChange = (e) => {
         setMessage(e.target.value);
-
+    
         // Typing indicator
         socket.emit("typing", selectedChatId);
-
+    
         // Clear the previous timeout if the user keeps typing
-        clearTimeout(typingTimeout);
-
+        if (typingTimeoutRef.current) {
+            clearTimeout(typingTimeoutRef.current);
+        }
+    
         // Set a new timeout to emit "stopTyping"
-        typingTimeout = setTimeout(() => {
+        typingTimeoutRef.current = setTimeout(() => {
             socket.emit("stopTyping", selectedChatId);
         }, 2000); // Emit after 2 seconds of no typing
     };
