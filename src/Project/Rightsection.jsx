@@ -8,6 +8,8 @@ const RightSection = ({ selectedChat, onBackClick, isMobile }) => {
     const [selectedMsg, setSelectedMsg] = useState(null); // Tracks the selected message for popup
     const [editingMessage, setEditingMessage] = useState(null);
     const [typing, setTyping] = useState(false);
+    const [loading, setLoading] = useState(false);
+
     const messagesEndRef = useRef(null);
     const messageInputRef = useRef(null);
     const typingTimeoutRef = useRef(null);
@@ -76,15 +78,15 @@ const RightSection = ({ selectedChat, onBackClick, isMobile }) => {
 
     const handleChange = (e) => {
         setMessage(e.target.value);
-    
+
         // Typing indicator
         socket.emit("typing", selectedChatId);
-    
+
         // Clear the previous timeout if the user keeps typing
         if (typingTimeoutRef.current) {
             clearTimeout(typingTimeoutRef.current);
         }
-    
+
         // Set a new timeout to emit "stopTyping"
         typingTimeoutRef.current = setTimeout(() => {
             socket.emit("stopTyping", selectedChatId);
@@ -162,11 +164,14 @@ const RightSection = ({ selectedChat, onBackClick, isMobile }) => {
     };
 
     const getMessages = async (chatId) => {
+        setLoading(true);
         try {
             const response = await apiEndpoints.getAllMessagesOfChat(chatId);
             setMessages(response.data);
         } catch (error) {
             console.error("Failed to fetch messages:", error);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -286,28 +291,62 @@ const RightSection = ({ selectedChat, onBackClick, isMobile }) => {
                                 : "flex-grow overflow-y-auto"
                         } bg-surface backdrop-blur-sm p-4 rounded-xl shadow-md flex flex-col space-y-3 mb-4 custom-scrollbar`}
                     >
-                        {messages.map((msg) => (
-                            <div
-                                key={msg._id || msg.tempId}
-                                onDoubleClick={() => handleDoubleClick(msg)}
-                                className={`group p-4 rounded-xl mb-2 shadow-sm max-w-sm break-words transition-all duration-300 hover:-translate-y-0.5 ${
-                                    msg.sender.username === currentUsername
-                                        ? "self-end bg-primary text-primary"
-                                        : "self-start bg-surface border border-gray-700 text-primary"
-                                } ${
-                                    editingMessage?._id === msg._id
-                                        ? "ring-2 ring-yellow-400"
-                                        : ""
-                                }`}
-                            >
-                                <div className="flex flex-col">
-                                    <span className="text-xs opacity-70 mb-1">
-                                        {msg.sender.username}
-                                    </span>
-                                    {msg.content}
-                                </div>
+                        {!loading ? (
+                            <>
+                                {messages.length === 0 ? (
+                                    <div className="flex flex-col items-center justify-center h-full space-y-4 text-center">
+                                        <div className="w-20 h-20 bg-background rounded-full flex items-center justify-center border border-gray-700">
+                                            <svg
+                                                className="w-10 h-10 text-primary"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                viewBox="0 0 24 24"
+                                            >
+                                                <path
+                                                    strokeLinecap="round"
+                                                    strokeLinejoin="round"
+                                                    strokeWidth="2"
+                                                    d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+                                                />
+                                            </svg>
+                                        </div>
+                                        <p className="text-muted text-lg">
+                                            No messages
+                                        </p>
+                                    </div>
+                                ) : (
+                                    messages.map((msg) => (
+                                        <div
+                                            key={msg._id || msg.tempId}
+                                            onDoubleClick={() =>
+                                                handleDoubleClick(msg)
+                                            }
+                                            className={`group p-4 rounded-xl mb-2 shadow-sm max-w-sm break-words transition-all duration-300 hover:-translate-y-0.5 ${
+                                                msg.sender.username ===
+                                                currentUsername
+                                                    ? "self-end bg-primary text-primary"
+                                                    : "self-start bg-surface border border-gray-700 text-primary"
+                                            } ${
+                                                editingMessage?._id === msg._id
+                                                    ? "ring-2 ring-yellow-400"
+                                                    : ""
+                                            }`}
+                                        >
+                                            <div className="flex flex-col">
+                                                <span className="text-xs opacity-70 mb-1">
+                                                    {msg.sender.username}
+                                                </span>
+                                                {msg.content}
+                                            </div>
+                                        </div>
+                                    ))
+                                )}
+                            </>
+                        ) : (
+                            <div className="flex justify-center py-4">
+                                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
                             </div>
-                        ))}
+                        )}
                         {typing && (
                             <div className="group p-4 rounded-xl mb-2 shadow-sm max-w-sm break-words transition-all duration-300 hover:-translate-y-0.5 self-start bg-surface border border-gray-700">
                                 <div className="flex space-x-1">
