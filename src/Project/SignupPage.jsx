@@ -13,6 +13,7 @@ const SignupPage = () => {
     });
 
     const [loading, setLoading] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState(null);
 
     const handleChange = (e) => {
@@ -91,7 +92,7 @@ const SignupPage = () => {
                             value={formData.name}
                             onChange={handleChange}
                             required
-                            className="block w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-700 bg-text-primary text-dark rounded-lg shadow-sm text-sm sm:text-base transition-all duration-300 placeholder-text-muted"
+                            className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-sm sm:text-base bg-surface text-primary placeholder-text-muted transition duration-300 ease-in-out"
                             placeholder="Your name"
                         />
                     </div>
@@ -107,7 +108,7 @@ const SignupPage = () => {
                             value={formData.username}
                             onChange={handleChange}
                             required
-                            className="block w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-700 bg-text-primary text-dark rounded-lg shadow-sm text-sm sm:text-base transition-all duration-300 placeholder-text-muted"
+                            className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-sm sm:text-base bg-surface text-primary placeholder-text-muted transition duration-300 ease-in-out"
                             placeholder="Your username"
                         />
                     </div>
@@ -123,7 +124,7 @@ const SignupPage = () => {
                             value={formData.email}
                             onChange={handleChange}
                             required
-                            className="block w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-700 bg-text-primary text-dark rounded-lg shadow-sm text-sm sm:text-base transition-all duration-300 placeholder-text-muted"
+                            className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-sm sm:text-base bg-surface text-primary placeholder-text-muted transition duration-300 ease-in-out"
                             placeholder="Your email"
                         />
                     </div>
@@ -133,15 +134,24 @@ const SignupPage = () => {
                         <label className="block text-sm font-medium text-primary">
                             Password
                         </label>
-                        <input
-                            type="password"
-                            name="password"
-                            value={formData.password}
-                            onChange={handleChange}
-                            required
-                            className="block w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-700 bg-text-primary text-dark rounded-lg shadow-sm text-sm sm:text-base transition-all duration-300 placeholder-text-muted"
-                            placeholder="Your password"
-                        />
+                        <div className="relative">
+                            <input
+                                type={showPassword ? "text" : "password"}
+                                name="password"
+                                value={formData.password}
+                                onChange={handleChange}
+                                required
+                                className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-sm sm:text-base bg-surface text-primary placeholder-text-muted transition duration-300 ease-in-out"
+                                placeholder="Your password"
+                            />
+                            <button
+                                type="button"
+                                onClick={() => setShowPassword((prev) => !prev)}
+                                className="absolute inset-y-0 right-2 flex items-center text-sm text-onPrimary hover:underline"
+                            >
+                                {showPassword ? "Hide" : "Show"}
+                            </button>
+                        </div>
                     </div>
 
                     {/* Confirm Password */}
@@ -149,15 +159,24 @@ const SignupPage = () => {
                         <label className="block text-sm font-medium text-primary">
                             Confirm Password
                         </label>
-                        <input
-                            type="password"
-                            name="confirmPassword"
-                            value={formData.confirmPassword}
-                            onChange={handleChange}
-                            required
-                            className="block w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-700 bg-text-primary text-dark rounded-lg shadow-sm text-sm sm:text-base transition-all duration-300 placeholder-text-muted"
-                            placeholder="Confirm password"
-                        />
+                        <div className="relative">
+                            <input
+                                type={showPassword ? "text" : "password"}
+                                name="confirmPassword"
+                                value={formData.confirmPassword}
+                                onChange={handleChange}
+                                required
+                                className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-sm sm:text-base bg-surface text-primary placeholder-text-muted transition duration-300 ease-in-out"
+                                placeholder="Confirm password"
+                            />
+                            <button
+                                type="button"
+                                onClick={() => setShowPassword((prev) => !prev)}
+                                className="absolute inset-y-0 right-2 flex items-center text-sm text-onPrimary hover:underline"
+                            >
+                                {showPassword ? "Hide" : "Show"}
+                            </button>
+                        </div>
                     </div>
 
                     <button

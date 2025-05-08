@@ -8,6 +8,7 @@ const Login = () => {
         password: "",
     });
     const [loading, setLoading] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState(null);
     const navigate = useNavigate();
 
@@ -40,7 +41,7 @@ const Login = () => {
                     "tempUserId",
                     error.response.data.tempUserId
                 );
-                sessionStorage.setItem("email",error.response.data.email);
+                sessionStorage.setItem("email", error.response.data.email);
                 navigate("/otp");
             }
             // console.error(error);
@@ -92,7 +93,7 @@ const Login = () => {
                             value={formData.identifier}
                             onChange={handleChange}
                             required
-                            className="block w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-700 bg-text-primary text-dark rounded-lg shadow-sm text-sm sm:text-base transition-all duration-300 placeholder-text-muted"
+                            className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-sm sm:text-base bg-surface text-primary placeholder-text-muted transition duration-300 ease-in-out"
                             placeholder="Enter your username or email"
                         />
                     </div>
@@ -104,16 +105,25 @@ const Login = () => {
                         >
                             Password
                         </label>
-                        <input
-                            type="password"
-                            name="password"
-                            id="password"
-                            value={formData.password}
-                            onChange={handleChange}
-                            required
-                            className="block w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-700 bg-text-primary text-dark rounded-lg shadow-sm text-sm sm:text-base transition-all duration-300 placeholder-text-muted"
-                            placeholder="Enter your password"
-                        />
+                        <div className="relative">
+                            <input
+                                type={showPassword ? "text" : "password"}
+                                name="password"
+                                id="password"
+                                value={formData.password}
+                                onChange={handleChange}
+                                required
+                                className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-sm sm:text-base bg-surface text-primary placeholder-text-muted transition duration-300 ease-in-out"
+                                placeholder="Enter your password"
+                            />
+                            <button
+                                type="button"
+                                onClick={() => setShowPassword((prev) => !prev)}
+                                className="absolute inset-y-0 right-2 flex items-center text-sm text-onPrimary hover:underline"
+                            >
+                                {showPassword ? "Hide" : "Show"}
+                            </button>
+                        </div>
                         <div className="flex justify-end">
                             <button
                                 type="button"

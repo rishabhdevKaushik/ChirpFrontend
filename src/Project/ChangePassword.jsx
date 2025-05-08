@@ -11,6 +11,7 @@ const ChangePassword = () => {
         confirmPassword: "",
     });
     const [loading, setLoading] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState(null);
     const navigate = useNavigate();
 
@@ -82,16 +83,25 @@ const ChangePassword = () => {
                         >
                             New Password
                         </label>
-                        <input
-                            type="password"
-                            name="newPassword"
-                            id="newPassword"
-                            value={passwords.newPassword}
-                            onChange={handleChange}
-                            required
-                            className="block w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-700 bg-text-primary text-dark rounded-lg shadow-sm text-sm sm:text-base transition-all duration-300 placeholder-text-muted"
-                            placeholder="Enter new password"
-                        />
+                        <div className="relative">
+                            <input
+                                type={showPassword ? "text" : "password"}
+                                name="newPassword"
+                                id="newPassword"
+                                value={passwords.newPassword}
+                                onChange={handleChange}
+                                required
+                                className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-sm sm:text-base bg-surface text-primary placeholder-text-muted transition duration-300 ease-in-out"
+                                placeholder="Enter new password"
+                            />
+                            <button
+                                type="button"
+                                onClick={() => setShowPassword((prev) => !prev)}
+                                className="absolute inset-y-0 right-2 flex items-center text-sm text-onPrimary hover:underline"
+                            >
+                                {showPassword ? "Hide" : "Show"}
+                            </button>
+                        </div>
                     </div>
 
                     <div className="space-y-2">
@@ -99,18 +109,27 @@ const ChangePassword = () => {
                             htmlFor="confirmPassword"
                             className="block text-sm font-medium text-primary"
                         >
-                            Confirm Password
+                            Confirm New Password
                         </label>
-                        <input
-                            type="password"
-                            name="confirmPassword"
-                            id="confirmPassword"
-                            value={passwords.confirmPassword}
-                            onChange={handleChange}
-                            required
-                            className="block w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-700 bg-text-primary text-dark rounded-lg shadow-sm text-sm sm:text-base transition-all duration-300 placeholder-text-muted"
-                            placeholder="Confirm new password"
-                        />
+                        <div className="relative">
+                            <input
+                                type={showPassword ? "text" : "password"}
+                                name="confirmPassword"
+                                id="confirmPassword"
+                                value={passwords.confirmPassword}
+                                onChange={handleChange}
+                                required
+                                className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-sm sm:text-base bg-surface text-primary placeholder-text-muted transition duration-300 ease-in-out"
+                                placeholder="Confirm new password"
+                            />
+                            <button
+                                type="button"
+                                onClick={() => setShowPassword((prev) => !prev)}
+                                className="absolute inset-y-0 right-2 flex items-center text-sm text-onPrimary hover:underline"
+                            >
+                                {showPassword ? "Hide" : "Show"}
+                            </button>
+                        </div>
                     </div>
 
                     <button
